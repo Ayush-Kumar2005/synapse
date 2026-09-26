@@ -1,0 +1,352 @@
+{
+  "kind": "xgboost",
+  "features": [
+    "rpm",
+    "speed_kph",
+    "measured_fuel_lph",
+    "co_pct",
+    "hc_ppm",
+    "co2_pct",
+    "o2_pct",
+    "lambda"
+  ],
+  "labels": {
+    "0": "No fault in laboratory experiment",
+    "1": "Fault type 1",
+    "2": "Fault type 2",
+    "3": "Fault type 3"
+  },
+  "label_mapping_verified": false,
+  "fault_families_in_paper": [
+    "rich mixture",
+    "lean mixture",
+    "low voltage"
+  ],
+  "excluded_source_features": [
+    "MAP",
+    "TPS",
+    "Force",
+    "Power",
+    "Consumption L/100KM",
+    "AFR"
+  ],
+  "input_domain": "EngineFaultDB laboratory measurements; external sensors require domain validation",
+  "required_fuel_provenance": "measured; VED MAF/trim-derived fuel is not interchangeable",
+  "min_score": 0.65,
+  "min_margin": 0.15,
+  "probabilities_calibrated": false,
+  "bounds": {
+    "rpm": [
+      1066.452,
+      3852.911
+    ],
+    "speed_kph": [
+      22.757,
+      82.675
+    ],
+    "measured_fuel_lph": [
+      1.917,
+      10.438
+    ],
+    "co_pct": [
+      0.421,
+      7.455
+    ],
+    "hc_ppm": [
+      2.179,
+      312.865
+    ],
+    "co2_pct": [
+      9.502,
+      15.129
+    ],
+    "o2_pct": [
+      0.223,
+      1.151
+    ],
+    "lambda": [
+      0.725,
+      1.149
+    ]
+  },
+  "model_sha256": "06958723d2457cebfeed699d5c5ba8da85a86e389c949c20efd957f34edb44e4",
+  "versions": {
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.1.3",
+    "numpy": "2.5.3",
+    "joblib": "1.6.0"
+  },
+  "audit": {
+    "source": "https://github.com/leoxthomas/EngineFaultDB",
+    "revision": "c63f23ba048761d9c2a2c95d8fb4c0392a3c63d3",
+    "csv_sha256": "70021a35b2b2efb294e49f4c78b80a391a05414d44d4564c429645eb32260763",
+    "source_rows": 55999,
+    "rows_removed_as_duplicate_predictors": 2,
+    "source_columns": [
+      "Fault",
+      "MAP",
+      "TPS",
+      "Force",
+      "Power",
+      "RPM",
+      "Consumption L/H",
+      "Consumption L/100KM",
+      "Speed",
+      "CO",
+      "HC",
+      "CO2",
+      "O2",
+      "Lambda",
+      "AFR"
+    ],
+    "source_label_counts": {
+      "0": 16000,
+      "2": 15000,
+      "3": 14001,
+      "1": 10998
+    },
+    "no_nox_column": true,
+    "missing_values": 0,
+    "split_counts": {
+      "train": 33197,
+      "test": 10800,
+      "validation": 10400,
+      "purged": 1600
+    },
+    "split_policy": "Per-label source order 60/20/20%; purge 100 rows on both sides of each boundary. No run independence claim.",
+    "limitations": "Single C14NE engine; no run IDs or timestamps. Source-row blocks are not verified independent recordings. Scores do not establish cross-vehicle diagnosis or a cause of VED drift."
+  },
+  "validation": {
+    "random_forest": {
+      "accuracy": 0.4123076923076923,
+      "balanced_accuracy": 0.4107802197802198,
+      "macro_f1": 0.40948328395811173,
+      "confusion_matrix_labels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "confusion_matrix": [
+        [
+          1887,
+          505,
+          134,
+          474
+        ],
+        [
+          999,
+          1000,
+          0,
+          1
+        ],
+        [
+          1000,
+          0,
+          900,
+          900
+        ],
+        [
+          1000,
+          0,
+          1099,
+          501
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.38620548505935326,
+          "recall": 0.629,
+          "f1-score": 0.4785696170428608,
+          "support": 3000.0
+        },
+        "1": {
+          "precision": 0.6644518272425249,
+          "recall": 0.5,
+          "f1-score": 0.5706134094151213,
+          "support": 2000.0
+        },
+        "2": {
+          "precision": 0.4219409282700422,
+          "recall": 0.32142857142857145,
+          "f1-score": 0.36488951956213256,
+          "support": 2800.0
+        },
+        "3": {
+          "precision": 0.26705756929637525,
+          "recall": 0.1926923076923077,
+          "f1-score": 0.22386058981233245,
+          "support": 2600.0
+        },
+        "accuracy": 0.4123076923076923,
+        "macro avg": {
+          "precision": 0.4349139524670739,
+          "recall": 0.4107802197802198,
+          "f1-score": 0.40948328395811173,
+          "support": 10400.0
+        },
+        "weighted avg": {
+          "precision": 0.4195484989413273,
+          "recall": 0.4123076923076923,
+          "f1-score": 0.4019869094466212,
+          "support": 10400.0
+        }
+      }
+    },
+    "xgboost": {
+      "accuracy": 0.45692307692307693,
+      "balanced_accuracy": 0.4578250915750916,
+      "macro_f1": 0.4255263662423886,
+      "confusion_matrix_labels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "confusion_matrix": [
+        [
+          2170,
+          139,
+          660,
+          31
+        ],
+        [
+          996,
+          1000,
+          3,
+          1
+        ],
+        [
+          1000,
+          0,
+          18,
+          1782
+        ],
+        [
+          1000,
+          0,
+          36,
+          1564
+        ]
+      ],
+      "per_class": {
+        "0": {
+          "precision": 0.42005420054200543,
+          "recall": 0.7233333333333334,
+          "f1-score": 0.5314719568944404,
+          "support": 3000.0
+        },
+        "1": {
+          "precision": 0.8779631255487269,
+          "recall": 0.5,
+          "f1-score": 0.6371455877668047,
+          "support": 2000.0
+        },
+        "2": {
+          "precision": 0.02510460251046025,
+          "recall": 0.0064285714285714285,
+          "f1-score": 0.010235996588001138,
+          "support": 2800.0
+        },
+        "3": {
+          "precision": 0.46299585553582,
+          "recall": 0.6015384615384616,
+          "f1-score": 0.5232519237203078,
+          "support": 2600.0
+        },
+        "accuracy": 0.45692307692307693,
+        "macro avg": {
+          "precision": 0.44652944603425315,
+          "recall": 0.4578250915750916,
+          "f1-score": 0.4255263662423886,
+          "support": 10400.0
+        },
+        "weighted avg": {
+          "precision": 0.41251643886018186,
+          "recall": 0.45692307692307693,
+          "f1-score": 0.40940604214770515,
+          "support": 10400.0
+        }
+      }
+    }
+  },
+  "exploratory_test": {
+    "accuracy": 0.5356481481481481,
+    "balanced_accuracy": 0.5004182336635062,
+    "macro_f1": 0.42073610085332763,
+    "confusion_matrix_labels": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "confusion_matrix": [
+      [
+        2997,
+        1,
+        86,
+        16
+      ],
+      [
+        1000,
+        100,
+        798,
+        202
+      ],
+      [
+        0,
+        0,
+        324,
+        2576
+      ],
+      [
+        0,
+        0,
+        336,
+        2364
+      ]
+    ],
+    "per_class": {
+      "0": {
+        "precision": 0.7498123592694521,
+        "recall": 0.9667741935483871,
+        "f1-score": 0.8445822178385233,
+        "support": 3100.0
+      },
+      "1": {
+        "precision": 0.9900990099009901,
+        "recall": 0.047619047619047616,
+        "f1-score": 0.09086778736937756,
+        "support": 2100.0
+      },
+      "2": {
+        "precision": 0.20984455958549222,
+        "recall": 0.11172413793103449,
+        "f1-score": 0.14581458145814583,
+        "support": 2900.0
+      },
+      "3": {
+        "precision": 0.4583171772004653,
+        "recall": 0.8755555555555555,
+        "f1-score": 0.6016798167472639,
+        "support": 2700.0
+      },
+      "accuracy": 0.5356481481481481,
+      "macro avg": {
+        "precision": 0.6020182764891,
+        "recall": 0.5004182336635062,
+        "f1-score": 0.42073610085332763,
+        "support": 10800.0
+      },
+      "weighted avg": {
+        "precision": 0.57866961442283,
+        "recall": 0.5356481481481481,
+        "f1-score": 0.44966898335382877,
+        "support": 10800.0
+      }
+    }
+  },
+  "paper": "https://doi.org/10.1109/ACCESS.2023.3331316",
+  "component_diagnosis_validated": false,
+  "model_file": "classifier.json"
+}

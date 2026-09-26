@@ -1,0 +1,37 @@
+{
+  "ved_trip": [
+    575,
+    1651
+  ],
+  "ved_points": 752,
+  "ved_nox_available": 0,
+  "synthetic_points": 241,
+  "synthetic_fuel_alert": {
+    "vehicle_id": 999999,
+    "trip_id": 1,
+    "detected_at_s": 149.0,
+    "evidence_start_s": 89.0,
+    "duration_s": 60.0,
+    "threshold_exceeded_for_s": 30.0,
+    "window_expected_l": 0.08593142827351881,
+    "window_observed_l": 0.14091322046385887,
+    "excess_l": 0.054981792190340065,
+    "excess_pct": 63.98333333333366,
+    "valid_coverage": 1.0,
+    "explanation": "Estimated fuel use remained above the model's expected range. Inspection may be warranted; this is not a component diagnosis."
+  },
+  "synthetic_nox_alert": {
+    "detected_at_s": 122.0,
+    "change_ppm": 180.0,
+    "reference_ppm": 100.0,
+    "sensor_id": "demo-nox-1",
+    "position": "downstream",
+    "provenance": "synthetic",
+    "explanation": "Sustained NOx concentration increase versus an assumed reference at comparable RPM/load. Investigate sensor validity and operating conditions."
+  },
+  "lab_examples": 32,
+  "fault_model_exploratory_accuracy": 0.5356481481481481,
+  "ved_test_data_read": false,
+  "uses_detector_v2": false,
+  "limitations": "These are separate sources. The synthetic scenario tests wiring, not detection performance. VED has no measured NOx. Lab rows are not measurements from the VED vehicle."
+}

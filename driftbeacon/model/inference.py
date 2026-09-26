@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 from pathlib import Path
+import warnings
 import joblib
 import numpy as np
+from sklearn.exceptions import InconsistentVersionWarning
+from sklearn.impute import SimpleImputer
 
 from .common import FEATURES, read_json, sha256
 
@@ -22,7 +25,20 @@ class Predictor:
             self.model = XGBRegressor()
             self.model.load_model(directory / "model.json")
             self.model.set_params(device="cpu")
-            self.preprocessor = joblib.load(directory / "preprocessor.joblib")
+            # Colab and local sklearn versions differ. Execute no private imputer
+            # methods: this supported schema is exactly median replacement.
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", InconsistentVersionWarning)
+                self.preprocessor = joblib.load(directory / "preprocessor.joblib")
+            p = self.preprocessor
+            if (type(p) is not SimpleImputer or p.strategy != "median"
+                    or p.add_indicator or not p.keep_empty_features
+                    or list(p.feature_names_in_) != FEATURES
+                    or not np.isnan(p.missing_values)):
+                raise ValueError("Unsupported saved preprocessing schema")
+            self.medians = np.asarray(p.statistics_, dtype=float)
+            if self.medians.shape != (len(FEATURES),) or not np.isfinite(self.medians).all():
+                raise ValueError("Invalid saved training medians")
         else:
             self.model = joblib.load(directory / "model.joblib")
 
@@ -36,6 +52,7 @@ class Predictor:
         if good.any():
             xx = x.loc[good]
             if self.kind == "xgboost":
-                xx = self.preprocessor.transform(xx)
+                xx = xx.to_numpy(dtype=float)
+                xx = np.where(np.isnan(xx), self.medians, xx)
             values[good.to_numpy()] = np.maximum(0, self.model.predict(xx))
         return values

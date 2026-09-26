@@ -1,0 +1,2 @@
+# Fuel + EngineFaultDB models run on CPU. No GPU required for inference.
+-r requirements-gpu.txt

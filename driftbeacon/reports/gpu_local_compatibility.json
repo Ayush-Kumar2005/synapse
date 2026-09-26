@@ -1,0 +1,11 @@
+{
+  "validation": {
+    "mae_lph": 1.0330305537877558,
+    "rmse_lph": 1.7043340856945126,
+    "bias_lph": 0.20607938001741521
+  },
+  "matches_colab_validation_mae_within": 1e-05,
+  "median_preprocessor_portable": true,
+  "source": "downloaded Colab model",
+  "test_data_read": false
+}

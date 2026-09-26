@@ -1,5 +1,7 @@
 # DriftBeacon model preparation
 
+**Sensor integration update:** See [SENSOR_FUSION.md](SENSOR_FUSION.md) for the CPU-compatible Colab model, trained EngineFaultDB classifier, timestamped NOx import, local API, combined replay demo, measured results and remaining diagnosis limitations. Run `.venv\Scripts\python.exe -m model.api` for the local demo. The preparation-stage descriptions below are historical: the other chat subsequently reported test evaluation; its detector v2 artifacts are not in this checkout.
+
 If you are the person training on the second laptop, start with [FRIEND_BRIEF.md](FRIEND_BRIEF.md), then follow [TRAINING_HANDOFF.md](TRAINING_HANDOFF.md).
 
 This directory contains the completed laptop-side VED preparation, a fitted CPU sanity model, training scripts for the second laptop, and sequential drift-detection/replay tools. Code lives on the `model-development` branch.
