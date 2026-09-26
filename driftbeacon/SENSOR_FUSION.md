@@ -9,7 +9,7 @@ This implementation combines a VED fuel predictor, a separate experimental Engin
 - `model.fusion.FusionEngine.step` returns one JSON object containing fuel expectations, fuel drift, exhaust measurements, NOx screening, data quality, experimental fault classification and suggested inspection directions.
 - `model.enginefault` downloads a pinned dataset, audits it, trains Random Forest and XGBoost on the CPU, selects using validation, and evaluates the frozen selection on an exploratory block holdout.
 - `model.verify_fusion` checks model/data integration using VED validation records, laboratory examples and explicitly synthetic test fixtures. Outputs are JSON reports; no dashboard or server is included.
-- `tests/test_sensor_fusion.py` covers invalid units, future/stale readings, stream isolation, missing channels, NOx reference/persistence, source-block splitting, fault prediction gates, reason-ranking safeguards, and JSON serialization. All **35 tests** including the original suite passed.
+- `tests/test_sensor_fusion.py` covers invalid units, future/stale readings, stream isolation, missing channels, NOx reference/persistence, source-block splitting, fault prediction gates, forward-chaining safeguards, and JSON serialization. All **36 tests** including the original suite passed.
 
 ## Run model processing
 
@@ -95,6 +95,8 @@ Training refuses to overwrite an existing model. The local selected classifier i
 ## Evidence and possible causes
 
 ### Ranked inspection reasons
+
+The reason module is a **prototype forward-chaining expert system**. It has a fact base built from the alert-window sensor readings, an explicit `FORWARD_RULES` knowledge base, and an inference engine that repeatedly fires enabled IF–THEN rules until no new facts can be added. For example, `warm_closed_loop + positive_trim` asserts `positive_correction_pattern`; that fact plus `lean_dtc` asserts `hypothesis:lean_system_evidence`. The JSON output includes `inference_method`, `asserted_facts`, `knowledge_base_version`, and `rule_trace` so the evaluator can inspect the chain. It does not start from a desired diagnosis or query for evidence to prove it. The rule base is an engineering prototype, not a mechanic-certified diagnostic standard.
 
 `model.reasoning` now evaluates only the frozen 60-second fuel-alert window, using a bounded history of valid, fresh signals. `diagnosis.reasoning.likely_reasons` lists possible reasons in an explicit inspection order. Each entry has its supporting readings, missing checks, whether fuel-estimate dependence weakens the evidence, and a next check. `confirmed_cause` always remains null. The order is a screening heuristic based on independent supporting clues; it is not a fault probability.
 

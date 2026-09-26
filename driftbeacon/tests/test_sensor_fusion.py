@@ -10,7 +10,7 @@ from model.common import ROOT
 from model.emissions import NoxConfig, NoxMonitor
 from model.enginefault import blocked_split, DEFAULT_MODEL, FaultPredictor, FEATURES as FAULT_FEATURES
 from model.fusion import FusionEngine, fuel_observation, inspection_evidence
-from model.reasoning import ReasoningConfig, rank_reasons
+from model.reasoning import ReasoningConfig, forward_chain, rank_reasons
 from model.telemetry import NoxFeed, Packet, Signal, signal_dict
 
 
@@ -203,8 +203,20 @@ class ReasoningTests(unittest.TestCase):
         self.assertIn("lean_system_evidence", codes)
         self.assertNotIn("charging_voltage_pattern", codes)
         self.assertEqual(result["reported_trouble_codes"], ["P0171"])
+        self.assertEqual(result["inference_method"], "forward_chaining")
+        self.assertIn("positive_trim", result["asserted_facts"])
+        known = set(result["asserted_facts"])
+        for firing in result["rule_trace"]:
+            self.assertTrue(set(firing["premises"]) <= known)
+            known.add(firing["conclusion"])
+        self.assertIn("hypothesis:lean_system_evidence", known)
         self.assertTrue(all(r["fuel_estimate_dependency"] for r in result["likely_reasons"]))
         self.assertIsNone(result["confirmed_cause"])
+
+    def test_forward_chain_needs_all_premises(self):
+        facts, trace = forward_chain({"positive_trim", "lean_dtc"})
+        self.assertNotIn("hypothesis:lean_system_evidence", facts)
+        self.assertEqual(trace, [])
 
     def test_sparse_or_unwarmed_trims_do_not_create_reason(self):
         rows = self.samples()[::15]
