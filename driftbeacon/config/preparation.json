@@ -1,0 +1,19 @@
+{
+  "seed": 20260926,
+  "max_trips_per_vehicle": 24,
+  "min_trip_duration_s": 180,
+  "min_valid_rows_per_trip": 150,
+  "min_valid_fraction_per_trip": 0.8,
+  "min_trips_per_vehicle": 3,
+  "max_gap_s": 5.0,
+  "min_acceleration_dt_s": 0.5,
+  "acceleration_method": "Difference against latest earlier source row at least 0.5 s away, at most 5 s away, within same trip and uninterrupted speed segment; past values only.",
+  "max_abs_acceleration_mps2": 8.0,
+  "air_fuel_ratio": 14.08,
+  "fuel_density_g_per_l": 745.0,
+  "fuel_density_note": "Engineering assumption for gasoline/E10, not measured in VED. Estimated litres scale inversely with this density.",
+  "fuel_assumption": "Gasoline/E10; exclude explicitly diesel, flex-fuel and unknown engine configurations.",
+  "target_method": "MAF * (1 + mean(STFT banks)/100 + mean(LTFT banks)/100) / AFR * 3600 / fuel_density_g_per_l",
+  "alignment": "Use supplied row values only. No forward fill, backward fill or interpolation. VED lacks per-signal acquisition timestamps, so the age of repeated values cannot be verified.",
+  "target_source": "https://arxiv.org/html/1905.02081v1#S2.SS3"
+}

@@ -1,0 +1,64 @@
+{
+  "selected": "xgboost",
+  "kind": "xgboost",
+  "requested_candidate": "xgboost",
+  "training_device": "cpu",
+  "features": [
+    "speed_kph",
+    "rpm",
+    "load_pct",
+    "acceleration_mps2",
+    "displacement_l",
+    "weight_kg"
+  ],
+  "target": "observed_fuel_lph",
+  "seed": 20260926,
+  "training_rows": 7895,
+  "training_vehicles": 12,
+  "training_trips": 13,
+  "validation_rows": 390786,
+  "validation_vehicles": 20,
+  "validation_scores": {
+    "median": {
+      "mae_lph": 2.7152613736386595,
+      "rmse_lph": 4.2605986738713435,
+      "bias_lph": -1.9225394442233297,
+      "fit_and_validation_seconds": 0.04033190000018294
+    },
+    "ridge": {
+      "mae_lph": 1.3833562224037708,
+      "rmse_lph": 2.0682243552009187,
+      "bias_lph": 0.1096740117809687,
+      "fit_and_validation_seconds": 0.03260439999985465
+    },
+    "xgboost": {
+      "mae_lph": 1.3237884056534162,
+      "rmse_lph": 2.1263732767517416,
+      "bias_lph": 0.1571325701314009,
+      "fit_and_validation_seconds": 1.8943386000000828
+    }
+  },
+  "test_evaluated": false,
+  "prediction_policy": "clip negative predictions to zero; reject invalid required sensors",
+  "feature_schema_sha256": "c618c8178e8592b1e9189d97d62d61edd89c8c5518a40ad2a651ea5c4fbcd529",
+  "prepared_checksums": {
+    "train": "573d1009ab2770c2d879cd4a653ce603464b7b1a56df198b765b72158645f8dc",
+    "validation": "60faa73383f18433f4b9fb4a5f9d2b44f1efb5a8e32c464f223771015009d9bf",
+    "test": "9c626e59e9340fd20422b9456c2e12fa01bb002a96eaf78606fed048a3ce7bd9"
+  },
+  "versions": {
+    "numpy": "2.5.3",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.9.1",
+    "joblib": "1.6.0",
+    "xgboost": "3.1.3"
+  },
+  "python": "3.13.2",
+  "model_files": {
+    "model.json": "8a3926997559cf75a2eb74b30c12db2eaf2bf2505597eee2f0b3e7e4bbd7da8e",
+    "preprocessor.joblib": "322111cd6f2c637efcd7b042225e0471f669f8951d8fcfabd9dee45b322ae76b"
+  },
+  "scope": "CPU baseline is a sanity check. Error is against a derived fuel target, not measured fuel or labelled mechanical faults.",
+  "cpu_reload_verified": true,
+  "cpu_prediction_batch_ms": 4.497799999853669
+}

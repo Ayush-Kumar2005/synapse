@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "scope": "Data integrity only; no final-test predictions or model selection",
+  "splits": {
+    "train": {
+      "rows": 1437486,
+      "valid_rows": 1431997,
+      "vehicles": 94,
+      "checksum_verified": true,
+      "time_order_verified": true
+    },
+    "validation": {
+      "rows": 392179,
+      "valid_rows": 390786,
+      "vehicles": 20,
+      "checksum_verified": true,
+      "time_order_verified": true
+    },
+    "test": {
+      "rows": 281009,
+      "valid_rows": 279699,
+      "vehicles": 21,
+      "checksum_verified": true,
+      "time_order_verified": true
+    }
+  }
+}

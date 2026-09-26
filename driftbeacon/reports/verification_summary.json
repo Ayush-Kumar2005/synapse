@@ -1,0 +1,11 @@
+{
+  "numerical_tests": {"run": 12, "passed": 12, "failed": 0},
+  "prepared_data_checks": "Passed for train, validation and test: checksums, vehicle isolation, identity, time order, finite usable inputs and trip-boundary acceleration",
+  "cpu_baseline_roundtrip": "Saved Random Forest reloaded on CPU with matching predictions",
+  "xgboost_cpu_roundtrip": "Pinned XGBoost 3.1.3 trained on a small CPU subset, exported JSON, and reloaded on CPU with matching predictions",
+  "handoff_extracted_folder": "ZIP extracted to a separate folder. Train/validation checksum verification passed. Numerical suite passed with the raw-metadata-only test skipped. Packaged XGBoost CPU training and export/reload passed.",
+  "paired_replay": {"vehicle_id": 575, "trip_id": 1790, "points_per_channel": 5299, "original_alert": false, "simulated_alert": true, "scenario": "+60% gradual fuel-observation ramp"},
+  "raw_data_and_binaries_ignored_by_git": true,
+  "cuda_execution_tested": false,
+  "final_test_predictions_evaluated": false
+}

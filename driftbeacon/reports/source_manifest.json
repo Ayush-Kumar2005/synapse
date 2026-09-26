@@ -1,0 +1,41 @@
+{
+  "repo": "https://github.com/gsoh/VED",
+  "commit": "6baa4963782d515a67d32a5490bd5d11f5d9bf0d",
+  "files": [
+    {
+      "file": "Data/VED_DynamicData_Part1.7z",
+      "url": "https://raw.githubusercontent.com/gsoh/VED/6baa4963782d515a67d32a5490bd5d11f5d9bf0d/Data/VED_DynamicData_Part1.7z",
+      "bytes": 82723769,
+      "sha256": "44d53754fd39e196171ec09f123604375d0248d5c06a97d6695ef0e22a948c61",
+      "checksum_format": "binary"
+    },
+    {
+      "file": "Data/VED_DynamicData_Part2.7z",
+      "url": "https://raw.githubusercontent.com/gsoh/VED/6baa4963782d515a67d32a5490bd5d11f5d9bf0d/Data/VED_DynamicData_Part2.7z",
+      "bytes": 93662910,
+      "sha256": "a235c894e619a9e06b6c28c6e68593e26f4b168265cd2c45a0f3a43e646bc701",
+      "checksum_format": "binary"
+    },
+    {
+      "file": "Data/VED_Static_Data_ICE&HEV.xlsx",
+      "url": "https://raw.githubusercontent.com/gsoh/VED/6baa4963782d515a67d32a5490bd5d11f5d9bf0d/Data/VED_Static_Data_ICE%26HEV.xlsx",
+      "bytes": 21193,
+      "sha256": "addb23d937ef7d943620755f478cc5a24316a7d61dee232ffbfd9b6e50986dae",
+      "checksum_format": "binary"
+    },
+    {
+      "file": "LICENSE",
+      "url": "https://raw.githubusercontent.com/gsoh/VED/6baa4963782d515a67d32a5490bd5d11f5d9bf0d/LICENSE",
+      "bytes": 11547,
+      "sha256": "9856fba4809707af8aa4a3a224a881c8dc2a06f487ab4b6644cab5647934c388",
+      "checksum_format": "lf_normalized"
+    },
+    {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/gsoh/VED/6baa4963782d515a67d32a5490bd5d11f5d9bf0d/README.md",
+      "bytes": 3090,
+      "sha256": "c0f216828cd727635cea6fe46931033e9cdc823f7066f8b3685364aacb56d3bd",
+      "checksum_format": "lf_normalized"
+    }
+  ]
+}

@@ -1,0 +1,1350 @@
+{
+  "source_repo": "https://github.com/gsoh/VED",
+  "source_commit": "6baa4963782d515a67d32a5490bd5d11f5d9bf0d",
+  "raw_rows": 22436808,
+  "dynamic_vehicle_count": 384,
+  "vehicle_rows": {
+    "2": 6691,
+    "5": 33200,
+    "7": 1429,
+    "8": 25728,
+    "9": 1465,
+    "10": 167257,
+    "11": 91432,
+    "12": 96967,
+    "108": 18331,
+    "110": 8693,
+    "115": 44186,
+    "116": 32203,
+    "119": 1822,
+    "120": 1199,
+    "123": 24144,
+    "124": 39765,
+    "125": 33796,
+    "126": 4327,
+    "128": 60825,
+    "129": 3923,
+    "130": 34295,
+    "131": 2262,
+    "132": 66964,
+    "133": 55937,
+    "135": 78846,
+    "137": 2328,
+    "138": 7332,
+    "139": 34281,
+    "140": 84549,
+    "141": 5203,
+    "142": 19318,
+    "143": 10343,
+    "145": 86028,
+    "147": 26316,
+    "148": 7979,
+    "149": 27210,
+    "150": 778,
+    "153": 8171,
+    "154": 54194,
+    "155": 127780,
+    "156": 159082,
+    "157": 65830,
+    "159": 1902,
+    "160": 8237,
+    "161": 64719,
+    "162": 22751,
+    "163": 16345,
+    "164": 13618,
+    "165": 5833,
+    "167": 30263,
+    "169": 11437,
+    "172": 1004,
+    "174": 72214,
+    "176": 18591,
+    "179": 17127,
+    "180": 92749,
+    "181": 94183,
+    "184": 45785,
+    "185": 128516,
+    "187": 2222,
+    "189": 30414,
+    "190": 1899,
+    "191": 10763,
+    "192": 21473,
+    "193": 5205,
+    "195": 95340,
+    "196": 40719,
+    "199": 16982,
+    "200": 74211,
+    "201": 52880,
+    "202": 73570,
+    "203": 59481,
+    "205": 58840,
+    "206": 6719,
+    "207": 3933,
+    "208": 174234,
+    "209": 22886,
+    "211": 6668,
+    "212": 5228,
+    "213": 87171,
+    "214": 8281,
+    "215": 13358,
+    "216": 21722,
+    "217": 5264,
+    "218": 113152,
+    "220": 107640,
+    "222": 976,
+    "223": 66634,
+    "225": 22700,
+    "228": 77813,
+    "230": 53849,
+    "231": 66653,
+    "232": 53618,
+    "233": 19582,
+    "234": 14142,
+    "235": 7789,
+    "237": 36617,
+    "238": 1162,
+    "240": 12348,
+    "241": 26505,
+    "242": 18523,
+    "243": 8495,
+    "244": 25032,
+    "246": 13156,
+    "247": 1008,
+    "248": 59765,
+    "249": 59364,
+    "250": 94849,
+    "251": 45540,
+    "252": 26350,
+    "254": 2348,
+    "255": 6427,
+    "257": 9381,
+    "258": 59898,
+    "259": 146855,
+    "260": 4360,
+    "262": 678,
+    "264": 15283,
+    "265": 50208,
+    "266": 67059,
+    "267": 105257,
+    "268": 52885,
+    "269": 23775,
+    "270": 12664,
+    "271": 40633,
+    "272": 23095,
+    "273": 101191,
+    "274": 3010,
+    "275": 38781,
+    "276": 75604,
+    "278": 42904,
+    "280": 1422,
+    "282": 73154,
+    "283": 136338,
+    "285": 58346,
+    "286": 40619,
+    "288": 2506,
+    "289": 58847,
+    "291": 43838,
+    "292": 70908,
+    "293": 8249,
+    "297": 11441,
+    "298": 20898,
+    "299": 69884,
+    "300": 1979,
+    "301": 105246,
+    "302": 583,
+    "303": 16631,
+    "304": 38021,
+    "306": 4666,
+    "307": 45501,
+    "308": 93244,
+    "309": 208966,
+    "311": 103865,
+    "312": 10443,
+    "313": 13455,
+    "315": 3986,
+    "318": 2302,
+    "319": 69035,
+    "321": 6652,
+    "323": 221962,
+    "324": 95776,
+    "325": 4122,
+    "326": 29454,
+    "328": 8208,
+    "329": 5322,
+    "330": 541,
+    "332": 525,
+    "333": 1134,
+    "334": 14143,
+    "337": 119644,
+    "338": 38539,
+    "340": 182314,
+    "344": 15392,
+    "345": 18081,
+    "346": 26420,
+    "347": 80575,
+    "348": 10706,
+    "349": 172244,
+    "350": 57753,
+    "351": 101875,
+    "353": 78980,
+    "354": 3346,
+    "355": 140303,
+    "356": 95853,
+    "357": 6146,
+    "359": 77879,
+    "360": 5788,
+    "366": 155001,
+    "367": 89526,
+    "368": 7942,
+    "369": 34648,
+    "370": 65394,
+    "371": 351393,
+    "372": 78447,
+    "374": 157711,
+    "375": 26838,
+    "376": 3304,
+    "378": 9827,
+    "379": 1313,
+    "380": 1262,
+    "381": 42109,
+    "382": 53838,
+    "383": 42192,
+    "384": 39579,
+    "385": 83371,
+    "386": 38009,
+    "387": 29432,
+    "388": 331418,
+    "389": 19239,
+    "392": 68120,
+    "393": 54186,
+    "394": 16247,
+    "397": 20491,
+    "398": 153205,
+    "399": 54069,
+    "400": 114804,
+    "401": 22680,
+    "402": 9912,
+    "403": 28955,
+    "404": 21408,
+    "405": 31474,
+    "406": 16128,
+    "407": 14738,
+    "409": 22146,
+    "410": 125351,
+    "411": 172327,
+    "413": 13229,
+    "414": 11505,
+    "415": 93723,
+    "416": 36735,
+    "417": 43517,
+    "418": 189976,
+    "422": 80519,
+    "426": 1477,
+    "428": 44677,
+    "429": 40433,
+    "430": 39369,
+    "431": 28615,
+    "432": 1097,
+    "433": 11728,
+    "434": 2152,
+    "435": 34370,
+    "436": 40364,
+    "437": 68985,
+    "438": 95764,
+    "439": 27816,
+    "440": 25691,
+    "441": 48748,
+    "443": 31248,
+    "444": 88865,
+    "445": 63393,
+    "447": 98106,
+    "448": 22398,
+    "449": 123498,
+    "450": 362712,
+    "451": 103757,
+    "452": 134286,
+    "453": 24322,
+    "454": 27866,
+    "455": 303824,
+    "456": 34983,
+    "457": 200675,
+    "458": 203264,
+    "459": 264087,
+    "460": 57308,
+    "461": 9962,
+    "462": 190638,
+    "463": 93605,
+    "464": 32514,
+    "465": 222301,
+    "466": 44109,
+    "467": 38352,
+    "468": 119143,
+    "469": 38265,
+    "470": 56530,
+    "472": 27350,
+    "473": 12345,
+    "474": 61377,
+    "475": 68170,
+    "476": 46582,
+    "477": 94071,
+    "478": 80333,
+    "480": 131577,
+    "482": 17770,
+    "483": 71383,
+    "484": 227493,
+    "485": 653,
+    "486": 27851,
+    "487": 20562,
+    "488": 246159,
+    "489": 68987,
+    "490": 52625,
+    "492": 92803,
+    "494": 119641,
+    "497": 13063,
+    "498": 2711,
+    "500": 91135,
+    "501": 13494,
+    "502": 91646,
+    "503": 17054,
+    "504": 32925,
+    "505": 394,
+    "506": 33973,
+    "507": 67715,
+    "516": 16127,
+    "517": 187,
+    "519": 31368,
+    "521": 113391,
+    "522": 57310,
+    "526": 23425,
+    "527": 3241,
+    "528": 175615,
+    "529": 88524,
+    "530": 128322,
+    "531": 381876,
+    "532": 25281,
+    "533": 58038,
+    "534": 20391,
+    "535": 37113,
+    "536": 42734,
+    "537": 109864,
+    "538": 43201,
+    "539": 14264,
+    "540": 71209,
+    "541": 5227,
+    "542": 41010,
+    "543": 5848,
+    "545": 13563,
+    "546": 119030,
+    "547": 60672,
+    "548": 12743,
+    "549": 53594,
+    "550": 95833,
+    "552": 683,
+    "554": 38863,
+    "555": 7955,
+    "557": 129131,
+    "558": 1706,
+    "560": 887056,
+    "561": 270330,
+    "562": 109464,
+    "563": 37808,
+    "564": 191938,
+    "565": 196540,
+    "566": 49720,
+    "567": 13047,
+    "569": 243105,
+    "571": 4290,
+    "573": 11636,
+    "574": 93616,
+    "575": 321097,
+    "576": 40729,
+    "577": 64276,
+    "578": 14180,
+    "579": 44384,
+    "580": 8013,
+    "581": 10165,
+    "584": 130293,
+    "587": 13758,
+    "588": 45394,
+    "591": 110192,
+    "592": 145942,
+    "595": 43753,
+    "596": 25174,
+    "597": 183158,
+    "598": 14983,
+    "599": 34405,
+    "600": 6824,
+    "601": 80077,
+    "602": 20352,
+    "603": 62287,
+    "604": 42571,
+    "605": 34776,
+    "606": 27096,
+    "607": 60534,
+    "608": 70431,
+    "609": 64221,
+    "610": 65815,
+    "616": 651,
+    "618": 7432,
+    "624": 39844,
+    "625": 557,
+    "630": 424
+  },
+  "metadata_vehicle_count": 357,
+  "metadata_powertrains": {
+    "ICE": 264,
+    "HEV": 93
+  },
+  "powertrain_rows": {
+    "ICE": 13129563,
+    "HEV": 5587565,
+    "outside_ICE_HEV_metadata": 3719680
+  },
+  "excluded_metadata": [
+    {
+      "VehId": 5,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 115,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 119,
+      "exclusion": "diesel"
+    },
+    {
+      "VehId": 124,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 125,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 150,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 201,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 212,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 220,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 231,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 241,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 242,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 258,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 272,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 292,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 298,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 328,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 338,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 344,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 346,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 347,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 348,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 349,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 350,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 351,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 353,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 355,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 357,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 360,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 368,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 369,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 372,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 374,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 375,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 376,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 378,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 381,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 382,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 383,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 384,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 385,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 386,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 387,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 389,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 392,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 393,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 397,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 399,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 402,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 403,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 404,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 405,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 406,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 407,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 410,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 411,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 418,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 422,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 428,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 430,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 435,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 436,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 437,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 438,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 439,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 440,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 441,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 444,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 445,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 447,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 448,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 450,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 451,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 452,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 456,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 458,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 468,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 474,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 475,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 477,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 526,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 532,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 543,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 549,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 555,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 558,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 564,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 565,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 566,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 573,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 574,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 579,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 588,
+      "exclusion": "flex_fuel_unknown_blend"
+    },
+    {
+      "VehId": 605,
+      "exclusion": "not_ICE"
+    },
+    {
+      "VehId": 610,
+      "exclusion": "not_ICE"
+    }
+  ],
+  "eligible_metadata_vehicles": 262,
+  "eligible_raw_rows": 13082347,
+  "eligible_target_rows_before_other_filters": 8268474,
+  "eligible_reported_fuel_rows": 0,
+  "raw_missing_counts": {
+    "DayNum": 0,
+    "VehId": 0,
+    "Trip": 0,
+    "Timestamp(ms)": 0,
+    "Latitude[deg]": 0,
+    "Longitude[deg]": 0,
+    "Vehicle Speed[km/h]": 1396,
+    "MAF[g/sec]": 4178670,
+    "Engine RPM[RPM]": 482305,
+    "Absolute Load[%]": 5965212,
+    "OAT[DegC]": 9368517,
+    "Fuel Rate[L/hr]": 21540711,
+    "Air Conditioning Power[kW]": 21542533,
+    "Air Conditioning Power[Watts]": 19602431,
+    "Heater Power[Watts]": 21558450,
+    "HV Battery Current[A]": 18708156,
+    "HV Battery SOC[%]": 18708156,
+    "HV Battery Voltage[V]": 18708156,
+    "Short Term Fuel Trim Bank 1[%]": 4754080,
+    "Short Term Fuel Trim Bank 2[%]": 15645072,
+    "Long Term Fuel Trim Bank 1[%]": 7263493,
+    "Long Term Fuel Trim Bank 2[%]": 18126338
+  },
+  "eligible_missing_counts": {
+    "day_num": 0,
+    "vehicle_id": 0,
+    "trip_id": 0,
+    "timestamp_ms": 0,
+    "speed_kph": 1058,
+    "maf_gps": 2680129,
+    "rpm": 5554,
+    "load_pct": 2182724,
+    "reported_fuel_lph": 13082347,
+    "stft1_pct": 1316962,
+    "stft2_pct": 7781882,
+    "ltft1_pct": 2602915,
+    "ltft2_pct": 9042150
+  },
+  "source_columns": [
+    "DayNum",
+    "VehId",
+    "Trip",
+    "Timestamp(ms)",
+    "Latitude[deg]",
+    "Longitude[deg]",
+    "Vehicle Speed[km/h]",
+    "MAF[g/sec]",
+    "Engine RPM[RPM]",
+    "Absolute Load[%]",
+    "OAT[DegC]",
+    "Fuel Rate[L/hr]",
+    "Air Conditioning Power[kW]",
+    "Air Conditioning Power[Watts]",
+    "Heater Power[Watts]",
+    "HV Battery Current[A]",
+    "HV Battery SOC[%]",
+    "HV Battery Voltage[V]",
+    "Short Term Fuel Trim Bank 1[%]",
+    "Short Term Fuel Trim Bank 2[%]",
+    "Long Term Fuel Trim Bank 1[%]",
+    "Long Term Fuel Trim Bank 2[%]"
+  ],
+  "source_files": [
+    {
+      "file": "VED_171101_week.csv",
+      "bytes": 67308873,
+      "sha256": "5846f9ffa1d66bfffae4b16f0983bd88139e630017b98f219650923fd2101aa8",
+      "rows": 489414,
+      "eligible_rows": 322465,
+      "target_rows": 30220
+    },
+    {
+      "file": "VED_171108_week.csv",
+      "bytes": 75916621,
+      "sha256": "fdc4782568be21fb33d7970a80ffc87a6eca2da234bb38d86fe6fbe7586ed680",
+      "rows": 535198,
+      "eligible_rows": 344518,
+      "target_rows": 218724
+    },
+    {
+      "file": "VED_171115_week.csv",
+      "bytes": 86242908,
+      "sha256": "5aabf8228b289ce9d2bd328374731227a6f681ba13de3295be43c3ebf983c612",
+      "rows": 602092,
+      "eligible_rows": 368731,
+      "target_rows": 302842
+    },
+    {
+      "file": "VED_171122_week.csv",
+      "bytes": 68144211,
+      "sha256": "7987b514b104166db7db94a7c555d69289fd3171e3dce220e8e671d98312c462",
+      "rows": 474329,
+      "eligible_rows": 294521,
+      "target_rows": 230216
+    },
+    {
+      "file": "VED_171129_week.csv",
+      "bytes": 75967997,
+      "sha256": "bc59b1cc65aede79ef272f865ea28925fd509bd1f548a97abd9c7bf730be0bed",
+      "rows": 531856,
+      "eligible_rows": 332747,
+      "target_rows": 250350
+    },
+    {
+      "file": "VED_171206_week.csv",
+      "bytes": 84502150,
+      "sha256": "374279d348312d89dcbd90dcfda96e81b3fec948780a004de019f2131a3c203b",
+      "rows": 589154,
+      "eligible_rows": 388194,
+      "target_rows": 313313
+    },
+    {
+      "file": "VED_171213_week.csv",
+      "bytes": 96677690,
+      "sha256": "9837c74a51e6b4d58c23a35eff7992881bb73026c9f6e641097d4714b647b8a1",
+      "rows": 670084,
+      "eligible_rows": 452509,
+      "target_rows": 352204
+    },
+    {
+      "file": "VED_171220_week.csv",
+      "bytes": 77286260,
+      "sha256": "60c97c3a037166abe308320217a0f3648ce1a4abc29dc3a47a3e80081a679aa7",
+      "rows": 539468,
+      "eligible_rows": 328427,
+      "target_rows": 258734
+    },
+    {
+      "file": "VED_171227_week.csv",
+      "bytes": 45136873,
+      "sha256": "abde28050fcff11dc22e40a5047095e9a362d5bc035de53f41a74f3f317c9cec",
+      "rows": 311927,
+      "eligible_rows": 182175,
+      "target_rows": 140986
+    },
+    {
+      "file": "VED_180103_week.csv",
+      "bytes": 56988898,
+      "sha256": "a05c3590266a732059315ccb7544ec43796d820c10bd0922eb6f9fddb586c9b8",
+      "rows": 393498,
+      "eligible_rows": 249135,
+      "target_rows": 193042
+    },
+    {
+      "file": "VED_180110_week.csv",
+      "bytes": 78967236,
+      "sha256": "29a1053e199a2c247fa950612bbdcf3e1c5e845437c1abe9916f53ba8b60884c",
+      "rows": 550780,
+      "eligible_rows": 354444,
+      "target_rows": 262342
+    },
+    {
+      "file": "VED_180117_week.csv",
+      "bytes": 75881368,
+      "sha256": "a9c8c59935a9b6d9912890a219b0ae14df43155637701f995fbb52ced82a889d",
+      "rows": 526771,
+      "eligible_rows": 349878,
+      "target_rows": 275728
+    },
+    {
+      "file": "VED_180124_week.csv",
+      "bytes": 65066823,
+      "sha256": "62cb26a2b7a896826f39cec7bd64b049ea1ca5de4a0cb06f73dbb439b54bd418",
+      "rows": 456757,
+      "eligible_rows": 274718,
+      "target_rows": 208150
+    },
+    {
+      "file": "VED_180131_week.csv",
+      "bytes": 68794177,
+      "sha256": "fe81f0f0f828778ac0a63d03a56beed003595de5c6608bc533510b4f840dc03d",
+      "rows": 479522,
+      "eligible_rows": 285159,
+      "target_rows": 230586
+    },
+    {
+      "file": "VED_180207_week.csv",
+      "bytes": 60279484,
+      "sha256": "f19dbcdcca9b6eb74cf16f4817303688c4c40c5536ee3390d3c9de0b3f42d5fb",
+      "rows": 419846,
+      "eligible_rows": 254951,
+      "target_rows": 192712
+    },
+    {
+      "file": "VED_180214_week.csv",
+      "bytes": 55627466,
+      "sha256": "9c23eab56fc0c937205c72cc39c1a264310764c18bd4314418840e472dfee743",
+      "rows": 389642,
+      "eligible_rows": 247431,
+      "target_rows": 194643
+    },
+    {
+      "file": "VED_180221_week.csv",
+      "bytes": 40833773,
+      "sha256": "e4cfb530c8ee3cc19e6b4d5f6db7af9eeb8e3c5683dd13469fcc16922375c5b8",
+      "rows": 285924,
+      "eligible_rows": 163895,
+      "target_rows": 132517
+    },
+    {
+      "file": "VED_180228_week.csv",
+      "bytes": 57193078,
+      "sha256": "ccb5c6bf0cb8d3654450b129ac0ed94b743caa6d7f6bae08a6a745922d743f9b",
+      "rows": 402041,
+      "eligible_rows": 260147,
+      "target_rows": 199473
+    },
+    {
+      "file": "VED_180307_week.csv",
+      "bytes": 57152472,
+      "sha256": "47de8e82cc26c371b565bc97ba38d7b8ab0272a77ac05960274fce803880b257",
+      "rows": 398405,
+      "eligible_rows": 239692,
+      "target_rows": 201028
+    },
+    {
+      "file": "VED_180314_week.csv",
+      "bytes": 59817095,
+      "sha256": "8957c25dfe002a467777c0027db1e6dcc4f59d6a6e984ff88ee5cbd465014141",
+      "rows": 420510,
+      "eligible_rows": 236637,
+      "target_rows": 193623
+    },
+    {
+      "file": "VED_180321_week.csv",
+      "bytes": 57347343,
+      "sha256": "d6e14593880ad440a499daf5a6bbc5db48a28e527bf76cf279e9c5a41f39f993",
+      "rows": 402133,
+      "eligible_rows": 237008,
+      "target_rows": 172090
+    },
+    {
+      "file": "VED_180328_week.csv",
+      "bytes": 52267868,
+      "sha256": "ac2955a89d8fe917d7132b8f93dabc4971828d6e080724903412c7cdde3ae5b7",
+      "rows": 367606,
+      "eligible_rows": 186064,
+      "target_rows": 114168
+    },
+    {
+      "file": "VED_180404_week.csv",
+      "bytes": 65907189,
+      "sha256": "fc0c4500a7a0d5a2d21ccfae0acfdf1221cf376014c56e3c1a8beb9841ee4838",
+      "rows": 461047,
+      "eligible_rows": 258577,
+      "target_rows": 183081
+    },
+    {
+      "file": "VED_180411_week.csv",
+      "bytes": 62131626,
+      "sha256": "5ca2789467d1f2ba6d126f18b6172a3a2482d1bfa643a9dd8c970e6c856ae2ce",
+      "rows": 434636,
+      "eligible_rows": 261591,
+      "target_rows": 193364
+    },
+    {
+      "file": "VED_180418_week.csv",
+      "bytes": 69488610,
+      "sha256": "db4b8532041d1c2fdfd095421cb2b72c00382cc1ef1a4f01262121f6fc712a15",
+      "rows": 486657,
+      "eligible_rows": 281556,
+      "target_rows": 159305
+    },
+    {
+      "file": "VED_180425_week.csv",
+      "bytes": 64296606,
+      "sha256": "aa5a478ee78ffbfe8baebff560e32f05f1d8a9eb1d09b36a60692228858e27c5",
+      "rows": 451633,
+      "eligible_rows": 246004,
+      "target_rows": 148972
+    },
+    {
+      "file": "VED_180502_week.csv",
+      "bytes": 60718614,
+      "sha256": "d31de77dbc62fc3f8a656705e4ccced4cb5b3d22e837e52703f6e5c38f2a64ed",
+      "rows": 426242,
+      "eligible_rows": 247355,
+      "target_rows": 135584
+    },
+    {
+      "file": "VED_180509_week.csv",
+      "bytes": 59951343,
+      "sha256": "da228a1b7c551afb010bd4efc91d0117bf93062e252f3783b8abea35e24c2fc3",
+      "rows": 421647,
+      "eligible_rows": 252890,
+      "target_rows": 148817
+    },
+    {
+      "file": "VED_180516_week.csv",
+      "bytes": 66823025,
+      "sha256": "a37a7cb33b1db8d53558161519b467dea0c60d6defc02e5e4dd94699de5844af",
+      "rows": 465975,
+      "eligible_rows": 273500,
+      "target_rows": 162699
+    },
+    {
+      "file": "VED_180523_week.csv",
+      "bytes": 62803076,
+      "sha256": "b99a5f9f9927a091dcd8dc3ace14e087972eb9442d6e01ef76bdb61d9dfc3a44",
+      "rows": 437321,
+      "eligible_rows": 269783,
+      "target_rows": 158937
+    },
+    {
+      "file": "VED_180530_week.csv",
+      "bytes": 59807804,
+      "sha256": "c00b55678ef814616b5c022825a858a9e19860f1ff3c52c435f027ac95445ffb",
+      "rows": 416659,
+      "eligible_rows": 256189,
+      "target_rows": 129827
+    },
+    {
+      "file": "VED_180606_week.csv",
+      "bytes": 61846571,
+      "sha256": "07c24dd283f0b77e725029b46fc970d428914ac2991699325b3eb426e67d06bd",
+      "rows": 432177,
+      "eligible_rows": 264145,
+      "target_rows": 142695
+    },
+    {
+      "file": "VED_180613_week.csv",
+      "bytes": 55087543,
+      "sha256": "c35f5ff07ebe723f508e5ba520e92fdbc7a935acc74d5fbd89b3b83027080874",
+      "rows": 384455,
+      "eligible_rows": 234699,
+      "target_rows": 130820
+    },
+    {
+      "file": "VED_180620_week.csv",
+      "bytes": 62335705,
+      "sha256": "ab1b38e8985530b5a869fe199d4b5b0aba6267fbcdb8763a04391df11e2b5859",
+      "rows": 433660,
+      "eligible_rows": 261953,
+      "target_rows": 130183
+    },
+    {
+      "file": "VED_180627_week.csv",
+      "bytes": 58660993,
+      "sha256": "1af55270f5ce104c22bd9ce81966d2ca20b06e5e9be82629a8d4d71890912985",
+      "rows": 410853,
+      "eligible_rows": 247174,
+      "target_rows": 125026
+    },
+    {
+      "file": "VED_180704_week.csv",
+      "bytes": 47182029,
+      "sha256": "444a4a33572a6c7a5669c7f69142b5d36e44bd28c3c2bca578568adbcd478b75",
+      "rows": 330147,
+      "eligible_rows": 200777,
+      "target_rows": 101970
+    },
+    {
+      "file": "VED_180711_week.csv",
+      "bytes": 56061802,
+      "sha256": "dadf5a960a3b2cd5e97ba72a40486fbf71b90110368080d05bcce7274d85043e",
+      "rows": 393911,
+      "eligible_rows": 201491,
+      "target_rows": 88326
+    },
+    {
+      "file": "VED_180718_week.csv",
+      "bytes": 56979607,
+      "sha256": "e0daa1a3d081dc33fb7af26f1cbac7e73f509c46207366cbfff0184e7d7d4789",
+      "rows": 399092,
+      "eligible_rows": 189980,
+      "target_rows": 110747
+    },
+    {
+      "file": "VED_180725_week.csv",
+      "bytes": 47498384,
+      "sha256": "4bfd052abd982dd09f74273b35b9061157d41f85e0b2fbf738aa8261513e888d",
+      "rows": 333913,
+      "eligible_rows": 186998,
+      "target_rows": 98063
+    },
+    {
+      "file": "VED_180801_week.csv",
+      "bytes": 51116539,
+      "sha256": "69f584582bb4d5e7c8ed37f681f6868f077a52e7c6c61c0d4b940caf179fcb55",
+      "rows": 358812,
+      "eligible_rows": 201052,
+      "target_rows": 113255
+    },
+    {
+      "file": "VED_180808_week.csv",
+      "bytes": 51552748,
+      "sha256": "a6bc41f75fd6874adad28109d47a0b0cfa26e6d939199490a927e35ddfe19495",
+      "rows": 359952,
+      "eligible_rows": 197255,
+      "target_rows": 109243
+    },
+    {
+      "file": "VED_180815_week.csv",
+      "bytes": 42653729,
+      "sha256": "1677b678b1c71a980cf2fe6dc5cc01efac9358e8f717726583d0ea490a79f330",
+      "rows": 299642,
+      "eligible_rows": 165731,
+      "target_rows": 91440
+    },
+    {
+      "file": "VED_180822_week.csv",
+      "bytes": 43105346,
+      "sha256": "37c7d6a7e13be0982dcd5cf01f13f342b3288197c0ea644f76793fe9b6b3ff81",
+      "rows": 300557,
+      "eligible_rows": 150022,
+      "target_rows": 78493
+    },
+    {
+      "file": "VED_180829_week.csv",
+      "bytes": 48642313,
+      "sha256": "092b13e9cd915969242810d9c99d8da70959f72aebe2185e34527fce586060ef",
+      "rows": 341372,
+      "eligible_rows": 185893,
+      "target_rows": 80262
+    },
+    {
+      "file": "VED_180905_week.csv",
+      "bytes": 46100275,
+      "sha256": "252c8f13af4c549eaa8706862804aae21ceddcfbb18ad9b4a231eefd7e4dfd81",
+      "rows": 323481,
+      "eligible_rows": 159653,
+      "target_rows": 76967
+    },
+    {
+      "file": "VED_180912_week.csv",
+      "bytes": 49957903,
+      "sha256": "72e37be67770d3a75c4fd2c06892ac34562ce8c69c343d440d8b9397b8657603",
+      "rows": 351253,
+      "eligible_rows": 164687,
+      "target_rows": 78099
+    },
+    {
+      "file": "VED_180919_week.csv",
+      "bytes": 53460656,
+      "sha256": "ef0793e6ac954acc9fc250b1297ba5e039683b23487a1022cb29b0bf54e5cf4e",
+      "rows": 376531,
+      "eligible_rows": 211032,
+      "target_rows": 101862
+    },
+    {
+      "file": "VED_180926_week.csv",
+      "bytes": 54129300,
+      "sha256": "f78c98304bd8ba5b5b7b59327fd916236f803e1a16f5ce1af97a4ac281570fe9",
+      "rows": 382985,
+      "eligible_rows": 178110,
+      "target_rows": 86061
+    },
+    {
+      "file": "VED_181003_week.csv",
+      "bytes": 49440287,
+      "sha256": "817e941ca07618a304054e4b7aff629b851b982b62038523ddbd1926b828441e",
+      "rows": 348442,
+      "eligible_rows": 153773,
+      "target_rows": 74206
+    },
+    {
+      "file": "VED_181010_week.csv",
+      "bytes": 45108696,
+      "sha256": "20b65b187257f4cde4b66fcff3471eed564d469559510a6c0188ecec2ee62233",
+      "rows": 317933,
+      "eligible_rows": 151274,
+      "target_rows": 64926
+    },
+    {
+      "file": "VED_181017_week.csv",
+      "bytes": 55205044,
+      "sha256": "3346dadde8264c51d2a5216bef75418e56bf95e8fc65418866d049a230c642c4",
+      "rows": 386404,
+      "eligible_rows": 204883,
+      "target_rows": 86693
+    },
+    {
+      "file": "VED_181024_week.csv",
+      "bytes": 62659925,
+      "sha256": "880ec58f0de4cd5b22a2c96dbd52402d50359dda42e631e2702e2b121602e8c5",
+      "rows": 442505,
+      "eligible_rows": 223938,
+      "target_rows": 89979
+    },
+    {
+      "file": "VED_181031_week.csv",
+      "bytes": 52704367,
+      "sha256": "d6b10461baca1255b544baf69110a84ed667e263976c90b4f47047b4bb149051",
+      "rows": 371630,
+      "eligible_rows": 191199,
+      "target_rows": 96245
+    },
+    {
+      "file": "VED_181107_week.csv",
+      "bytes": 16737410,
+      "sha256": "9c8cd37169c168528faad710278c02b1b95bc66be85efe2b74f5886494fff458",
+      "rows": 118327,
+      "eligible_rows": 55737,
+      "target_rows": 24636
+    }
+  ],
+  "raw_trips_in_eligible_population": 18863,
+  "candidate_trips": 7545,
+  "selected_trips": 2590,
+  "selected_vehicles": 135,
+  "duplicate_timestamps_removed": 0,
+  "prepared_quality_counts": {
+    "source_values_age_unverified": 2102482,
+    "invalid_time_or_acceleration": 8009,
+    "invalid_required_sensor": 183
+  },
+  "source_day_min": 1.01549324074,
+  "source_day_max": 375.501194722,
+  "config": {
+    "seed": 20260926,
+    "max_trips_per_vehicle": 24,
+    "min_trip_duration_s": 180,
+    "min_valid_rows_per_trip": 150,
+    "min_valid_fraction_per_trip": 0.8,
+    "min_trips_per_vehicle": 3,
+    "max_gap_s": 5.0,
+    "min_acceleration_dt_s": 0.5,
+    "acceleration_method": "Difference against latest earlier source row at least 0.5 s away, at most 5 s away, within same trip and uninterrupted speed segment; past values only.",
+    "max_abs_acceleration_mps2": 8.0,
+    "air_fuel_ratio": 14.08,
+    "fuel_density_g_per_l": 745.0,
+    "fuel_density_note": "Engineering assumption for gasoline/E10, not measured in VED. Estimated litres scale inversely with this density.",
+    "fuel_assumption": "Gasoline/E10; exclude explicitly diesel, flex-fuel and unknown engine configurations.",
+    "target_method": "MAF * (1 + mean(STFT banks)/100 + mean(LTFT banks)/100) / AFR * 3600 / fuel_density_g_per_l",
+    "alignment": "Use supplied row values only. No forward fill, backward fill or interpolation. VED lacks per-signal acquisition timestamps, so the age of repeated values cannot be verified.",
+    "target_source": "https://arxiv.org/html/1905.02081v1#S2.SS3"
+  },
+  "splits": {
+    "train": {
+      "file": "train.parquet",
+      "sha256": "573d1009ab2770c2d879cd4a653ce603464b7b1a56df198b765b72158645f8dc",
+      "rows": 1437486,
+      "valid_rows": 1431997,
+      "vehicles": 94,
+      "trips": 1779
+    },
+    "validation": {
+      "file": "validation.parquet",
+      "sha256": "60faa73383f18433f4b9fb4a5f9d2b44f1efb5a8e32c464f223771015009d9bf",
+      "rows": 392179,
+      "valid_rows": 390786,
+      "vehicles": 20,
+      "trips": 429
+    },
+    "test": {
+      "file": "test.parquet",
+      "sha256": "9c626e59e9340fd20422b9456c2e12fa01bb002a96eaf78606fed048a3ce7bd9",
+      "rows": 281009,
+      "valid_rows": 279699,
+      "vehicles": 21,
+      "trips": 382
+    }
+  },
+  "limitations": [
+    "Derived targets are not calibrated fuel measurements",
+    "No mechanical-fault labels",
+    "No per-signal acquisition ages",
+    "Metadata ICE count includes known diesel/flex-fuel exclusions; other fuel blends are unobserved",
+    "Only complete selected trip records are retained; original publication already removes trip portions for privacy",
+    "Test rows are prepared but not used for model or threshold selection"
+  ]
+}

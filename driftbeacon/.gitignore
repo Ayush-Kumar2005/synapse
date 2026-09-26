@@ -1,0 +1,9 @@
+data/raw/
+data/prepared/
+data/interim/
+handoff/
+artifacts/models/
+reports/replays/
+__pycache__/
+.venv/
+.tmp/

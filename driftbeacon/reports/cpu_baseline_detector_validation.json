@@ -1,0 +1,2268 @@
+{
+  "config": {
+    "window_s": 60.0,
+    "persistence_s": 30.0,
+    "relative_threshold": 0.25,
+    "absolute_threshold_lph": 0.5,
+    "min_expected_lph": 0.5,
+    "max_gap_s": 5.0
+  },
+  "status": "validation_selected",
+  "model_metadata_sha256": "5de5d5f03ab99aa013f9f3abfa8e341b6501ea838ee3e1f4ebd3c99129182b1d",
+  "validation_sha256": "60faa73383f18433f4b9fb4a5f9d2b44f1efb5a8e32c464f223771015009d9bf",
+  "selection": "At most 3 trips per validation vehicle, 300-1800 s, deterministic SHA256 order; thresholds selected using validation only",
+  "objective_nuisance_alerts_per_hour": 0.2,
+  "metrics": {
+    "trips": 60,
+    "vehicles": 20,
+    "valid_original_hours": 10.565972222222221,
+    "original_trips_with_alert": 0,
+    "nuisance_alerts_per_valid_hour": 0.0,
+    "synthetic_scenarios": 120,
+    "synthetic_detection_rate": 0.725,
+    "missed_or_preempted_scenarios": 33,
+    "early_alert_scenarios": 0,
+    "incremental_detection_rate_on_original_no_alert_trips": 0.725,
+    "original_no_alert_scenarios": 120,
+    "median_detection_delay_s": 180.02499999999998,
+    "max_detection_delay_s": 807.125,
+    "per_severity": {
+      "0.3": {
+        "scenarios": 60,
+        "detections": 30
+      },
+      "0.6": {
+        "scenarios": 60,
+        "detections": 57
+      }
+    }
+  },
+  "trials": [
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.15,
+        "absolute_threshold_lph": 0.5,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 8,
+        "nuisance_alerts_per_valid_hour": 0.7571475517581335,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.8666666666666667,
+        "missed_or_preempted_scenarios": 16,
+        "early_alert_scenarios": 2,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.8653846153846154,
+        "original_no_alert_scenarios": 104,
+        "median_detection_delay_s": 172.25,
+        "max_detection_delay_s": 783.5,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 47
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 57
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.15,
+        "absolute_threshold_lph": 1.0,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 3,
+        "nuisance_alerts_per_valid_hour": 0.28393033190930006,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.7583333333333333,
+        "missed_or_preempted_scenarios": 29,
+        "early_alert_scenarios": 2,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.7631578947368421,
+        "original_no_alert_scenarios": 114,
+        "median_detection_delay_s": 187.77499999999998,
+        "max_detection_delay_s": 805.0249999999999,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 35
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 56
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.15,
+        "absolute_threshold_lph": 2.0,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 0,
+        "nuisance_alerts_per_valid_hour": 0.0,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.475,
+        "missed_or_preempted_scenarios": 63,
+        "early_alert_scenarios": 0,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.475,
+        "original_no_alert_scenarios": 120,
+        "median_detection_delay_s": 271.875,
+        "max_detection_delay_s": 604.25,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 12
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 45
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.25,
+        "absolute_threshold_lph": 0.5,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 0,
+        "nuisance_alerts_per_valid_hour": 0.0,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.725,
+        "missed_or_preempted_scenarios": 33,
+        "early_alert_scenarios": 0,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.725,
+        "original_no_alert_scenarios": 120,
+        "median_detection_delay_s": 180.02499999999998,
+        "max_detection_delay_s": 807.125,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 30
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 57
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.25,
+        "absolute_threshold_lph": 1.0,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 0,
+        "nuisance_alerts_per_valid_hour": 0.0,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.7,
+        "missed_or_preempted_scenarios": 36,
+        "early_alert_scenarios": 0,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.7,
+        "original_no_alert_scenarios": 120,
+        "median_detection_delay_s": 205.925,
+        "max_detection_delay_s": 807.125,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 28
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 56
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.25,
+        "absolute_threshold_lph": 2.0,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 0,
+        "nuisance_alerts_per_valid_hour": 0.0,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.4583333333333333,
+        "missed_or_preempted_scenarios": 65,
+        "early_alert_scenarios": 0,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.4583333333333333,
+        "original_no_alert_scenarios": 120,
+        "median_detection_delay_s": 271.875,
+        "max_detection_delay_s": 604.25,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 10
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 45
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.4,
+        "absolute_threshold_lph": 0.5,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 0,
+        "nuisance_alerts_per_valid_hour": 0.0,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.5083333333333333,
+        "missed_or_preempted_scenarios": 59,
+        "early_alert_scenarios": 0,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.5083333333333333,
+        "original_no_alert_scenarios": 120,
+        "median_detection_delay_s": 245.375,
+        "max_detection_delay_s": 739.05,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 11
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 50
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.4,
+        "absolute_threshold_lph": 1.0,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 0,
+        "nuisance_alerts_per_valid_hour": 0.0,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.5083333333333333,
+        "missed_or_preempted_scenarios": 59,
+        "early_alert_scenarios": 0,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.5083333333333333,
+        "original_no_alert_scenarios": 120,
+        "median_detection_delay_s": 291.725,
+        "max_detection_delay_s": 783.0,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 11
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 50
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.4,
+        "absolute_threshold_lph": 2.0,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 0,
+        "nuisance_alerts_per_valid_hour": 0.0,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.36666666666666664,
+        "missed_or_preempted_scenarios": 76,
+        "early_alert_scenarios": 0,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.36666666666666664,
+        "original_no_alert_scenarios": 120,
+        "median_detection_delay_s": 270.325,
+        "max_detection_delay_s": 604.25,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 6
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 38
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.6,
+        "absolute_threshold_lph": 0.5,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 0,
+        "nuisance_alerts_per_valid_hour": 0.0,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.19166666666666668,
+        "missed_or_preempted_scenarios": 97,
+        "early_alert_scenarios": 0,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.19166666666666668,
+        "original_no_alert_scenarios": 120,
+        "median_detection_delay_s": 292.45000000000005,
+        "max_detection_delay_s": 491.92499999999995,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 0
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 23
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.6,
+        "absolute_threshold_lph": 1.0,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 0,
+        "nuisance_alerts_per_valid_hour": 0.0,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.16666666666666666,
+        "missed_or_preempted_scenarios": 100,
+        "early_alert_scenarios": 0,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.16666666666666666,
+        "original_no_alert_scenarios": 120,
+        "median_detection_delay_s": 294.275,
+        "max_detection_delay_s": 491.92499999999995,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 0
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 20
+          }
+        }
+      }
+    },
+    {
+      "config": {
+        "window_s": 60.0,
+        "persistence_s": 30.0,
+        "relative_threshold": 0.6,
+        "absolute_threshold_lph": 2.0,
+        "min_expected_lph": 0.5,
+        "max_gap_s": 5.0
+      },
+      "metrics": {
+        "trips": 60,
+        "vehicles": 20,
+        "valid_original_hours": 10.565972222222221,
+        "original_trips_with_alert": 0,
+        "nuisance_alerts_per_valid_hour": 0.0,
+        "synthetic_scenarios": 120,
+        "synthetic_detection_rate": 0.14166666666666666,
+        "missed_or_preempted_scenarios": 103,
+        "early_alert_scenarios": 0,
+        "incremental_detection_rate_on_original_no_alert_trips": 0.14166666666666666,
+        "original_no_alert_scenarios": 120,
+        "median_detection_delay_s": 320.87499999999994,
+        "max_detection_delay_s": 495.975,
+        "per_severity": {
+          "0.3": {
+            "scenarios": 60,
+            "detections": 0
+          },
+          "0.6": {
+            "scenarios": 60,
+            "detections": 17
+          }
+        }
+      }
+    }
+  ],
+  "trips": [
+    {
+      "vehicle_id": 156,
+      "trip_id": 1359
+    },
+    {
+      "vehicle_id": 156,
+      "trip_id": 1578
+    },
+    {
+      "vehicle_id": 156,
+      "trip_id": 1489
+    },
+    {
+      "vehicle_id": 157,
+      "trip_id": 1989
+    },
+    {
+      "vehicle_id": 157,
+      "trip_id": 2105
+    },
+    {
+      "vehicle_id": 157,
+      "trip_id": 2719
+    },
+    {
+      "vehicle_id": 163,
+      "trip_id": 1154
+    },
+    {
+      "vehicle_id": 163,
+      "trip_id": 1551
+    },
+    {
+      "vehicle_id": 163,
+      "trip_id": 1100
+    },
+    {
+      "vehicle_id": 195,
+      "trip_id": 1671
+    },
+    {
+      "vehicle_id": 195,
+      "trip_id": 1487
+    },
+    {
+      "vehicle_id": 195,
+      "trip_id": 2101
+    },
+    {
+      "vehicle_id": 208,
+      "trip_id": 1236
+    },
+    {
+      "vehicle_id": 208,
+      "trip_id": 1150
+    },
+    {
+      "vehicle_id": 208,
+      "trip_id": 1066
+    },
+    {
+      "vehicle_id": 209,
+      "trip_id": 1455
+    },
+    {
+      "vehicle_id": 209,
+      "trip_id": 1283
+    },
+    {
+      "vehicle_id": 209,
+      "trip_id": 1379
+    },
+    {
+      "vehicle_id": 214,
+      "trip_id": 588
+    },
+    {
+      "vehicle_id": 214,
+      "trip_id": 484
+    },
+    {
+      "vehicle_id": 214,
+      "trip_id": 596
+    },
+    {
+      "vehicle_id": 230,
+      "trip_id": 1126
+    },
+    {
+      "vehicle_id": 230,
+      "trip_id": 1272
+    },
+    {
+      "vehicle_id": 230,
+      "trip_id": 941
+    },
+    {
+      "vehicle_id": 240,
+      "trip_id": 1949
+    },
+    {
+      "vehicle_id": 240,
+      "trip_id": 1600
+    },
+    {
+      "vehicle_id": 240,
+      "trip_id": 1282
+    },
+    {
+      "vehicle_id": 278,
+      "trip_id": 1038
+    },
+    {
+      "vehicle_id": 278,
+      "trip_id": 1127
+    },
+    {
+      "vehicle_id": 278,
+      "trip_id": 1631
+    },
+    {
+      "vehicle_id": 285,
+      "trip_id": 1787
+    },
+    {
+      "vehicle_id": 285,
+      "trip_id": 1527
+    },
+    {
+      "vehicle_id": 285,
+      "trip_id": 1293
+    },
+    {
+      "vehicle_id": 289,
+      "trip_id": 1380
+    },
+    {
+      "vehicle_id": 289,
+      "trip_id": 1759
+    },
+    {
+      "vehicle_id": 289,
+      "trip_id": 1641
+    },
+    {
+      "vehicle_id": 307,
+      "trip_id": 1036
+    },
+    {
+      "vehicle_id": 307,
+      "trip_id": 1004
+    },
+    {
+      "vehicle_id": 307,
+      "trip_id": 1086
+    },
+    {
+      "vehicle_id": 366,
+      "trip_id": 3121
+    },
+    {
+      "vehicle_id": 366,
+      "trip_id": 1513
+    },
+    {
+      "vehicle_id": 366,
+      "trip_id": 1902
+    },
+    {
+      "vehicle_id": 413,
+      "trip_id": 1068
+    },
+    {
+      "vehicle_id": 413,
+      "trip_id": 1570
+    },
+    {
+      "vehicle_id": 413,
+      "trip_id": 1000
+    },
+    {
+      "vehicle_id": 459,
+      "trip_id": 1442
+    },
+    {
+      "vehicle_id": 459,
+      "trip_id": 1494
+    },
+    {
+      "vehicle_id": 459,
+      "trip_id": 1597
+    },
+    {
+      "vehicle_id": 484,
+      "trip_id": 762
+    },
+    {
+      "vehicle_id": 484,
+      "trip_id": 1553
+    },
+    {
+      "vehicle_id": 484,
+      "trip_id": 909
+    },
+    {
+      "vehicle_id": 522,
+      "trip_id": 1845
+    },
+    {
+      "vehicle_id": 522,
+      "trip_id": 738
+    },
+    {
+      "vehicle_id": 522,
+      "trip_id": 1038
+    },
+    {
+      "vehicle_id": 575,
+      "trip_id": 3120
+    },
+    {
+      "vehicle_id": 575,
+      "trip_id": 1462
+    },
+    {
+      "vehicle_id": 575,
+      "trip_id": 2322
+    },
+    {
+      "vehicle_id": 597,
+      "trip_id": 230
+    },
+    {
+      "vehicle_id": 597,
+      "trip_id": 154
+    },
+    {
+      "vehicle_id": 597,
+      "trip_id": 147
+    }
+  ],
+  "scenarios": [
+    {
+      "vehicle_id": 156,
+      "trip_id": 1359,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 99.625,
+      "ramp_s": 99.625,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 131.575
+    },
+    {
+      "vehicle_id": 156,
+      "trip_id": 1359,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 99.625,
+      "ramp_s": 99.625,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 98.275
+    },
+    {
+      "vehicle_id": 156,
+      "trip_id": 1578,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 93.175,
+      "ramp_s": 93.175,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 274.925
+    },
+    {
+      "vehicle_id": 156,
+      "trip_id": 1578,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 93.175,
+      "ramp_s": 93.175,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 106.12500000000001
+    },
+    {
+      "vehicle_id": 156,
+      "trip_id": 1489,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 232.975,
+      "ramp_s": 232.975,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 454.92499999999995
+    },
+    {
+      "vehicle_id": 156,
+      "trip_id": 1489,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 232.975,
+      "ramp_s": 232.975,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 253.025
+    },
+    {
+      "vehicle_id": 157,
+      "trip_id": 1989,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 119.875,
+      "ramp_s": 119.875,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 161.02499999999998
+    },
+    {
+      "vehicle_id": 157,
+      "trip_id": 1989,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 119.875,
+      "ramp_s": 119.875,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 117.42500000000001
+    },
+    {
+      "vehicle_id": 157,
+      "trip_id": 2105,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 100.675,
+      "ramp_s": 100.675,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 164.125
+    },
+    {
+      "vehicle_id": 157,
+      "trip_id": 2105,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 100.675,
+      "ramp_s": 100.675,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 131.22500000000002
+    },
+    {
+      "vehicle_id": 157,
+      "trip_id": 2719,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 188.975,
+      "ramp_s": 188.975,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 300.025
+    },
+    {
+      "vehicle_id": 157,
+      "trip_id": 2719,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 188.975,
+      "ramp_s": 188.975,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 201.12500000000003
+    },
+    {
+      "vehicle_id": 163,
+      "trip_id": 1154,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 99.425,
+      "ramp_s": 99.425,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 163,
+      "trip_id": 1154,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 99.425,
+      "ramp_s": 99.425,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 262.47499999999997
+    },
+    {
+      "vehicle_id": 163,
+      "trip_id": 1551,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 90.025,
+      "ramp_s": 90.025,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 163,
+      "trip_id": 1551,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 90.025,
+      "ramp_s": 90.025,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 196.87499999999997
+    },
+    {
+      "vehicle_id": 163,
+      "trip_id": 1100,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 116.95,
+      "ramp_s": 116.95,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 163,
+      "trip_id": 1100,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 116.95,
+      "ramp_s": 116.95,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 117.55
+    },
+    {
+      "vehicle_id": 195,
+      "trip_id": 1671,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 285.575,
+      "ramp_s": 285.575,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 195,
+      "trip_id": 1671,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 285.575,
+      "ramp_s": 285.575,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 807.125
+    },
+    {
+      "vehicle_id": 195,
+      "trip_id": 1487,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 78.9,
+      "ramp_s": 78.9,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 195,
+      "trip_id": 1487,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 78.9,
+      "ramp_s": 78.9,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 78.19999999999999
+    },
+    {
+      "vehicle_id": 195,
+      "trip_id": 2101,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 251.55,
+      "ramp_s": 251.55,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 195,
+      "trip_id": 2101,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 251.55,
+      "ramp_s": 251.55,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 723.3499999999999
+    },
+    {
+      "vehicle_id": 208,
+      "trip_id": 1236,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 192.425,
+      "ramp_s": 192.425,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 312.075
+    },
+    {
+      "vehicle_id": 208,
+      "trip_id": 1236,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 192.425,
+      "ramp_s": 192.425,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 245.375
+    },
+    {
+      "vehicle_id": 208,
+      "trip_id": 1150,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 143.95,
+      "ramp_s": 143.95,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 172.95
+    },
+    {
+      "vehicle_id": 208,
+      "trip_id": 1150,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 143.95,
+      "ramp_s": 143.95,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 107.95000000000002
+    },
+    {
+      "vehicle_id": 208,
+      "trip_id": 1066,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 87.45,
+      "ramp_s": 87.45,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 167.55
+    },
+    {
+      "vehicle_id": 208,
+      "trip_id": 1066,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 87.45,
+      "ramp_s": 87.45,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 167.55
+    },
+    {
+      "vehicle_id": 209,
+      "trip_id": 1455,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 177.25,
+      "ramp_s": 177.25,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 181.85000000000002
+    },
+    {
+      "vehicle_id": 209,
+      "trip_id": 1455,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 177.25,
+      "ramp_s": 177.25,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 145.85000000000002
+    },
+    {
+      "vehicle_id": 209,
+      "trip_id": 1283,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 92.275,
+      "ramp_s": 92.275,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 267.125
+    },
+    {
+      "vehicle_id": 209,
+      "trip_id": 1283,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 92.275,
+      "ramp_s": 92.275,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 115.725
+    },
+    {
+      "vehicle_id": 209,
+      "trip_id": 1379,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 91.825,
+      "ramp_s": 91.825,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 209,
+      "trip_id": 1379,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 91.825,
+      "ramp_s": 91.825,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 172.47500000000002
+    },
+    {
+      "vehicle_id": 214,
+      "trip_id": 588,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 295.65,
+      "ramp_s": 295.65,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 327.35
+    },
+    {
+      "vehicle_id": 214,
+      "trip_id": 588,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 295.65,
+      "ramp_s": 295.65,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 246.64999999999998
+    },
+    {
+      "vehicle_id": 214,
+      "trip_id": 484,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 297.3,
+      "ramp_s": 297.3,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 214,
+      "trip_id": 484,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 297.3,
+      "ramp_s": 297.3,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 621.0999999999999
+    },
+    {
+      "vehicle_id": 214,
+      "trip_id": 596,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 185.725,
+      "ramp_s": 185.725,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 489.275
+    },
+    {
+      "vehicle_id": 214,
+      "trip_id": 596,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 185.725,
+      "ramp_s": 185.725,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 182.17499999999998
+    },
+    {
+      "vehicle_id": 230,
+      "trip_id": 1126,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 201.5,
+      "ramp_s": 201.5,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 182.7
+    },
+    {
+      "vehicle_id": 230,
+      "trip_id": 1126,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 201.5,
+      "ramp_s": 201.5,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 146.5
+    },
+    {
+      "vehicle_id": 230,
+      "trip_id": 1272,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 112.375,
+      "ramp_s": 112.375,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 230,
+      "trip_id": 1272,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 112.375,
+      "ramp_s": 112.375,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 180.02499999999998
+    },
+    {
+      "vehicle_id": 230,
+      "trip_id": 941,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 89.675,
+      "ramp_s": 89.675,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 117.825
+    },
+    {
+      "vehicle_id": 230,
+      "trip_id": 941,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 89.675,
+      "ramp_s": 89.675,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 106.52499999999999
+    },
+    {
+      "vehicle_id": 240,
+      "trip_id": 1949,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 103.425,
+      "ramp_s": 103.425,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 170.47499999999997
+    },
+    {
+      "vehicle_id": 240,
+      "trip_id": 1949,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 103.425,
+      "ramp_s": 103.425,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 102.47500000000001
+    },
+    {
+      "vehicle_id": 240,
+      "trip_id": 1600,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 78.175,
+      "ramp_s": 78.175,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 123.22500000000001
+    },
+    {
+      "vehicle_id": 240,
+      "trip_id": 1600,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 78.175,
+      "ramp_s": 78.175,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 92.02499999999999
+    },
+    {
+      "vehicle_id": 240,
+      "trip_id": 1282,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 130.35,
+      "ramp_s": 130.35,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 240,
+      "trip_id": 1282,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 130.35,
+      "ramp_s": 130.35,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 120.55000000000001
+    },
+    {
+      "vehicle_id": 278,
+      "trip_id": 1038,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 125.875,
+      "ramp_s": 125.875,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 210.72500000000002
+    },
+    {
+      "vehicle_id": 278,
+      "trip_id": 1038,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 125.875,
+      "ramp_s": 125.875,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 149.125
+    },
+    {
+      "vehicle_id": 278,
+      "trip_id": 1127,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 219.125,
+      "ramp_s": 219.125,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 465.975
+    },
+    {
+      "vehicle_id": 278,
+      "trip_id": 1127,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 219.125,
+      "ramp_s": 219.125,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 241.875
+    },
+    {
+      "vehicle_id": 278,
+      "trip_id": 1631,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 122.1,
+      "ramp_s": 122.1,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 278,
+      "trip_id": 1631,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 122.1,
+      "ramp_s": 122.1,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 117.30000000000001
+    },
+    {
+      "vehicle_id": 285,
+      "trip_id": 1787,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 220.2,
+      "ramp_s": 220.2,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 285,
+      "trip_id": 1787,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 220.2,
+      "ramp_s": 220.2,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 339.2
+    },
+    {
+      "vehicle_id": 285,
+      "trip_id": 1527,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 91.875,
+      "ramp_s": 91.875,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 285,
+      "trip_id": 1527,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 91.875,
+      "ramp_s": 91.875,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 210.925
+    },
+    {
+      "vehicle_id": 285,
+      "trip_id": 1293,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 157.425,
+      "ramp_s": 157.425,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 285,
+      "trip_id": 1293,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 157.425,
+      "ramp_s": 157.425,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 158.875
+    },
+    {
+      "vehicle_id": 289,
+      "trip_id": 1380,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 229.65,
+      "ramp_s": 229.65,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 292.45000000000005
+    },
+    {
+      "vehicle_id": 289,
+      "trip_id": 1380,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 229.65,
+      "ramp_s": 229.65,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 106.95000000000002
+    },
+    {
+      "vehicle_id": 289,
+      "trip_id": 1759,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 212.1,
+      "ramp_s": 212.1,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 396.79999999999995
+    },
+    {
+      "vehicle_id": 289,
+      "trip_id": 1759,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 212.1,
+      "ramp_s": 212.1,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 396.79999999999995
+    },
+    {
+      "vehicle_id": 289,
+      "trip_id": 1641,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 142.8,
+      "ramp_s": 142.8,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 296.09999999999997
+    },
+    {
+      "vehicle_id": 289,
+      "trip_id": 1641,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 142.8,
+      "ramp_s": 142.8,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 110.79999999999998
+    },
+    {
+      "vehicle_id": 307,
+      "trip_id": 1036,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 145.375,
+      "ramp_s": 145.375,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 307,
+      "trip_id": 1036,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 145.375,
+      "ramp_s": 145.375,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 239.22500000000002
+    },
+    {
+      "vehicle_id": 307,
+      "trip_id": 1004,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 114.35,
+      "ramp_s": 114.35,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 307,
+      "trip_id": 1004,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 114.35,
+      "ramp_s": 114.35,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 166.35
+    },
+    {
+      "vehicle_id": 307,
+      "trip_id": 1086,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 143.9,
+      "ramp_s": 143.9,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 307,
+      "trip_id": 1086,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 143.9,
+      "ramp_s": 143.9,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 366,
+      "trip_id": 3121,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 136.925,
+      "ramp_s": 136.925,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 139.27499999999998
+    },
+    {
+      "vehicle_id": 366,
+      "trip_id": 3121,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 136.925,
+      "ramp_s": 136.925,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 108.875
+    },
+    {
+      "vehicle_id": 366,
+      "trip_id": 1513,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 172.675,
+      "ramp_s": 172.675,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 113.625
+    },
+    {
+      "vehicle_id": 366,
+      "trip_id": 1513,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 172.675,
+      "ramp_s": 172.675,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 103.22499999999997
+    },
+    {
+      "vehicle_id": 366,
+      "trip_id": 1902,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 84.3,
+      "ramp_s": 84.3,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 89.39999999999999
+    },
+    {
+      "vehicle_id": 366,
+      "trip_id": 1902,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 84.3,
+      "ramp_s": 84.3,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 78.7
+    },
+    {
+      "vehicle_id": 413,
+      "trip_id": 1068,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 156.1,
+      "ramp_s": 156.1,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 413,
+      "trip_id": 1068,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 156.1,
+      "ramp_s": 156.1,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 210.9
+    },
+    {
+      "vehicle_id": 413,
+      "trip_id": 1570,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 173.55,
+      "ramp_s": 173.55,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 413,
+      "trip_id": 1570,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 173.55,
+      "ramp_s": 173.55,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 303.45
+    },
+    {
+      "vehicle_id": 413,
+      "trip_id": 1000,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 188.45,
+      "ramp_s": 188.45,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 413,
+      "trip_id": 1000,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 188.45,
+      "ramp_s": 188.45,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 168.25
+    },
+    {
+      "vehicle_id": 459,
+      "trip_id": 1442,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 237.75,
+      "ramp_s": 237.75,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 459,
+      "trip_id": 1442,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 237.75,
+      "ramp_s": 237.75,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 318.54999999999995
+    },
+    {
+      "vehicle_id": 459,
+      "trip_id": 1494,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 206.975,
+      "ramp_s": 206.975,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 465.32499999999993
+    },
+    {
+      "vehicle_id": 459,
+      "trip_id": 1494,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 206.975,
+      "ramp_s": 206.975,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 226.225
+    },
+    {
+      "vehicle_id": 459,
+      "trip_id": 1597,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 194.075,
+      "ramp_s": 194.075,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 459,
+      "trip_id": 1597,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 194.075,
+      "ramp_s": 194.075,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 483.62500000000006
+    },
+    {
+      "vehicle_id": 484,
+      "trip_id": 762,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 261.65,
+      "ramp_s": 261.65,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 484,
+      "trip_id": 762,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 261.65,
+      "ramp_s": 261.65,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 250.75
+    },
+    {
+      "vehicle_id": 484,
+      "trip_id": 1553,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 202.925,
+      "ramp_s": 202.925,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 484,
+      "trip_id": 1553,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 202.925,
+      "ramp_s": 202.925,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 294.875
+    },
+    {
+      "vehicle_id": 484,
+      "trip_id": 909,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 144.85,
+      "ramp_s": 144.85,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 159.75000000000003
+    },
+    {
+      "vehicle_id": 484,
+      "trip_id": 909,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 144.85,
+      "ramp_s": 144.85,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 129.25000000000003
+    },
+    {
+      "vehicle_id": 522,
+      "trip_id": 1845,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 149.5,
+      "ramp_s": 149.5,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 355.5
+    },
+    {
+      "vehicle_id": 522,
+      "trip_id": 1845,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 149.5,
+      "ramp_s": 149.5,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 200.39999999999998
+    },
+    {
+      "vehicle_id": 522,
+      "trip_id": 738,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 108.9,
+      "ramp_s": 108.9,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 145.2
+    },
+    {
+      "vehicle_id": 522,
+      "trip_id": 738,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 108.9,
+      "ramp_s": 108.9,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 84.79999999999998
+    },
+    {
+      "vehicle_id": 522,
+      "trip_id": 1038,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 88.625,
+      "ramp_s": 88.625,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 522,
+      "trip_id": 1038,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 88.625,
+      "ramp_s": 88.625,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 159.675
+    },
+    {
+      "vehicle_id": 575,
+      "trip_id": 3120,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 158.4,
+      "ramp_s": 158.4,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 575,
+      "trip_id": 3120,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 158.4,
+      "ramp_s": 158.4,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 138.70000000000002
+    },
+    {
+      "vehicle_id": 575,
+      "trip_id": 1462,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 198.4,
+      "ramp_s": 198.4,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 575,
+      "trip_id": 1462,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 198.4,
+      "ramp_s": 198.4,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 182.49999999999997
+    },
+    {
+      "vehicle_id": 575,
+      "trip_id": 2322,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 313.85,
+      "ramp_s": 313.85,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 575,
+      "trip_id": 2322,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 313.85,
+      "ramp_s": 313.85,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 597,
+      "trip_id": 230,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 233.9,
+      "ramp_s": 233.9,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 400.5
+    },
+    {
+      "vehicle_id": 597,
+      "trip_id": 230,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 233.9,
+      "ramp_s": 233.9,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 308.4
+    },
+    {
+      "vehicle_id": 597,
+      "trip_id": 154,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 260.05,
+      "ramp_s": 260.05,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 597,
+      "trip_id": 154,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 260.05,
+      "ramp_s": 260.05,
+      "detected": true,
+      "incremental_detection": true,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": 292.34999999999997
+    },
+    {
+      "vehicle_id": 597,
+      "trip_id": 147,
+      "severity": 0.3,
+      "onset_fraction": 0.25,
+      "onset_s": 179.4,
+      "ramp_s": 179.4,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    },
+    {
+      "vehicle_id": 597,
+      "trip_id": 147,
+      "severity": 0.6,
+      "onset_fraction": 0.25,
+      "onset_s": 179.4,
+      "ramp_s": 179.4,
+      "detected": false,
+      "incremental_detection": false,
+      "original_alerted": false,
+      "early_alert": false,
+      "delay_s": null
+    }
+  ],
+  "test_evaluated": false,
+  "limits": "Metrics are on calibration data and optimistic for generalization. Original trips are not certified fault-free. One latched alert maximum per trip. Synthetic observed-fuel ramps do not validate real fault detection."
+}

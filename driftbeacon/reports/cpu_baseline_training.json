@@ -1,0 +1,62 @@
+{
+  "selected": "random_forest",
+  "kind": "sklearn",
+  "requested_candidate": "random_forest",
+  "training_device": "cpu",
+  "features": [
+    "speed_kph",
+    "rpm",
+    "load_pct",
+    "acceleration_mps2",
+    "displacement_l",
+    "weight_kg"
+  ],
+  "target": "observed_fuel_lph",
+  "seed": 20260926,
+  "training_rows": 119916,
+  "training_vehicles": 57,
+  "training_trips": 154,
+  "validation_rows": 390786,
+  "validation_vehicles": 20,
+  "validation_scores": {
+    "median": {
+      "mae_lph": 2.714239238132905,
+      "rmse_lph": 4.199107961081754,
+      "bias_lph": -1.7821235994230213,
+      "fit_and_validation_seconds": 0.06479410000008556
+    },
+    "ridge": {
+      "mae_lph": 1.436634146089641,
+      "rmse_lph": 2.0671307367139535,
+      "bias_lph": 0.48396834336736055,
+      "fit_and_validation_seconds": 0.06960460000004787
+    },
+    "random_forest": {
+      "mae_lph": 1.1640306693385931,
+      "rmse_lph": 1.881431908177459,
+      "bias_lph": 0.3863117447966177,
+      "fit_and_validation_seconds": 9.761794699999996
+    }
+  },
+  "test_evaluated": false,
+  "prediction_policy": "clip negative predictions to zero; reject invalid required sensors",
+  "feature_schema_sha256": "c618c8178e8592b1e9189d97d62d61edd89c8c5518a40ad2a651ea5c4fbcd529",
+  "prepared_checksums": {
+    "train": "573d1009ab2770c2d879cd4a653ce603464b7b1a56df198b765b72158645f8dc",
+    "validation": "60faa73383f18433f4b9fb4a5f9d2b44f1efb5a8e32c464f223771015009d9bf",
+    "test": "9c626e59e9340fd20422b9456c2e12fa01bb002a96eaf78606fed048a3ce7bd9"
+  },
+  "versions": {
+    "numpy": "2.5.3",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "python": "3.13.2",
+  "model_files": {
+    "model.joblib": "f4e5412752a321a520dc07bfcd336f7e7d77148bc54bbe1f9480d9093dbb8e28"
+  },
+  "scope": "CPU baseline is a sanity check. Error is against a derived fuel target, not measured fuel or labelled mechanical faults.",
+  "cpu_reload_verified": true,
+  "cpu_prediction_batch_ms": 7.941599999981008
+}
