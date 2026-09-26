@@ -1,5 +1,7 @@
 # DriftBeacon model preparation
 
+If you are the person training on the second laptop, start with [FRIEND_BRIEF.md](FRIEND_BRIEF.md), then follow [TRAINING_HANDOFF.md](TRAINING_HANDOFF.md).
+
 This directory contains the completed laptop-side VED preparation, a fitted CPU sanity model, training scripts for the second laptop, and sequential drift-detection/replay tools. Code lives on the `model-development` branch.
 
 ## Current outputs

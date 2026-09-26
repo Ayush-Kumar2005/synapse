@@ -1,5 +1,7 @@
 # Training on the second laptop
 
+Read [FRIEND_BRIEF.md](FRIEND_BRIEF.md) first for the problem, model target, data split, completed work, and your exact deliverables.
+
 Adarsh's preparation tasks are complete. Transfer the local `handoff/driftbeacon-training.zip` to the training laptop and extract it. The archive includes code, configuration, train/validation data, the exact feature schema, checksums, source license, and baseline results. The raw 3.2 GB dataset and the final test data are not required for training and are omitted from the package.
 
 The archive's top-level directory is `driftbeacon`. Run the following commands from inside it, in PowerShell. Use Python 3.13, matching the tested environment.

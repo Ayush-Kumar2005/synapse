@@ -10,7 +10,7 @@ def main():
     paths = []
     for folder in ("model", "tests", "config"):
         paths.extend(p for p in (ROOT / folder).rglob("*") if p.is_file() and "__pycache__" not in p.parts)
-    paths.extend(ROOT / p for p in ("README.md", "TRAINING_HANDOFF.md", "requirements.txt", "requirements-gpu.txt", "VED_LICENSE.txt", "artifacts/feature_schema.json", "artifacts/split_manifest.json", "reports/data_audit.json", "reports/source_manifest.json", "reports/cpu_baseline_training.json", "data/prepared/split_manifest.json"))
+    paths.extend(ROOT / p for p in ("FRIEND_BRIEF.md", "README.md", "TRAINING_HANDOFF.md", "requirements.txt", "requirements-gpu.txt", "VED_LICENSE.txt", "artifacts/feature_schema.json", "artifacts/split_manifest.json", "reports/data_audit.json", "reports/source_manifest.json", "reports/cpu_baseline_training.json", "data/prepared/split_manifest.json"))
     for split in ("train", "validation"):
         file = ROOT / "data/prepared" / manifest["datasets"][split]["file"]
         if sha256(file) != manifest["datasets"][split]["sha256"]:

@@ -7,6 +7,8 @@ Model preparation, measured baseline results, detector and replay tools are in
 
 For training on the second laptop, follow
 [TRAINING_HANDOFF.md](driftbeacon/TRAINING_HANDOFF.md).
+For the complete context to send that person, see
+[FRIEND_BRIEF.md](driftbeacon/FRIEND_BRIEF.md).
 
 Model work is on `model-development`. Raw data, prepared Parquet files, local
 Python environments and model binaries are excluded from Git. The preparation
