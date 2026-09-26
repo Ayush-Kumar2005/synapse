@@ -144,7 +144,27 @@ class FaultTests(unittest.TestCase):
     def test_no_evidence_does_not_invent_components(self):
         result = inspection_evidence({}, {}, {}, {})
         self.assertEqual(result["systems_to_check"], [])
+        self.assertIsNone(result["drift_explanation"])
         self.assertIsNone(result["confirmed_component"])
+
+    def test_drift_reason_is_quantitative_without_claiming_component(self):
+        alert = {"duration_s": 60, "evidence_start_s": 10, "detected_at_s": 70,
+                 "window_expected_l": 0.1, "window_observed_l": 0.15,
+                 "excess_l": 0.05, "excess_pct": 50,
+                 "explanation": "Sustained excess fuel estimate."}
+        fuel = {"alert": alert, "observation_method": "derived_maf_trims",
+                "observation_provenance": ["recorded_age_unverified"]}
+        result = inspection_evidence({"stft1_pct": 20, "ltft1_pct": 0}, fuel,
+                                     {"alert": None}, {"top_label": "1", "top_label_name": "Fault type 1",
+                                                       "status": "experimental_classification"})
+        reason = result["drift_explanation"]
+        self.assertAlmostEqual(reason["expected_mean_lph"], 6)
+        self.assertAlmostEqual(reason["observed_mean_lph"], 9)
+        self.assertEqual(reason["excess_l"], 0.05)
+        self.assertFalse(reason["fuel_measurement_independent_of_maf_trims"])
+        self.assertIsNone(reason["root_cause"])
+        self.assertFalse(result["causal_diagnosis"])
+        self.assertFalse(result["systems_to_check"][1]["independent_of_fuel_estimate"])
 
 
 @unittest.skipUnless((ROOT / "artifacts/models/gpu_candidate/metadata.json").exists(), "Fuel model not available")

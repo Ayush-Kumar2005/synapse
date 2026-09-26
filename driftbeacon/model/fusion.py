@@ -38,8 +38,37 @@ def fuel_observation(values):
 
 def inspection_evidence(values, fuel, nox, fault):
     evidence, checks = [], []
+    drift_explanation = None
     if fuel.get("alert"):
-        evidence.append({"kind": "fuel_drift", "detail": fuel["alert"]["explanation"]})
+        alert = fuel["alert"]
+        duration = alert["duration_s"]
+        expected_rate = alert["window_expected_l"] * 3600 / duration
+        observed_rate = alert["window_observed_l"] * 3600 / duration
+        method = fuel.get("observation_method", "unavailable")
+        drift_explanation = {
+            "status": "drift_detected_cause_unverified",
+            "reason_for_alert": ("Measured fuel use exceeded the model expectation for the sustained evidence window."
+                                 if method == "measured_fuel_sensor" else
+                                 "The supplied or derived fuel estimate exceeded the model expectation for the sustained evidence window."),
+            "evidence_window_s": [alert["evidence_start_s"], alert["detected_at_s"]],
+            "expected_mean_lph": expected_rate,
+            "observed_mean_lph": observed_rate,
+            "excess_l": alert["excess_l"],
+            "excess_pct": alert["excess_pct"],
+            "observation_method": method,
+            "observation_provenance": fuel.get("observation_provenance", []),
+            "fuel_measurement_independent_of_maf_trims": method == "measured_fuel_sensor",
+            "root_cause": None,
+            "root_cause_status": "not_identifiable_from_current_models_and_signals",
+            "needed_for_cause_validation": [
+                "Independent measured fuel flow or consumption if the observation was derived from MAF and trims",
+                "Same-trip operating context, including temperature, route, load and driving pattern",
+                "Diagnostic trouble codes and synchronized fuel/air system measurements",
+                "Mechanic-confirmed fault and post-repair fuel comparison",
+            ],
+        }
+        evidence.append({"kind": "fuel_drift", "detail": alert["explanation"],
+                         "observation_method": method, "evidence_window_s": drift_explanation["evidence_window_s"]})
         checks.append({"system": "Operating conditions and fuel measurement", "support": "sustained_fuel_residual",
                        "next_check": "Compare route, payload, cold operation, sensor validity and maintenance history."})
     if "stft1_pct" in values and "ltft1_pct" in values:
@@ -61,6 +90,7 @@ def inspection_evidence(values, fuel, nox, fault):
         evidence.append({"kind": "laboratory_classifier", "detail": fault["top_label_name"],
                          "status": fault["status"], "numeric_label_mapping_verified": False})
     return {"status": "inspection_suggestions" if checks else "insufficient_evidence_for_cause",
+            "drift_explanation": drift_explanation,
             "evidence": evidence, "systems_to_check": checks, "confirmed_component": None,
             "causal_diagnosis": False,
             "limitations": "Suggestions are heuristic inspection directions. MAF and fuel trims generate the VED fuel target, so they are not independent corroboration. EngineFaultDB classes are experimental conditions, not component repair labels."}

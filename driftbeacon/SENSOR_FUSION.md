@@ -94,6 +94,10 @@ Training refuses to overwrite an existing model. The local selected classifier i
 
 ## Evidence and possible causes
 
+When the detector flags fuel drift, `diagnosis.drift_explanation` reports the frozen evidence window, mean expected and observed or estimated fuel rates, excess litres and percentage, and the fuel observation method. It records whether fuel came from an independent measured sensor or was estimated from MAF and trims. This explains **why the alert fired**, not why the vehicle's fuel use changed. No alert yields `drift_explanation: null`.
+
+The VED fuel model predicts fuel rate from operating inputs, while EngineFaultDB classifies separate laboratory fault states from exhaust and fuel measurements. The classifier cannot turn a VED residual into a named fault: VED lacks its required exhaust features, its numeric fault-state mapping is unverified, and its labels do not identify failed components or repairs. The `root_cause` field therefore remains null even when the laboratory classifier returns a class. Fuel trims used to construct a VED fuel observation cannot independently corroborate the resulting drift.
+
 `diagnosis.systems_to_check` provides inspection directions from actual available evidence: operating conditions and measurement validity after a fuel alert; intake/MAF/fuel delivery checks when large fuel correction is observed; sensor/exhaust investigation after a NOx change. The 15% combined fuel-trim screen is an engineering heuristic, not an OEM fault threshold. A single trim reading does not establish persistence or closed-loop operation.
 
 `confirmed_component` remains null. Neither VED nor EngineFaultDB supplies mechanic-confirmed component/repair labels suitable for learning the exact reason for a VED alert. A NOx increase alone cannot establish a failed catalyst or other component. Required future evidence includes synchronized recordings, operating-temperature context, diagnostic codes, confirmed faults and repair outcomes.
