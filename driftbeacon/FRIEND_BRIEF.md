@@ -46,6 +46,8 @@ Adarsh will send **`driftbeacon-training.zip`** (about 17 MB). Extract it; its s
 - `reports/data_audit.json`, `source_manifest.json`, and `cpu_baseline_training.json` for provenance and baseline comparison.
 - `handoff_manifest.json` containing hashes for the ZIP's individual files.
 
+If the Windows GPU setup is causing problems, open `colab_train.ipynb` in Google Colab, select an NVIDIA GPU runtime, upload the same ZIP, and run the cells from top to bottom. It installs Colab-compatible dependencies, verifies the train/validation package, runs the same GPU command, calibrates the detector, and downloads the model artifact. Return the artifact ZIP plus the two JSON reports requested below. Colab GPU availability and session duration vary, so record whether the CUDA run actually completed.
+
 There is no need to download VED again or train from the full raw CSVs. Avoid retraining or evaluating on the reserved test vehicles. The current project has model preparation and replay code but **no API endpoints or frontend integration yet**; those are separate project tasks.
 
 ## Your steps

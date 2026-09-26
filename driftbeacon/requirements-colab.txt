@@ -1,0 +1,11 @@
+# Colab already supplies Python, CUDA libraries and much of the scientific stack.
+# Keep this file separate from the Windows lockfile.
+numpy>=2.0,<3
+pandas>=2.2,<3
+scikit-learn>=1.6,<2
+scipy>=1.12,<2
+joblib>=1.4,<2
+pyarrow>=18,<24
+openpyxl>=3.1,<4
+threadpoolctl>=3.5,<4
+xgboost>=3.1,<4
