@@ -10,6 +10,7 @@ from model.common import ROOT
 from model.emissions import NoxConfig, NoxMonitor
 from model.enginefault import blocked_split, DEFAULT_MODEL, FaultPredictor, FEATURES as FAULT_FEATURES
 from model.fusion import FusionEngine, fuel_observation, inspection_evidence
+from model.reasoning import ReasoningConfig, rank_reasons
 from model.telemetry import NoxFeed, Packet, Signal, signal_dict
 
 
@@ -21,6 +22,13 @@ def packet(t=0, vehicle=1, trip=1):
 
 
 class TelemetryTests(unittest.TestCase):
+    def test_trouble_codes_are_bounded_and_validated(self):
+        p = packet()
+        p["trouble_codes"] = ["P0171"]
+        self.assertEqual(Packet.from_dict(p).trouble_codes, ("P0171",))
+        p["trouble_codes"] = ["not-a-code"]
+        with self.assertRaises(ValueError):
+            Packet.from_dict(p)
     def test_wrong_unit_and_future_sample_rejected(self):
         p = packet()
         p["signals"]["rpm"]["unit"] = "Hz"
@@ -167,6 +175,58 @@ class FaultTests(unittest.TestCase):
         self.assertFalse(result["systems_to_check"][1]["independent_of_fuel_estimate"])
 
 
+class ReasoningTests(unittest.TestCase):
+    @staticmethod
+    def samples():
+        rows = []
+        for t in range(100, 161):
+            idle = t <= 130
+            rows.append({"time_s": t, "trip_elapsed_s": 700 + t,
+                         "values": {"rpm": 800 if idle else 2200, "closed_loop": 1,
+                                    "coolant_c": 85, "stft1_pct": 18 if idle else 8,
+                                    "ltft1_pct": 2, "battery_v": 14},
+                         "provenance": {"rpm": "measured", "stft1_pct": "measured"},
+                         "trouble_codes": ("P0171",) if t == 150 else ()})
+        return rows
+
+    @staticmethod
+    def alert():
+        return {"evidence_start_s": 100, "detected_at_s": 160}
+
+    def test_ranked_reasons_use_window_and_disclose_derived_fuel(self):
+        rows = self.samples()
+        rows.append({"time_s": 170, "values": {"battery_v": 1},
+                     "provenance": {"battery_v": "synthetic"}, "trouble_codes": ("P0562",)})
+        result = rank_reasons(rows, self.alert(), "derived_maf_trims")
+        codes = [r["reason_code"] for r in result["likely_reasons"]]
+        self.assertIn("intake_air_leak_pattern", codes)
+        self.assertIn("lean_system_evidence", codes)
+        self.assertNotIn("charging_voltage_pattern", codes)
+        self.assertEqual(result["reported_trouble_codes"], ["P0171"])
+        self.assertTrue(all(r["fuel_estimate_dependency"] for r in result["likely_reasons"]))
+        self.assertIsNone(result["confirmed_cause"])
+
+    def test_sparse_or_unwarmed_trims_do_not_create_reason(self):
+        rows = self.samples()[::15]
+        result = rank_reasons(rows, self.alert(), "measured_fuel_sensor")
+        self.assertEqual(result["likely_reasons"], [])
+        self.assertEqual(result["status"], "insufficient_diagnostic_evidence")
+        rows = self.samples()
+        for row in rows:
+            row["values"].pop("closed_loop")
+        self.assertEqual(rank_reasons(rows, self.alert(), "measured_fuel_sensor")["likely_reasons"], [])
+
+    def test_fuel_pressure_requires_vehicle_specification(self):
+        rows = self.samples()
+        for row in rows:
+            row["values"].update(fuel_pressure_kpa=200)
+        without = rank_reasons(rows, self.alert(), "measured_fuel_sensor")
+        with_spec = rank_reasons(rows, self.alert(), "measured_fuel_sensor",
+                                 ReasoningConfig(fuel_pressure_min_kpa=250))
+        self.assertNotIn("fuel_delivery_pressure", [r["reason_code"] for r in without["likely_reasons"]])
+        self.assertIn("fuel_delivery_pressure", [r["reason_code"] for r in with_spec["likely_reasons"]])
+
+
 @unittest.skipUnless((ROOT / "artifacts/models/gpu_candidate/metadata.json").exists(), "Fuel model not available")
 class FusionIntegrationTests(unittest.TestCase):
     @classmethod
@@ -178,11 +238,19 @@ class FusionIntegrationTests(unittest.TestCase):
 
     def test_combined_fixture_triggers_both_channels_and_serializes(self):
         from model.verify_fusion import synthetic_packets
+        first_reason = None
         for p in synthetic_packets(self.engine):
             result = self.engine.step(p)
+            if first_reason is None and result["diagnosis"]["reasoning"] is not None:
+                first_reason = copy.deepcopy(result["diagnosis"]["reasoning"])
         self.assertIsNotNone(result["fuel"]["alert"])
         self.assertIsNotNone(result["nox"]["alert"])
         self.assertIsNone(result["diagnosis"]["confirmed_component"])
+        self.assertEqual(result["diagnosis"]["reasoning"]["status"], "possible_reasons")
+        self.assertEqual(result["diagnosis"]["reasoning"]["likely_reasons"][0]["reason_code"],
+                         "lean_system_evidence")
+        self.assertEqual(result["diagnosis"]["reasoning"], first_reason)
+        self.assertIsNone(result["diagnosis"]["reasoning"]["confirmed_cause"])
         self.assertEqual(result["fault_classifier"]["status"], "unavailable")
         json.dumps(result, allow_nan=False)
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 from bisect import bisect_right
 from dataclasses import dataclass
 import math
+import re
 
 import pandas as pd
 
@@ -14,6 +15,7 @@ UNITS = {
     "nox_ppm": "ppm", "co_pct": "%", "hc_ppm": "ppm", "co2_pct": "%", "o2_pct": "%",
     "lambda": "ratio", "map_kpa": "kPa", "throttle_pct": "%", "coolant_c": "degC",
     "battery_v": "V", "afr": "ratio",
+    "fuel_pressure_kpa": "kPa", "closed_loop": "flag",
 }
 RANGES = {"speed_kph": (0, 250), "rpm": (0, 8000), "load_pct": (0, 300),
           "acceleration_mps2": (-8, 8), "displacement_l": (.5, 10), "weight_kg": (500, 6000),
@@ -22,7 +24,8 @@ RANGES = {"speed_kph": (0, 250), "rpm": (0, 8000), "load_pct": (0, 300),
           "co2_pct": (0, 100), "o2_pct": (0, 100), "lambda": (.1, 10),
           "stft1_pct": (-99, 99), "stft2_pct": (-99, 99), "ltft1_pct": (-99, 99), "ltft2_pct": (-99, 99),
           "map_kpa": (0, 1000), "throttle_pct": (0, 100), "coolant_c": (-50, 200),
-          "battery_v": (0, 60), "afr": (0, 150)}
+          "battery_v": (0, 60), "afr": (0, 150),
+          "fuel_pressure_kpa": (0, 10000), "closed_loop": (0, 1)}
 MODES = {"live", "ved_replay", "enginefaultdb_replay", "synthetic_demo"}
 PROVENANCE = {"measured", "derived_maf_trims", "recorded_age_unverified", "laboratory_recording", "synthetic"}
 QUALITIES = {"valid", "warming_up", "fault", "unavailable"}
@@ -68,6 +71,7 @@ class Packet:
     source_time_s: float
     mode: str
     signals: dict[str, Signal]
+    trouble_codes: tuple[str, ...] = ()
 
     @classmethod
     def from_dict(cls, payload):
@@ -84,9 +88,14 @@ class Packet:
             if name not in UNITS:
                 raise ValueError(f"Unknown signal {name}; define its units before importing")
             signals[name] = Signal(**value)
+        codes = payload.get("trouble_codes", [])
+        if not isinstance(codes, list) or len(codes) > 32 or any(
+                not isinstance(code, str) or not re.fullmatch(r"[PBCU][0-3][0-9A-F]{3}", code)
+                for code in codes):
+            raise ValueError("trouble_codes must be a list of at most 32 uppercase five-character DTCs")
         if payload["mode"] == "live" and any(s.provenance != "measured" for s in signals.values()):
             raise ValueError("Live packets require measured signals; derive fuel within the pipeline")
-        return cls(payload["vehicle_id"], payload["trip_id"], t, payload["mode"], signals)
+        return cls(payload["vehicle_id"], payload["trip_id"], t, payload["mode"], signals, tuple(codes))
 
     def available(self, max_age_s=3.0):
         if not math.isfinite(max_age_s) or max_age_s <= 0:

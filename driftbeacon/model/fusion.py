@@ -5,6 +5,7 @@ CLI: python -m model.fusion --input telemetry.jsonl --output results.jsonl
 from __future__ import annotations
 
 import argparse
+from collections import deque
 from dataclasses import asdict
 import json
 import math
@@ -19,6 +20,7 @@ from .emissions import NoxConfig, NoxMonitor
 from .enginefault import DEFAULT_MODEL, FaultPredictor
 from .inference import Predictor
 from .replay import load_detector
+from .reasoning import ReasoningConfig, rank_reasons
 from .telemetry import Packet, UNITS
 
 
@@ -36,7 +38,7 @@ def fuel_observation(values):
     return None, "unavailable"
 
 
-def inspection_evidence(values, fuel, nox, fault):
+def inspection_evidence(values, fuel, nox, fault, reason_report=None):
     evidence, checks = [], []
     drift_explanation = None
     if fuel.get("alert"):
@@ -91,13 +93,15 @@ def inspection_evidence(values, fuel, nox, fault):
                          "status": fault["status"], "numeric_label_mapping_verified": False})
     return {"status": "inspection_suggestions" if checks else "insufficient_evidence_for_cause",
             "drift_explanation": drift_explanation,
+            "reasoning": reason_report,
             "evidence": evidence, "systems_to_check": checks, "confirmed_component": None,
             "causal_diagnosis": False,
             "limitations": "Suggestions are heuristic inspection directions. MAF and fuel trims generate the VED fuel target, so they are not independent corroboration. EngineFaultDB classes are experimental conditions, not component repair labels."}
 
 
 class FusionEngine:
-    def __init__(self, fuel_model, fault_model=None, freshness_s=3., nox_config=None):
+    def __init__(self, fuel_model, fault_model=None, freshness_s=3., nox_config=None,
+                 reasoning_config=None):
         self.fuel_predictor = Predictor(fuel_model)
         self.detector_config, self.detector_bundle = load_detector(Path(fuel_model))
         self.fault_predictor = FaultPredictor(fault_model) if fault_model else None
@@ -105,6 +109,7 @@ class FusionEngine:
             raise ValueError("Positive finite freshness_s required")
         self.freshness_s = freshness_s
         self.nox_config = nox_config or NoxConfig()
+        self.reasoning_config = reasoning_config or ReasoningConfig()
         self.states = {}
 
     def reset(self):
@@ -118,7 +123,8 @@ class FusionEngine:
         state = self.states.get(key)
         if state is None:
             state = {"last_time": None, "fuel": DriftDetector(self.detector_config),
-                     "nox": NoxMonitor(self.nox_config), "fuel_source": None, "fuel_provenance": None}
+                     "nox": NoxMonitor(self.nox_config), "fuel_source": None, "fuel_provenance": None,
+                     "first_time": packet.source_time_s, "history": deque(), "reason_report": None}
             self.states[key] = state
         if state["last_time"] is not None and packet.source_time_s <= state["last_time"]:
             raise ValueError("Each stream requires strictly increasing source_time_s")
@@ -140,6 +146,8 @@ class FusionEngine:
         # Changing observation method/provenance must not masquerade as drift.
         if fuel_source != "unavailable" and (fuel_source != state["fuel_source"] or provenance != state["fuel_provenance"]):
             state["fuel"].reset()
+            state["history"].clear()
+            state["reason_report"] = None
         if fuel_source != "unavailable":
             state["fuel_source"], state["fuel_provenance"] = fuel_source, provenance
         fuel = state["fuel"].step(packet.vehicle_id, packet.trip_id, packet.source_time_s,
@@ -148,6 +156,13 @@ class FusionEngine:
                     observation_method=fuel_source, observation_provenance=provenance,
                     predictor="xgboost" if self.fuel_predictor.kind == "xgboost" else self.fuel_predictor.kind,
                     detector_version="original_threshold_detector", detector_config=asdict(self.detector_config))
+        state["history"].append({"time_s": packet.source_time_s, "trip_elapsed_s": packet.source_time_s - state["first_time"],
+                                 "values": values.copy(), "provenance": {k: packet.signals[k].provenance for k in values},
+                                 "trouble_codes": packet.trouble_codes})
+        while state["history"] and state["history"][0]["time_s"] < packet.source_time_s - self.detector_config.window_s - self.detector_config.max_gap_s:
+            state["history"].popleft()
+        if fuel["alert"] and state["reason_report"] is None:
+            state["reason_report"] = rank_reasons(state["history"], fuel["alert"], fuel_source, self.reasoning_config)
         nox = state["nox"].step(nox_signal, values)
         domain = "enginefaultdb_lab" if packet.mode == "enginefaultdb_replay" else packet.mode
         if domain == "enginefaultdb_lab" and any(s.provenance not in {"measured", "laboratory_recording"} for s in packet.signals.values()):
@@ -165,8 +180,9 @@ class FusionEngine:
         return {"schema_version": 1, "vehicle_id": packet.vehicle_id, "trip_id": packet.trip_id,
                 "source_time_s": packet.source_time_s, "mode": packet.mode,
                 "data_quality": quality, "fuel": fuel, "emissions": emissions, "nox": nox,
-                "fault_classifier": fault, "diagnosis": inspection_evidence(values, fuel, nox, fault),
-                "signal_values": values, "compliance": "not_assessed"}
+                "fault_classifier": fault, "diagnosis": inspection_evidence(values, fuel, nox, fault, state["reason_report"]),
+                "signal_values": values, "trouble_codes": list(packet.trouble_codes),
+                "compliance": "not_assessed"}
 
 
 def main():

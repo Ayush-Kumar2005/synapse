@@ -22,11 +22,13 @@ def synthetic_packets(engine):
         factor = 1 + .8 * max(0, min(1, (t - 80) / 40))
         values = {**base, "observed_fuel_lph": expected * factor,
                   "nox_ppm": 100 + 180 * max(0, min(1, (t - 80) / 40)),
-                  "stft1_pct": 3. if t < 100 else 12., "ltft1_pct": 2. if t < 100 else 10.}
+                  "stft1_pct": 3. if t < 100 else 12., "ltft1_pct": 2. if t < 100 else 10.,
+                  "coolant_c": 85., "closed_loop": 1.}
         signals = {k: signal_dict(k, v, t, "synthetic",
                                   **({"sensor_id": "demo-nox-1", "position": "downstream"} if k == "nox_ppm" else {}))
                    for k, v in values.items()}
-        yield {"vehicle_id": 999999, "trip_id": 1, "source_time_s": t, "mode": "synthetic_demo", "signals": signals}
+        yield {"vehicle_id": 999999, "trip_id": 1, "source_time_s": t, "mode": "synthetic_demo", "signals": signals,
+               "trouble_codes": ["P0171"] if t >= 120 else []}
 
 
 def main():

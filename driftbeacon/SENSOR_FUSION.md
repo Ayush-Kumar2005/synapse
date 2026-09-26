@@ -9,7 +9,7 @@ This implementation combines a VED fuel predictor, a separate experimental Engin
 - `model.fusion.FusionEngine.step` returns one JSON object containing fuel expectations, fuel drift, exhaust measurements, NOx screening, data quality, experimental fault classification and suggested inspection directions.
 - `model.enginefault` downloads a pinned dataset, audits it, trains Random Forest and XGBoost on the CPU, selects using validation, and evaluates the frozen selection on an exploratory block holdout.
 - `model.verify_fusion` checks model/data integration using VED validation records, laboratory examples and explicitly synthetic test fixtures. Outputs are JSON reports; no dashboard or server is included.
-- `tests/test_sensor_fusion.py` covers invalid units, future/stale readings, stream isolation, missing channels, NOx reference/persistence, source-block splitting, fault prediction gates, JSON serialization. All **30 tests** including the original suite passed.
+- `tests/test_sensor_fusion.py` covers invalid units, future/stale readings, stream isolation, missing channels, NOx reference/persistence, source-block splitting, fault prediction gates, reason-ranking safeguards, and JSON serialization. All **35 tests** including the original suite passed.
 
 ## Run model processing
 
@@ -93,6 +93,16 @@ python -m unittest discover -s tests -v
 Training refuses to overwrite an existing model. The local selected classifier is `artifacts/models/enginefault_candidate`; XGBoost is stored as portable JSON. Raw data and model weights are excluded from Git. The handoff ZIP contains the model artifacts, source code, examples and reports.
 
 ## Evidence and possible causes
+
+### Ranked inspection reasons
+
+`model.reasoning` now evaluates only the frozen 60-second fuel-alert window, using a bounded history of valid, fresh signals. `diagnosis.reasoning.likely_reasons` lists possible reasons in an explicit inspection order. Each entry has its supporting readings, missing checks, whether fuel-estimate dependence weakens the evidence, and a next check. `confirmed_cause` always remains null. The order is a screening heuristic based on independent supporting clues; it is not a fault probability.
+
+The current rules screen for an intake-air-leak pattern (warm closed-loop positive trims stronger at idle), a fuel-delivery pressure issue (positive trims and pressure below a **vehicle-specific configured minimum**), a lean-system pattern (positive trims and a reported lean code), a rich-mixture pattern (negative trims with a rich code or sustained low lambda), a cold-running pattern after at least ten minutes of observed trip time, and a low-voltage pattern with a reported code. These are possible inspection directions. `ReasoningConfig` in `model/reasoning.py` holds the provisional thresholds; only set `fuel_pressure_min_kpa` from the particular vehicle's service specification. Missing or sparse readings do not trigger a rule.
+
+Packets can include `trouble_codes` as a list of uppercase five-character codes such as `P0171`. Optional numeric signals include `closed_loop` (`flag`, 0 or 1) and `fuel_pressure_kpa` (`kPa`). Codes are attributed to the packet timestamp; the feed does not yet distinguish pending, stored, or active codes. The reasoning module needs `closed_loop=1` and sustained warm coolant readings before using fuel trims. No codes or extra diagnostic signals are required for the fuel detector itself.
+
+The synthetic combined-sensor fixture includes warm closed-loop readings and a scripted `P0171` code, so it demonstrates one ranked reason. It is not a real-world validation. The selected VED validation trip has no drift alert and lacks these diagnostic signals, so its `diagnosis.reasoning` remains null. The EngineFaultDB classifier is neither retrained nor used to infer VED causes.
 
 When the detector flags fuel drift, `diagnosis.drift_explanation` reports the frozen evidence window, mean expected and observed or estimated fuel rates, excess litres and percentage, and the fuel observation method. It records whether fuel came from an independent measured sensor or was estimated from MAF and trims. This explains **why the alert fired**, not why the vehicle's fuel use changed. No alert yields `drift_explanation: null`.
 
