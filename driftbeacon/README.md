@@ -1,6 +1,6 @@
 # DriftBeacon model preparation
 
-**Sensor integration update:** See [SENSOR_FUSION.md](SENSOR_FUSION.md) for the CPU-compatible Colab model, trained EngineFaultDB classifier, timestamped NOx import, local API, combined replay demo, measured results and remaining diagnosis limitations. Run `.venv\Scripts\python.exe -m model.api` for the local demo. The preparation-stage descriptions below are historical: the other chat subsequently reported test evaluation; its detector v2 artifacts are not in this checkout.
+**Model and data update:** See [SENSOR_FUSION.md](SENSOR_FUSION.md) for the CPU-compatible Colab model, trained EngineFaultDB classifier, timestamped NOx processing, measured results and remaining diagnosis limitations. This work covers model training and data processing only. The preparation-stage descriptions below are historical: the other chat subsequently reported test evaluation; its detector v2 artifacts are not in this checkout.
 
 If you are the person training on the second laptop, start with [FRIEND_BRIEF.md](FRIEND_BRIEF.md), then follow [TRAINING_HANDOFF.md](TRAINING_HANDOFF.md).
 

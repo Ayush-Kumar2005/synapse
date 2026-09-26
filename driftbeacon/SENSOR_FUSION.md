@@ -8,78 +8,24 @@ This implementation combines a VED fuel predictor, a separate experimental Engin
 - `model.telemetry` defines sensor units, timestamps, provenance, quality and causal NOx alignment. `model.sensor_replay` imports a VED validation trip and recovers available MAF/fuel trims from exact raw source rows.
 - `model.fusion.FusionEngine.step` returns one JSON object containing fuel expectations, fuel drift, exhaust measurements, NOx screening, data quality, experimental fault classification and suggested inspection directions.
 - `model.enginefault` downloads a pinned dataset, audits it, trains Random Forest and XGBoost on the CPU, selects using validation, and evaluates the frozen selection on an exploratory block holdout.
-- `model.api` serves a local JSON API and browser demonstration. `model.demo_fusion` builds a standalone HTML demo, JSON results and clearly labelled synthetic import fixtures.
-- `tests/test_sensor_fusion.py` covers invalid units, future/stale readings, stream isolation, missing channels, NOx reference/persistence, source-block splitting, fault prediction gates, JSON serialization and the HTTP API. All **31 tests** including the original suite passed.
+- `model.verify_fusion` checks model/data integration using VED validation records, laboratory examples and explicitly synthetic test fixtures. Outputs are JSON reports; no dashboard or server is included.
+- `tests/test_sensor_fusion.py` covers invalid units, future/stale readings, stream isolation, missing channels, NOx reference/persistence, source-block splitting, fault prediction gates, JSON serialization. All **30 tests** including the original suite passed.
 
-## Start the demo
+## Run model processing
 
-Open PowerShell in the `driftbeacon` directory. The existing local environment and model artifacts are ready:
-
-```powershell
-.venv\Scripts\python.exe -m model.api --port 8765
-```
-
-Open `http://127.0.0.1:8765/`. The API binds to your laptop's loopback address. It has no hardware connection, authentication or production deployment configuration. It retains at most 256 vehicle/trip/mode streams in memory; reset between sessions. Restarting clears state. The dashboard uses saved replay results; POSTing live telemetry returns API results and does not automatically replace the dashboard's saved scenarios.
-
-You can also open `reports/replays/fusion/index.html` directly without a server or internet connection. Use **Source**, **Play**, **Reset**, and the timeline slider.
-
-The three sources are deliberately labelled:
-
-1. **VED validation replay:** vehicle 575, trip 1651, 752 records. Selected deterministically by duration and a hash, without selecting for an alert outcome. NOx is unavailable; optional MAF/fuel trims remain available for evidence.
-2. **Synthetic combined-sensor scenario:** a 241-point fixture exercises rising fuel observations, rising NOx and changing fuel trims. The fuel screen alerts at 149 s; the NOx screen alerts at 122 s. These times verify wiring, not real-world accuracy.
-3. **EngineFaultDB laboratory examples:** 32 rows from development validation blocks. The displayed order is a playback index because the source supplies no timestamps. These rows are not paired measurements from the VED vehicle.
-
-## API and Python integration
-
-| Route | Method | Purpose |
-|---|---|---|
-| `/health` | GET | Model availability and local-demo status |
-| `/v1/schema` | GET | Supported units and a minimal packet example |
-| `/v1/telemetry` | POST | Process one ordered sensor packet |
-| `/v1/reset` | POST | Reset all in-memory detector state; send `{}` |
-
-POST requests require `Content-Type: application/json`; the size limit is 1 MiB. Invalid packets return HTTP 400, while missing or stale values produce explicit unavailable channels. Send records in strictly increasing `source_time_s` for each `(vehicle_id, trip_id, mode)`. Measurements and packet times must use one agreed clock origin. There is no automatic clock-offset estimation.
-
-Example partial live packet:
-
-```json
-{
-  "vehicle_id": 7,
-  "trip_id": 1,
-  "source_time_s": 100.0,
-  "mode": "live",
-  "signals": {
-    "rpm": {"value": 2000, "unit": "rpm", "measured_at_s": 100.0, "provenance": "measured"},
-    "load_pct": {"value": 40, "unit": "%", "measured_at_s": 100.0, "provenance": "measured"},
-    "nox_ppm": {
-      "value": 125, "unit": "ppm", "measured_at_s": 99.6,
-      "provenance": "measured", "quality": "valid",
-      "sensor_id": "vehicle-7-nox-downstream", "position": "downstream"
-    }
-  }
-}
-```
-
-This partial packet can contribute to NOx screening; fuel prediction remains unavailable until its required predictors arrive. `Signal.measured_at_s` records acquisition time, not upload time. Default maximum age is three seconds. Valid qualities are `valid`, `warming_up`, `fault`, and `unavailable`. Positions are `upstream`, `downstream`, or `unknown`. Changing NOx sensor identity, position or provenance resets its reference.
-
-```python
-from pathlib import Path
-from model.fusion import FusionEngine
-
-engine = FusionEngine(
-    Path("artifacts/models/gpu_candidate"),
-    Path("artifacts/models/enginefault_candidate"),
-)
-result = engine.step(packet)  # same dictionary schema as HTTP
-```
-
-For file import, supply one packet per line:
+Use Python in the `driftbeacon` directory. The local environment and model artifacts are ready. To process a file of ordered sensor packets:
 
 ```powershell
 .venv\Scripts\python.exe -m model.fusion --input examples/synthetic_telemetry.jsonl --output reports/replays/my_fusion_run.jsonl
 ```
 
-The CLI preserves existing output files; choose a new name for a subsequent run.
+The example input is synthetic and exists solely to test data processing. Outputs are JSON records; no graphical interface or HTTP API is included. The CLI preserves existing output files, so choose a new name for each run.
+
+Each input line has `vehicle_id`, `trip_id`, `source_time_s`, `mode` and a `signals` dictionary. Each signal supplies `value`, `unit`, `measured_at_s`, `provenance`, and optionally `quality`. NOx additionally requires `sensor_id` and `position`. Accepted units are defined in `model.telemetry.UNITS`. Live signals require measured provenance; historical records and test fixtures retain their distinct provenance.
+
+Timestamps must share one clock origin. Data older than three seconds is unavailable by default. Future samples and invalid units are rejected. Records must arrive in increasing time per vehicle/trip/mode. Signal quality can be `valid`, `warming_up`, `fault` or `unavailable`.
+
+For Python integration, instantiate `model.fusion.FusionEngine` with the fuel and fault model directories, then call `engine.step(packet)`. Each result contains fuel estimates, sensor quality, emission measurements, experimental classifier output and inspection evidence.
 
 ## NOx CSV import
 
@@ -158,13 +104,13 @@ That chat reported a final VED evaluation and a detector v2 candidate using base
 
 ## Files to share
 
-`handoff/driftbeacon-sensor-fusion.zip` includes the two model artifacts, inference code, local API, tests, documentation, examples, reports, standalone demo and EngineFaultDB attribution. It excludes raw datasets and VED test data. Extract into a folder, create a Python environment, install `requirements-fusion.txt`, and run `python -m model.api`.
+`handoff/driftbeacon-sensor-fusion.zip` includes the two model artifacts, inference code, tests, documentation, examples, JSON reports and EngineFaultDB attribution. It excludes raw datasets and VED test data. Extract into a folder, create a Python environment, install `requirements-fusion.txt`, and run the model-processing command above.
 
-To rebuild the demo on this prepared laptop:
+To rerun model verification and rebuild the package on this prepared laptop:
 
 ```powershell
-.venv\Scripts\python.exe -m model.demo_fusion
-.venv\Scripts\python.exe -c "from model.demo_fusion import package; package()"
+.venv\Scripts\python.exe -m model.verify_fusion
+.venv\Scripts\python.exe -c "from model.verify_fusion import package; package()"
 ```
 
 ## Sources
@@ -174,3 +120,9 @@ To rebuild the demo on this prepared laptop:
 - Bosch NOx sensor overview: <https://www.bosch-mobility.com/en/solutions/sensors/nox-sensor/>. Outputs depend on the exact sensor; separate instrumentation is required for other gas channels.
 - Ford fuel-trim investigation example: <https://www.fordservicecontent.com/Ford_Content/pubs/content/~WT/~MUS~LEN/3602/tsb04-17-04.htm>. Manufacturer-specific procedures motivate inspection directions, not a universal diagnosis rule.
 - VED provenance and target assumptions remain documented in `README.md` and `config/preparation.json`.
+
+## NOx data plan
+
+No measured NOx training data has been downloaded or used. The current NOx screen is uncalibrated and its test fixtures are synthetic. The next data candidate to audit is RWTH Aachen's gasoline-vehicle dataset, *Real Driving Emissions—Event Detection for Efficient Emission Calibration*: https://zenodo.org/records/11094761 . The repository describes synchronized 1 Hz time traces with speed, measured NOx mass flow in g/s, downstream lambda sensor voltage, and a fuel-cutoff flag. Event files also provide lambda. These are mass-flow readings, not ppm, and must have their own schema and evaluation; they cannot be passed into `nox_ppm`.
+
+Before selecting it for training, inspect the actual files, available full trips, overlap between event extracts, and train/validation/test separation. Its described signals do not include the full VED RPM/load feature set, so it is a candidate for a separate NOx task, not a verified substitute for a synchronized VED-plus-NOx training table. It contains measurements from a different vehicle. No rows will be joined to VED as though they were simultaneous.

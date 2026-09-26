@@ -157,7 +157,7 @@ class FusionIntegrationTests(unittest.TestCase):
         self.engine.reset()
 
     def test_combined_fixture_triggers_both_channels_and_serializes(self):
-        from model.demo_fusion import synthetic_packets
+        from model.verify_fusion import synthetic_packets
         for p in synthetic_packets(self.engine):
             result = self.engine.step(p)
         self.assertIsNotNone(result["fuel"]["alert"])
@@ -197,31 +197,6 @@ class FusionIntegrationTests(unittest.TestCase):
         result = self.engine.step(p)
         self.assertIsNone(result["fuel"]["expected_fuel_lph"])
         self.assertEqual(result["fuel"]["window_coverage"], 0)
-
-    def test_api_json_validation_and_inference(self):
-        import threading
-        import urllib.request
-        import urllib.error
-        from model.api import make_server
-        server = make_server(self.engine, 0)
-        thread = threading.Thread(target=server.serve_forever, daemon=True)
-        thread.start()
-        base = f"http://127.0.0.1:{server.server_port}"
-        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-        try:
-            with opener.open(base + "/health") as response:
-                self.assertEqual(json.load(response)["status"], "ready")
-            request = urllib.request.Request(base + "/v1/telemetry", data=json.dumps(packet()).encode(), headers={"Content-Type": "application/json"})
-            with opener.open(request) as response:
-                self.assertEqual(json.load(response)["mode"], "synthetic_demo")
-            with self.assertRaises(urllib.error.HTTPError) as error:
-                opener.open(request)
-            self.assertEqual(error.exception.code, 400)
-        finally:
-            server.shutdown()
-            server.server_close()
-            thread.join(timeout=3)
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,4 @@
-"""Build a self-contained demo from VED validation, lab samples and labelled fixtures."""
+"""Verify model/data integration using validation records and labelled test fixtures."""
 from __future__ import annotations
 
 import json
@@ -79,9 +79,6 @@ def main():
                "fault_model": metadata, "ved_trip": list(map(int, key)),
                "notice": "These are separate sources. The synthetic scenario tests wiring, not detection performance. VED has no measured NOx. Lab rows are not measurements from the VED vehicle."}
     write_json(output / "combined_demo.json", payload)
-    template = (ROOT / "demo/fusion.html").read_text(encoding="utf-8")
-    embedded = json.dumps(payload, allow_nan=False).replace("<", "\\u003c").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
-    (output / "index.html").write_text(template.replace("__DEMO_DATA__", embedded), encoding="utf-8")
     summary = {"ved_trip": list(map(int, key)), "ved_points": len(real),
                "ved_nox_available": sum(p["emissions"]["nox_ppm"]["value"] is not None for p in real),
                "synthetic_points": len(synthetic), "synthetic_fuel_alert": synthetic[-1]["fuel"]["alert"],
@@ -91,7 +88,7 @@ def main():
                "limitations": payload["notice"]}
     write_json(ROOT / "reports/fusion_demo_verification.json", summary)
     print(json.dumps(summary, indent=2))
-    print("Demo:", output / "index.html")
+    print("Model verification records:", output / "combined_demo.json")
 
 
 def package():
@@ -99,10 +96,10 @@ def package():
     destination = ROOT / "handoff/driftbeacon-sensor-fusion.zip"
     destination.parent.mkdir(exist_ok=True)
     paths = list((ROOT / "model").glob("*.py")) + list((ROOT / "tests").glob("*.py"))
-    paths += list((ROOT / "examples").glob("*")) + list((ROOT / "demo").glob("*"))
+    paths += list((ROOT / "examples").glob("*"))
     paths += [ROOT / "SENSOR_FUSION.md", ROOT / "README.md", ROOT / "VED_LICENSE.txt", ROOT / "requirements.txt", ROOT / "requirements-gpu.txt", ROOT / "requirements-fusion.txt"]
     paths += [ROOT / "reports" / name for name in ("enginefault_training.json", "gpu_local_compatibility.json", "fusion_demo_verification.json")]
-    paths += list((ROOT / "reports/replays/fusion").glob("*"))
+    paths += list((ROOT / "reports/replays/fusion").glob("*.json"))
     for name in ("gpu_candidate", "enginefault_candidate"):
         paths += [p for p in (ROOT / "artifacts/models" / name).glob("*") if p.name != "classifier.joblib"]
     with zipfile.ZipFile(destination, "w", zipfile.ZIP_DEFLATED) as z:
