@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DriftBeacon by ANKOR - Vehicle Efficiency Drift Detection</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              forest: '#174634',
+              forestHover: '#113527',
+              teal: '#0D9488',
+              tealLight: '#E6F4F1',
+              mint: '#F0F7F4',
+              warmWhite: '#FBFBFA',
+              cardBg: '#FFFFFF',
+              navy: '#0F1E28',
+              navyMuted: '#526371',
+              accentAmber: '#D97706',
+              accentAmberBg: '#FEF3C7',
+              accentRed: '#DC2626',
+              accentRedBg: '#FEE2E2',
+              borderLight: '#E2EBE6'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          },
+          boxShadow: {
+            'phone': '0 25px 65px -12px rgba(15, 30, 40, 0.28), 0 0 0 12px #1E282E, 0 0 0 14px #475569',
+            'subtle': '0 3px 12px rgba(15, 30, 40, 0.05)',
+            'card': '0 4px 20px -2px rgba(15, 30, 40, 0.06)'
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .custom-scrubber::-webkit-slider-thumb {
+      appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #174634;
+      cursor: pointer;
+      border: 2.5px solid white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+    }
+    .custom-scrubber::-moz-range-thumb {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #174634;
+      cursor: pointer;
+      border: 2.5px solid white;
+    }
+    .pulse-dot {
+      animation: pulseAnim 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(1.35); }
+    }
+    .car-marker {
+      transition: transform 0.15s ease-out;
+      transform-origin: center center;
+    }
+  </style>
+<link rel="stylesheet" href="/stitch-overrides.css"/>
+</head>
+<body class="bg-brand-warmWhite text-brand-navy antialiased min-h-screen flex flex-col justify-between selection:bg-teal-100 selection:text-teal-900">
+<!-- Desktop Presentation Outer Shell -->
+<div class="w-full flex-1 flex flex-col">
+<!-- Top Global Header (Shown on desktop showcase) -->
+<header class="hidden lg:flex items-center justify-between px-10 py-4 border-b border-brand-borderLight bg-white/80 backdrop-blur-md sticky top-0 z-40">
+<div class="flex items-center space-x-3">
+<div class="w-9 h-9 rounded-xl bg-brand-forest flex items-center justify-center text-white shadow-sm">
+<i class="w-5 h-5" data-lucide="gauge"></i>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<span class="font-extrabold text-lg tracking-tight text-brand-navy">DriftBeacon</span>
+<span class="text-[10px] uppercase tracking-wider font-bold text-brand-teal px-2 py-0.5 bg-brand-tealLight rounded-full">by ANKOR</span>
+</div>
+<p class="text-xs text-brand-navyMuted">Demo drive · fuel and emissions monitor</p>
+</div>
+</div>
+<div class="flex items-center space-x-5 text-sm">
+<div class="flex items-center space-x-2 text-xs text-brand-navyMuted bg-brand-mint border border-brand-borderLight px-3 py-1.5 rounded-lg">
+<i class="w-3.5 h-3.5 text-brand-teal" data-lucide="database"></i>
+<span>Moving car demo · sample route</span>
+</div>
+<a class="text-brand-navy hover:text-brand-forest font-semibold text-xs flex items-center gap-1 transition" href="#quick-guide">
+<span>Evaluator Guide</span>
+<i class="w-4 h-4" data-lucide="arrow-down-right"></i>
+</a>
+</div>
+</header>
+<!-- Main Container: Showcase Grid on Desktop, Pure Responsive Phone App on Mobile -->
+<main class="flex-1 max-w-7xl mx-auto w-full p-3 sm:p-6 lg:p-8 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 lg:gap-12">
+<!-- LEFT: Realistic Phone Mockup Frame (Mobile-First Canvas) -->
+<div class="w-full max-w-[420px] flex-shrink-0 flex flex-col items-center">
+<!-- Interactive Notice Tag (Desktop only) -->
+<div class="hidden sm:flex items-center gap-2 mb-3 text-xs font-semibold text-brand-navyMuted bg-white border border-brand-borderLight shadow-sm px-3.5 py-1 rounded-full">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+<span>Interactive car demo</span>
+</div>
+<!-- Phone Shell Container -->
+<div class="w-full h-[785px] max-h-[94vh] bg-white rounded-[44px] overflow-hidden shadow-card sm:shadow-phone border-4 border-slate-800/90 sm:border-0 relative flex flex-col select-none">
+<!-- Phone Speaker & Camera Notch (Dynamic Island Style) -->
+<div class="absolute top-0 left-0 right-0 h-7 flex items-center justify-between px-7 pt-2 z-50 pointer-events-none text-slate-800">
+<span class="text-[11px] font-bold tracking-tight font-mono" id="phoneClock">09:41</span>
+<div class="w-24 h-4 bg-slate-900 rounded-full mx-auto flex items-center justify-end px-2">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+</div>
+<div class="flex items-center space-x-1.5 text-[10px]">
+<i class="w-3 h-3" data-lucide="wifi"></i>
+<i class="w-3.5 h-3.5" data-lucide="battery"></i>
+</div>
+</div>
+<!-- Phone Inner Screen Content Area -->
+<div class="w-full h-full pt-8 pb-16 overflow-y-auto flex flex-col bg-brand-mint text-brand-navy relative" id="phoneViewport">
+<!-- VIEW 0: WELCOME / INTRO OVERLAY SCREEN -->
+<div class="absolute inset-0 bg-brand-warmWhite z-40 flex flex-col justify-between p-6 pt-11 transition-transform duration-300" id="welcomeScreen">
+<div class="flex flex-col items-center text-center mt-4">
+<div class="w-16 h-16 rounded-2xl bg-brand-tealLight border border-brand-teal/20 flex items-center justify-center text-brand-forest mb-4 shadow-sm">
+<i class="w-8 h-8 text-brand-forest" data-lucide="gauge"></i>
+</div>
+<div class="inline-block px-3 py-0.5 bg-brand-mint rounded-full text-[11px] font-bold text-brand-forest border border-brand-borderLight mb-3">
+                  ANKOR Diagnostics Labs
+                </div>
+<h1 class="text-2xl font-black tracking-tight text-brand-navy leading-snug px-1">
+                  See when fuel use starts to drift.
+                </h1>
+<p class="text-xs text-brand-navyMuted mt-2.5 leading-relaxed px-2">
+                  Watch a car move, see its fuel and emissions readings, and explore a possible system issue.
+                </p>
+</div>
+<!-- Feature Highlights on Welcome -->
+<div class="space-y-2.5 my-3">
+<div class="flex items-start gap-3 bg-white p-3 rounded-2xl border border-brand-borderLight shadow-sm">
+<div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+<i class="w-4 h-4" data-lucide="trending-up"></i>
+</div>
+<div>
+<h4 class="text-xs font-bold text-brand-navy">Sustained Excess Alert</h4>
+<p class="text-[11px] text-brand-navyMuted">Shows when a simulated fuel-use increase persists above a provisional threshold.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 bg-white p-3 rounded-2xl border border-brand-borderLight shadow-sm">
+<div class="w-8 h-8 rounded-xl bg-teal-50 text-brand-teal flex items-center justify-center flex-shrink-0 mt-0.5">
+<i class="w-4 h-4" data-lucide="file-check-2"></i>
+</div>
+<div>
+<h4 class="text-xs font-bold text-brand-navy">Driver-Controlled Service Handoff</h4>
+<p class="text-[11px] text-brand-navyMuted">Choose the evidence and observations you want to share for an inspection.</p>
+</div>
+</div>
+</div>
+<!-- Demo Notice & CTA -->
+<div class="space-y-2.5 pt-1">
+<div class="p-2.5 bg-brand-mint rounded-xl border border-brand-borderLight text-center">
+<p class="text-[11px] text-brand-navyMuted font-medium flex items-center justify-center gap-1.5">
+<i class="w-3.5 h-3.5 text-brand-teal" data-lucide="shield-alert"></i>
+<span>Sample car journey with expert-system screening examples.</span>
+</p>
+</div>
+<button class="w-full py-3 px-4 bg-brand-forest hover:bg-brand-forestHover text-white font-bold text-xs rounded-xl transition shadow-md flex items-center justify-center space-x-2" id="btnStartRecordedDrive">
+<span>Start Demo Drive</span>
+<i class="w-4 h-4" data-lucide="arrow-right"></i>
+</button>
+</div>
+</div>
+<!-- VIEW 1: TAB - DRIVE SCREEN -->
+<div class="flex-1 flex flex-col p-3.5 space-y-3 overflow-y-auto" id="tabContentDrive">
+<!-- App Bar inside Phone -->
+<div class="flex items-center justify-between pt-0.5">
+<div>
+<div class="text-[10px] font-bold uppercase tracking-wider text-brand-teal flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-brand-teal inline-block"></span>
+<span><span id="tripSourceLabel">Demo car · sample journey</span></span>
+</div>
+<h2 class="text-sm font-black text-brand-navy">Trip replay</h2>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="hidden text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-300 px-2 py-0.5 rounded-full flex items-center gap-1" id="syntheticBadge">
+<i class="w-2.5 h-2.5" data-lucide="zap"></i> +15% Drift Active
+                  </span>
+<button class="p-1.5 rounded-xl bg-white border border-brand-borderLight text-brand-navy hover:bg-slate-50 transition shadow-xs" id="btnOpenDemoControls" title="Synthetic Drift Controls">
+<i class="w-3.5 h-3.5" data-lucide="sliders-horizontal"></i>
+</button>
+</div>
+</div>
+<!-- CAR SIMULATION HERO: OpenStreetMap Vector Road Map with Smooth Moving Car -->
+<div class="bg-white rounded-2xl border border-brand-borderLight shadow-card overflow-hidden">
+<!-- Map Header Context Bar -->
+<div class="px-3 py-2 bg-slate-50 border-b border-brand-borderLight flex items-center justify-between text-[11px]">
+<div class="flex items-center gap-1.5 font-bold text-brand-navy">
+<i class="w-3.5 h-3.5 text-brand-forest" data-lucide="map-pin"></i>
+<span id="drivingContextText">Awaiting telemetry</span>
+</div>
+<div class="flex items-center gap-2 font-mono">
+<span class="font-bold text-brand-navy bg-white px-1.5 py-0.5 rounded border border-slate-200" id="heroSpeedBadge">— km/h</span>
+<span class="font-semibold text-brand-navyMuted" id="tripTimeDisplay">00:00 / 42:00</span>
+</div>
+</div>
+<!-- Vector Map Area (OSM Style SVG) -->
+<div class="relative w-full h-44 bg-[#F2EFE9] overflow-hidden select-none">
+<!-- Vector Canvas -->
+<div id="driveRouteUnavailable" class="h-full w-full flex flex-col items-center justify-center text-center px-8">
+  <div class="demo-car-icon" aria-hidden="true">▰</div>
+  <strong class="text-xs text-brand-navy">Car location unavailable</strong>
+  <span class="text-[10px] text-brand-navyMuted leading-relaxed mt-1">The demo car will appear with the sample journey.</span>
+</div><div id="driveMap" class="hidden absolute inset-0" aria-label="Recorded route and car position"></div>
+<!-- Map Overlays -->
+<div class="absolute bottom-1 right-2 bg-white/80 backdrop-blur-xs px-1.5 py-0.5 rounded text-[8px] font-mono text-slate-500">
+                    © OpenStreetMap contributors
+                  </div>
+<div class="hidden absolute top-2 left-2 bg-amber-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 animate-bounce" id="liveDriftAlertPill">
+<i class="w-3 h-3" data-lucide="flame"></i>
+<span>Excess Fuel Burn Hotspot</span>
+</div>
+</div>
+<!-- Unified Playback Scrubber & Controls -->
+<div class="p-3 bg-white space-y-2">
+<!-- Scrubber Track Slider -->
+<div class="relative flex items-center">
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer custom-scrubber accent-brand-forest" id="tripScrubber" aria-label="Trip time" max="2520" min="0" type="range" value="0"/>
+</div>
+<!-- Controls Bar -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center space-x-1.5">
+<button class="px-3 py-1 bg-brand-forest hover:bg-brand-forestHover text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition shadow-xs" id="btnPlayPause">
+<i class="w-3.5 h-3.5" data-lucide="play" id="playIcon"></i>
+<span id="playBtnText">Play</span>
+</button>
+<button class="p-1.5 bg-slate-100 hover:bg-slate-200 text-brand-navy rounded-lg text-xs transition" id="btnResetTrip" title="Reset trip">
+<i class="w-3.5 h-3.5" data-lucide="rotate-ccw"></i>
+</button>
+</div>
+<!-- 1x / 2x / 4x Speed toggles -->
+<div class="flex items-center space-x-1 bg-slate-100 p-0.5 rounded-lg">
+<button class="speed-btn px-2 py-0.5 text-[10px] font-bold rounded-md bg-brand-forest text-white" data-speed="1">1x</button>
+<button class="speed-btn px-2 py-0.5 text-[10px] font-semibold rounded-md text-brand-navy hover:bg-white" data-speed="2">2x</button>
+<button class="speed-btn px-2 py-0.5 text-[10px] font-semibold rounded-md text-brand-navy hover:bg-white" data-speed="4">4x</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Plain-Language Status Card (5 Dynamic States) -->
+<div class="p-3.5 rounded-2xl bg-white border border-brand-borderLight shadow-subtle transition-all duration-300 flex items-start justify-between" id="statusBanner">
+<div class="space-y-1">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500" id="statusIndicatorDot"></span>
+<span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800" id="statusLabelText">Collecting baseline</span>
+</div>
+<h3 class="text-xs font-bold text-brand-navy leading-snug" id="statusHeadline">Collecting trip readings.</h3>
+<p class="text-[11px] text-brand-navyMuted" id="statusSubtext">Assessment will appear as the replay progresses.</p>
+</div>
+<div class="p-2 bg-emerald-50 text-emerald-700 rounded-xl flex-shrink-0 ml-2" id="statusIconWrap">
+<i class="w-4 h-4" data-lucide="shield-check" id="statusIcon"></i>
+</div>
+</div>
+<div class="text-[10px] font-black uppercase tracking-wider text-brand-forest pt-1">Fuel readings <span class="font-medium normal-case tracking-normal text-brand-navyMuted">· sample drive</span></div>
+<!-- 4 Compact Readable Telemetry Metrics Grid -->
+<div class="grid grid-cols-2 gap-2">
+<!-- Metric 1: Observed Fuel Use -->
+<div class="bg-white p-2.5 rounded-2xl border border-brand-borderLight shadow-subtle flex flex-col justify-between">
+<span class="text-[10px] text-brand-navyMuted font-semibold flex items-center justify-between">
+<span>Recent fuel use</span>
+<i class="w-3 h-3 text-brand-navyMuted" data-lucide="gauge"></i>
+</span>
+<div class="mt-1">
+<div class="flex items-baseline space-x-1">
+<span class="text-lg font-black tracking-tight text-brand-navy font-mono" id="metricObservedFuel">—</span>
+<span class="text-[10px] font-bold text-brand-navyMuted">L/h</span>
+</div>
+<span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded inline-block mt-0.5" id="fuelDeltaBadge">Waiting</span>
+</div>
+</div>
+<!-- Metric 2: Expected Baseline -->
+<div class="bg-white p-2.5 rounded-2xl border border-brand-borderLight shadow-subtle flex flex-col justify-between">
+<span class="text-[10px] text-brand-navyMuted font-semibold flex items-center justify-between">
+<span>Expected Baseline</span>
+<i class="w-3 h-3 text-brand-navyMuted" data-lucide="target"></i>
+</span>
+<div class="mt-1">
+<div class="flex items-baseline space-x-1">
+<span class="text-lg font-black tracking-tight text-brand-navy font-mono" id="metricExpectedFuel">—</span>
+<span class="text-[10px] font-bold text-brand-navyMuted">L/h</span>
+</div>
+<span class="text-[9px] text-brand-navyMuted font-medium inline-block mt-0.5">Expected for this drive</span>
+</div>
+</div>
+<!-- Metric 3: Accumulated Excess Fuel -->
+<div class="bg-white p-2.5 rounded-2xl border border-brand-borderLight shadow-subtle flex flex-col justify-between">
+<span class="text-[10px] text-brand-navyMuted font-semibold flex items-center justify-between">
+<span>Acc. Excess Fuel</span>
+<i class="w-3 h-3 text-brand-navyMuted" data-lucide="droplet"></i>
+</span>
+<div class="mt-1">
+<div class="flex items-baseline space-x-1">
+<span class="text-lg font-black tracking-tight text-brand-navy font-mono" id="metricExcessFuel">—</span>
+<span class="text-[10px] font-bold text-brand-navyMuted">L</span>
+</div>
+<span class="text-[9px] text-slate-500 font-mono inline-block mt-0.5" id="excessFuelSub">Waiting for valid readings</span>
+</div>
+</div>
+<!-- Metric 4: Estimated Extra CO2 -->
+<div class="bg-white p-2.5 rounded-2xl border border-brand-borderLight shadow-subtle flex flex-col justify-between">
+<span class="text-[10px] text-brand-navyMuted font-semibold flex items-center justify-between">
+<span>Extra CO₂*</span>
+<i class="w-3 h-3 text-brand-navyMuted" data-lucide="cloud"></i>
+</span>
+<div class="mt-1">
+<div class="flex items-baseline space-x-1">
+<span class="text-lg font-black tracking-tight text-brand-navy font-mono" id="metricExcessCO2">—</span>
+<span class="text-[10px] font-bold text-brand-navyMuted">kg</span>
+</div>
+<span class="text-[8px] text-brand-navyMuted inline-block mt-0.5 leading-tight"><span id="co2FactorDrive">Factor loading</span></span>
+</div>
+</div>
+</div>
+<!-- Measured exhaust channels remain unavailable until aligned sensor readings arrive. -->
+<div class="text-[10px] font-black uppercase tracking-wider text-brand-forest pt-1">Emissions readings <span class="font-medium normal-case tracking-normal text-brand-navyMuted">· demo values</span></div>
+<div class="grid grid-cols-2 gap-2" id="emissionsGrid">
+  <div class="bg-white p-2.5 rounded-2xl border border-brand-borderLight shadow-subtle">
+    <div class="text-[10px] text-brand-navyMuted font-semibold">NO / NOx</div>
+    <div class="text-lg font-black text-brand-navy font-mono" id="driveNoxValue">—</div>
+    <div class="text-[9px] text-brand-navyMuted" id="driveNoxSource">Sensor reading unavailable</div>
+  </div>
+  <div class="bg-white p-2.5 rounded-2xl border border-brand-borderLight shadow-subtle">
+    <div class="text-[10px] text-brand-navyMuted font-semibold">CO</div>
+    <div class="text-lg font-black text-brand-navy font-mono" id="driveCoValue">—</div>
+    <div class="text-[9px] text-brand-navyMuted" id="driveCoSource">Sensor reading unavailable</div>
+  </div>
+</div>
+<div id="pucDriveCard" class="hidden p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-brand-navy">
+  <strong class="text-[11px]">Consider an authorised PUC test</strong>
+  <p class="text-[10px] leading-relaxed mt-1" id="pucDriveReason"></p>
+</div>
+<!-- Quick Action Card to Analysis -->
+<div class="p-2.5 bg-brand-tealLight/60 border border-brand-teal/20 rounded-xl flex items-center justify-between text-xs">
+<div class="flex items-center gap-2 text-brand-forest">
+<i class="w-4 h-4 text-brand-teal" data-lucide="bar-chart-2"></i>
+<span class="font-bold text-[11px]">Notice a divergence? Inspect the evidence</span>
+</div>
+<button class="font-extrabold text-[11px] text-brand-forest hover:underline flex items-center" onclick="switchTab('analysis')">
+<span>Inspect</span>
+<i class="w-3.5 h-3.5" data-lucide="chevron-right"></i>
+</button>
+</div>
+</div>
+<!-- VIEW 2: TAB - ANALYSIS SCREEN ("WHAT CHANGED?") -->
+<div class="hidden flex-1 flex flex-col p-3.5 space-y-3 overflow-y-auto" id="tabContentAnalysis">
+<div class="flex items-center justify-between pt-0.5">
+<div>
+<div class="text-[10px] font-bold uppercase tracking-wider text-brand-teal">Trip evidence</div>
+<h2 class="text-sm font-black text-brand-navy">Fuel-use analysis</h2>
+</div>
+<span class="text-[10px] font-mono bg-white px-2 py-0.5 rounded border border-brand-borderLight text-brand-navyMuted font-semibold" id="analysisTripPosition">At 00:00</span>
+</div>
+<!-- Concise Lead Finding Card -->
+<div class="p-3 bg-white rounded-2xl border border-brand-borderLight shadow-subtle space-y-1.5">
+<div class="flex items-center gap-1.5">
+<div class="p-1 rounded bg-amber-50 text-amber-700">
+<i class="w-3.5 h-3.5" data-lucide="sparkles"></i>
+</div>
+<h3 class="text-xs font-black text-brand-navy uppercase tracking-wide">Why did this alert appear?</h3>
+</div>
+<p class="text-xs text-brand-navy leading-relaxed font-medium" id="analysisSummaryText">
+                  The demo will show a stable alert when sustained medium drift is detected.
+                </p>
+<div class="pt-1.5 grid grid-cols-2 gap-2 text-[10px] border-t border-slate-100">
+<div>
+<span class="text-brand-navyMuted block">Trip Efficiency:</span>
+<span class="font-mono font-bold text-brand-navy" id="analysisL100km">Unavailable until distance is integrated</span>
+</div>
+<div>
+<span class="text-brand-navyMuted block">Multi-Trip Index:</span>
+<span class="font-bold text-emerald-700" id="analysisFleetComparison">Not enough comparable trips yet</span>
+</div>
+</div>
+</div>
+<!-- Illustrative comparison trips; the current row uses the active replay. -->
+<div class="bg-white p-3 rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+  <div class="flex items-center justify-between gap-2"><div class="text-[11px] font-bold text-brand-navy">Drift over comparable trips</div><span class="text-[9px] font-bold text-brand-teal bg-brand-tealLight px-1.5 py-0.5 rounded">EXAMPLE TRIPS</span></div>
+  <p class="text-[9px] text-brand-navyMuted">Three synthetic trips for illustration; current trip is calculated from this replay.</p>
+  <div id="comparisonTripRows" class="space-y-1.5 text-[10px]"></div>
+</div>
+<!-- Interactive Chart Container (SVG Based with L/h units & Gap indicator) -->
+<div class="bg-white p-3 rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+<div class="flex items-center justify-between">
+<div class="text-[11px] font-bold text-brand-navy flex items-center gap-1">
+<span>Expected vs Observed Fuel Use</span>
+<span class="text-[9px] text-brand-navyMuted font-mono">(L/h)</span>
+</div>
+<!-- Chart legend -->
+<div class="flex items-center gap-2.5 text-[9px]">
+<div class="flex items-center gap-1">
+<span class="w-2.5 h-0.5 bg-slate-400 inline-block"></span>
+<span class="text-brand-navyMuted">Baseline</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-2.5 h-1 bg-brand-forest rounded inline-block" id="chartLegendObsDot"></span>
+<span class="font-bold text-brand-forest">Observed</span>
+</div>
+</div>
+</div>
+<!-- SVG Fuel Chart -->
+<div class="w-full h-32 relative border-b border-l border-slate-200 bg-slate-50/40 rounded-sm">
+<svg class="w-full h-full overflow-visible" id="analysisSvgChart" viewbox="0 0 340 130">
+<!-- Grid Lines -->
+<line stroke="#E2E8F0" stroke-dasharray="2 2" stroke-width="1" x1="0" x2="340" y1="32" y2="32"></line>
+<line stroke="#E2E8F0" stroke-dasharray="2 2" stroke-width="1" x1="0" x2="340" y1="65" y2="65"></line>
+<line stroke="#E2E8F0" stroke-dasharray="2 2" stroke-width="1" x1="0" x2="340" y1="98" y2="98"></line>
+<!-- Expected Curve (Dotted Slate) -->
+<path d="M 0,105 Q 60,80 120,85 T 220,60 T 340,75" fill="none" id="pathExpectedCurve" stroke="#94A3B8" stroke-dasharray="3 3" stroke-width="2"></path>
+<!-- Observed Curve (Bold Green / Amber / Red) -->
+<path d="M 0,105 Q 60,80 120,85 T 220,60 T 340,75" fill="none" id="pathObservedCurve" stroke="#174634" stroke-width="2.5"></path>
+<!-- Divergence Area Fill -->
+<polygon fill="#F59E0B" fill-opacity="0.15" id="divergenceArea" points=""></polygon>
+<!-- Missing OBD packet gap marker (Telemetry sample robustness indicator) -->
+<rect fill="#CBD5E1" height="130" opacity="0.35" width="8" x="180" y="0"></rect>
+<text fill="#64748B" font-family="monospace" font-size="7" x="175" y="15">Gap</text>
+<!-- Current Time Cursor Vertical Line -->
+<line id="chartCursorLine" stroke="#0D9488" stroke-dasharray="2 2" stroke-width="1.5" x1="0" x2="0" y1="0" y2="130"></line>
+<circle cx="0" cy="105" fill="#0D9488" id="chartCursorPoint" r="4" stroke="#FFFFFF" stroke-width="2"></circle>
+</svg>
+<!-- Chart Y-axis labels -->
+<div class="absolute left-1 top-0 text-[8px] font-mono text-slate-400"><span id="chartYMax">Fuel L/h</span></div>
+<div class="absolute left-1 bottom-1 text-[8px] font-mono text-slate-400">2 L/h</div>
+</div>
+<div class="flex items-center justify-between text-[9px] text-slate-400 font-mono px-0.5">
+<span>00:00 (Start)</span>
+<span><span id="chartOnsetLabel">18:00 (drift begins)</span></span>
+<span><span id="chartEndLabel">42:00</span> (End)</span>
+</div>
+</div>
+<!-- Driving context and route evidence in the exported card style. -->
+<div class="bg-white p-3 rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+  <div class="flex items-center justify-between"><span class="text-[11px] font-bold text-brand-navy">Driving conditions considered</span><span class="text-[9px] text-brand-navyMuted">From this trip</span></div>
+  <p class="text-[10px] text-brand-navyMuted leading-relaxed" id="contextExplanation">Speed, changes in speed, RPM and engine load will appear here as the replay progresses.</p>
+  <div class="grid grid-cols-3 gap-1.5 text-center text-[9px]" id="contextStats"></div>
+  <p class="text-[9px] text-slate-400">Context describes vehicle motion; it is not proof of traffic conditions or a failed component.</p>
+</div>
+<div class="bg-white p-3 rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+  <div class="flex items-center justify-between"><span class="text-[11px] font-bold text-brand-navy">Route evidence</span><span class="text-[9px] text-brand-navyMuted">Time-aligned sections</span></div>
+  <div id="routeMap" class="route-map-unavailable"><strong>Route loading</strong><span>The recorded sections will appear as the trip replays.</span></div>
+  <div class="text-[9px] text-brand-navyMuted" id="mapAttribution">No OpenStreetMap tiles loaded</div>
+  <div id="sectionList" class="grid grid-cols-3 gap-1.5"></div>
+  <p class="text-[9px] text-brand-navyMuted">Map sections and fuel evidence share source timestamps. GPS coordinates are de-identified.</p>
+</div>
+<div class="bg-white p-3 rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+  <div class="text-[11px] font-bold text-brand-navy">Expert system finding</div>
+  <p class="text-[10px] text-brand-navyMuted" id="faultPattern">Fault analysis unavailable for this trip. No compatible fault-model output was returned.</p>
+  <div id="faultBreakdown" class="space-y-1.5 text-[10px]"></div>
+  <div class="text-[9px] text-brand-navyMuted">Possible faults are screening suggestions. A technician must confirm the cause.</div>
+</div>
+<!-- Practical Impact Calculator (Fuel Price & Excess Cost) -->
+<div class="p-3 bg-brand-warmWhite rounded-2xl border border-brand-borderLight space-y-2">
+<span class="text-[11px] font-bold text-brand-navy flex items-center justify-between">
+<span>Practical Cost &amp; Environmental Impact</span>
+<i class="w-3.5 h-3.5 text-brand-forest" data-lucide="calculator"></i>
+</span>
+<div class="grid grid-cols-2 gap-2 text-xs">
+<div class="p-2 bg-white rounded-xl border border-slate-200">
+<span class="text-[9px] text-brand-navyMuted block">Extra Gasoline:</span>
+<span class="font-bold text-brand-navy text-sm font-mono" id="analysisNetExcessFuel">—</span>
+</div>
+<div class="p-2 bg-white rounded-xl border border-slate-200">
+<span class="text-[9px] text-brand-navyMuted block">Estimated extra CO₂:</span>
+<span class="font-bold text-brand-navy text-sm font-mono" id="analysisNetExcessCO2">—</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 text-[11px]">
+<div class="flex items-center gap-1.5">
+<label class="text-brand-navyMuted" for="fuelPriceInput">Fuel price (₹/L):</label>
+<input class="w-16 px-1.5 py-0.5 text-xs font-mono font-bold bg-white border border-slate-200 rounded text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-teal" id="fuelPriceInput" step="0.05" type="number" value="100" min="0" inputmode="decimal" aria-label="Edit fuel price per litre in rupees"/>
+</div>
+<div class="text-right">
+<span class="text-brand-navyMuted text-[10px] block">Estimated extra cost:</span>
+<span class="font-black text-brand-forest font-mono text-xs" id="calcMonthlyExtraCost">₹0.00 this trip</span>
+</div>
+</div>
+</div>
+</div>
+<!-- VIEW 3: TAB - REPORT SCREEN -->
+<div class="hidden flex-1 flex flex-col p-3.5 space-y-3 overflow-y-auto" id="tabContentService">
+  <div class="pt-0.5"><div class="text-[10px] font-bold uppercase tracking-wider text-brand-teal">Driver-owned report</div><h2 class="text-sm font-black text-brand-navy">My fuel-use summary</h2></div>
+  <div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-subtle space-y-2" id="serviceRecommendationCard">
+    <div class="flex items-center gap-2"><div class="p-1.5 rounded-xl bg-brand-tealLight text-brand-teal"><i class="w-4 h-4" data-lucide="file-text"></i></div><h3 class="text-xs font-bold text-brand-navy uppercase tracking-wider" id="serviceRecTitle">Collecting replay evidence</h3></div>
+    <p class="text-xs text-brand-navy leading-relaxed" id="serviceRecText">The report will update with the current replay. A fuel-use alert recommends investigation, not a replacement part.</p>
+  </div>
+  <div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-subtle space-y-2.5">
+    <div class="flex items-center justify-between text-xs pb-1.5 border-b border-slate-100"><span class="font-black text-brand-navy">Read-only demo evidence</span><span class="text-[9px] font-bold text-brand-teal bg-brand-tealLight px-1.5 py-0.5 rounded">ILLUSTRATIVE DEMO</span></div>
+    <div class="report-evidence-grid" id="reportEvidence"></div>
+    <p class="text-[9px] text-brand-navyMuted">Calculated figures come from the replay service and cannot be edited here.</p>
+  </div>
+  <div class="p-3 bg-white rounded-2xl border border-brand-borderLight shadow-subtle space-y-2.5">
+    <div class="text-xs font-black text-brand-navy">My report details</div>
+    <label class="report-label">Report title<input id="reportTitle" class="report-input" maxlength="80" value="My fuel-use observations"></label>
+    <label class="report-label">What I noticed<textarea id="reportObservations" class="report-input" rows="3" placeholder="For example: when the change seemed noticeable"></textarea></label>
+    <label class="report-label">Relevant service history<textarea id="reportHistory" class="report-input" rows="2" placeholder="Optional work already done"></textarea></label>
+    <div class="text-[10px] text-brand-navyMuted">Include in report</div>
+    <label class="report-check"><input id="includeTrip" type="checkbox" checked> Demo journey</label>
+    <label class="report-check"><input id="includeChart" type="checkbox" checked> Fuel chart and alert evidence</label>
+    <label class="report-check"><input id="includeSections" type="checkbox" checked> Highlighted route area and driving context</label>
+    <label class="report-check"><input id="includeTechnical" type="checkbox"> Technical appendix</label>
+  </div>
+  <div class="p-3 bg-white rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+    <div class="text-xs font-black text-brand-navy">PUC certificate reminder</div>
+    <label class="report-label">Expiry date entered by me<input id="pucExpiry" class="report-input" type="date"></label>
+    <p class="text-[10px] text-brand-navyMuted" id="pucState">Not added. This reminder is separate from the fuel-use assessment.</p>
+    <p class="text-[10px] text-brand-navyMuted" id="pucAssessment">No emissions assessment is available.</p>
+    <p class="text-[9px] text-slate-400">DriftBeacon does not test emissions, issue a certificate, or predict PUC pass/fail. If concerned, consider an authorised PUC test.</p>
+  </div>
+  <div class="flex gap-2 pb-2"><button id="btnPreviewReport" class="flex-1 py-2 bg-brand-forest text-white text-xs font-bold rounded-xl">Preview</button><button id="btnPrintReport" class="py-2 px-3 bg-slate-100 text-brand-navy text-xs font-bold rounded-xl">Print / PDF</button><button id="btnShareSummary" class="py-2 px-3 bg-slate-100 text-brand-navy text-xs font-bold rounded-xl">Share</button></div>
+</div>
+<!-- Time-section details use the exported bottom-sheet styling. -->
+<div class="hidden absolute inset-x-3 bottom-14 bg-white rounded-2xl border border-brand-borderLight shadow-2xl z-50 p-3.5" id="hotspotDetailModal">
+  <div class="flex items-center justify-between pb-2 border-b border-slate-100"><h4 class="text-xs font-black text-brand-navy" id="hotspotModalTitle">Time-section evidence</h4><button id="closeHotspot" class="p-1 text-slate-400" aria-label="Close section">✕</button></div>
+  <div class="py-2 space-y-1.5 text-[11px]" id="hotspotDetails"></div>
+  <button id="viewOnChart" class="w-full mt-1 py-1.5 bg-brand-forest text-white text-xs font-bold rounded-lg">View on chart</button>
+</div>
+<div class="hidden absolute inset-x-3 bottom-14 bg-white rounded-2xl border border-brand-borderLight shadow-2xl z-50 p-3.5" id="reportPreviewSheet"><div class="flex justify-between pb-2 border-b border-slate-100"><h4 class="text-xs font-black text-brand-navy">Report preview</h4><button id="closePreview" aria-label="Close preview">✕</button></div><div id="reportPreviewContent" class="report-preview-content"></div></div>
+<!-- DEMO CONTROLS BOTTOM SHEET (SLIDER MODAL) -->
+<div class="hidden absolute inset-x-0 bottom-0 bg-white rounded-t-3xl border-t border-brand-borderLight shadow-2xl z-50 p-4 transition-all duration-300" id="demoControlsSheet">
+<div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
+<div class="flex items-center gap-2">
+<div class="p-1 rounded bg-amber-100 text-amber-800">
+<i class="w-3.5 h-3.5" data-lucide="sliders"></i>
+</div>
+<h3 class="text-xs font-black text-brand-navy">Synthetic Drift Injection</h3>
+</div>
+<button class="p-1 text-slate-400 hover:text-slate-600" id="btnCloseDemoControls">
+<i class="w-4 h-4" data-lucide="x"></i>
+</button>
+</div>
+<p class="text-[10px] text-brand-navyMuted mb-2.5">
+                Change the synthetic fuel-use fault in this car demo. Apply to start a fresh journey.
+              </p>
+<div class="space-y-2.5 text-xs">
+<!-- Slider 1: Synthetic Drift Magnitude -->
+<div>
+<div class="flex justify-between mb-0.5">
+<span class="text-brand-navy font-semibold text-[11px]">Excess Fuel Burn:</span>
+<span class="font-mono font-bold text-amber-700" id="sliderValueDrift">+15%</span>
+</div>
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-600" id="sliderDrift" max="30" min="0" step="1" type="range" value="15"/>
+<div class="flex justify-between text-[8px] text-slate-400">
+<span>0% (Clean baseline)</span>
+<span>+15% (Early drift)</span>
+<span>+30% (High)</span>
+</div>
+</div>
+<!-- Slider 2: Start Time -->
+<div>
+<div class="flex justify-between mb-0.5">
+<span class="text-brand-navy font-semibold text-[11px]">Onset Time:</span>
+<span class="font-mono font-bold text-brand-navy" id="sliderValueStartTime">Min 18 (Highway)</span>
+</div>
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-forest" id="sliderStartTime" max="35" min="0" step="1" type="range" value="18"/>
+</div>
+<!-- Slider 3: Ramp Duration -->
+<div>
+<div class="flex justify-between mb-0.5">
+<span class="text-brand-navy font-semibold text-[11px]">Ramp Duration:</span>
+<span class="font-mono font-bold text-brand-navy" id="sliderValueRamp">6 mins</span>
+</div>
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-forest" id="sliderRamp" max="15" min="1" step="1" type="range" value="6"/>
+</div>
+<!-- Action Button -->
+<div class="pt-1 flex gap-2">
+<button class="flex-1 py-2 px-3 bg-brand-forest hover:bg-brand-forestHover text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5" id="btnApplyAndReplay">
+<i class="w-3.5 h-3.5" data-lucide="play-circle"></i>
+<span>Apply &amp; Replay Fresh Run</span>
+</button>
+<button class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-brand-navy text-xs font-semibold rounded-xl transition" id="btnClearDrift">
+                    Clean Run (0%)
+                  </button>
+</div>
+</div>
+</div>
+<!-- SIMULATION NOTIFICATION TOAST -->
+<div class="hidden absolute top-10 inset-x-3 bg-brand-navy text-white text-xs px-3.5 py-2 rounded-xl shadow-lg z-50 flex items-center justify-between transition-all" id="notificationToast">
+<span id="toastMessage">State updated</span>
+<button class="text-slate-300 hover:text-white ml-2" onclick="hideToast()">
+<i class="w-3.5 h-3.5" data-lucide="x"></i>
+</button>
+</div>
+</div>
+<!-- PERSISTENT BOTTOM NAVIGATION BAR (3 Tabs: Drive, Analysis, Report) -->
+<div class="absolute bottom-0 inset-x-0 h-16 bg-white/95 backdrop-blur-md border-t border-brand-borderLight flex items-center justify-around px-3 z-30">
+<!-- Tab 1: Drive -->
+<button class="nav-tab flex flex-col items-center justify-center text-brand-forest space-y-0.5 flex-1 py-1 relative" id="navTabDrive" onclick="switchTab('drive')">
+<i class="w-4 h-4" data-lucide="steering-wheel"></i>
+<span class="text-[10px] font-extrabold">Drive</span>
+</button>
+<!-- Tab 2: Analysis -->
+<button class="nav-tab flex flex-col items-center justify-center text-slate-400 hover:text-brand-navy space-y-0.5 flex-1 py-1 relative" id="navTabAnalysis" onclick="switchTab('analysis')">
+<i class="w-4 h-4" data-lucide="bar-chart-2"></i>
+<span class="text-[10px] font-medium">Analysis</span>
+<span class="hidden absolute top-1 right-8 w-2 h-2 rounded-full bg-amber-500" id="analysisBadgeDot"></span>
+</button>
+<!-- Tab 3: Report -->
+<button class="nav-tab flex flex-col items-center justify-center text-slate-400 hover:text-brand-navy space-y-0.5 flex-1 py-1 relative" id="navTabService" onclick="switchTab('service')">
+<i class="w-4 h-4" data-lucide="file-check"></i>
+<span class="text-[10px] font-medium">Report</span>
+<span class="hidden absolute top-1 right-8 w-2 h-2 rounded-full bg-amber-500" id="reportBadgeDot"></span>
+</button>
+</div>
+<!-- Phone Home Bar -->
+<div class="absolute bottom-1 inset-x-0 flex justify-center pointer-events-none z-40">
+<div class="w-28 h-1 bg-slate-300 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- RIGHT: Desktop Showcase Explanation & Evaluator Walkthrough -->
+<div class="w-full max-w-xl flex flex-col space-y-5 lg:pt-1" id="quick-guide">
+<!-- Header & Executive Summary -->
+<div class="space-y-1.5">
+<div class="inline-flex items-center gap-1.5 px-3 py-0.5 bg-brand-tealLight rounded-full text-xs font-bold text-brand-teal">
+<i class="w-3.5 h-3.5" data-lucide="cpu"></i>
+<span>Interactive car demo</span>
+</div>
+<h1 class="text-3xl lg:text-4xl font-black text-brand-navy tracking-tight leading-tight">
+            How the DriftBeacon replay works
+          </h1>
+<p class="text-xs sm:text-sm text-brand-navyMuted leading-relaxed">
+            Follow the moving car, then compare clean, medium and high fuel drift. The expert system suggests a different inspection path for each outcome.
+          </p>
+</div>
+<!-- 3-Step Product Explanation Cards -->
+<div class="space-y-3">
+<!-- Step 1 -->
+<div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-card hover:border-brand-teal/40 transition">
+<div class="flex items-start gap-3">
+<div class="w-7 h-7 rounded-xl bg-brand-forest text-white font-extrabold flex items-center justify-center text-xs flex-shrink-0">
+                1
+              </div>
+<div class="space-y-1 flex-1">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-bold text-brand-navy">Drive: Follow the replay</h3>
+<span class="text-[10px] font-semibold text-brand-teal">Live demo view</span>
+</div>
+<p class="text-[11px] text-brand-navyMuted leading-relaxed">
+                  Watch speed, RPM, load, expected fuel and estimated observed fuel progress together through the trip.
+                </p>
+<div class="pt-1 flex items-center gap-1.5 text-[10px] text-brand-forest font-semibold">
+<i class="w-3 h-3 text-brand-teal" data-lucide="check"></i>
+<span>Pause, reset and change playback speed at any point.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-card hover:border-brand-teal/40 transition">
+<div class="flex items-start gap-3">
+<div class="w-7 h-7 rounded-xl bg-brand-forest text-white font-extrabold flex items-center justify-center text-xs flex-shrink-0">
+                2
+              </div>
+<div class="space-y-1 flex-1">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-bold text-brand-navy">Analysis: Answer "What Changed?"</h3>
+<span class="text-[10px] font-semibold text-amber-700">Divergence Isolation</span>
+</div>
+<p class="text-[11px] text-brand-navyMuted leading-relaxed">
+                  Explains why an alert appeared, what the expert system suggests, and the checks needed to confirm it.
+                </p>
+<div class="pt-1 flex items-center gap-1.5 text-[10px] text-brand-forest font-semibold">
+<i class="w-3 h-3 text-brand-teal" data-lucide="check"></i>
+<span>Comparable-trip figures are labeled synthetic examples.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-card hover:border-brand-teal/40 transition">
+<div class="flex items-start gap-3">
+<div class="w-7 h-7 rounded-xl bg-brand-forest text-white font-extrabold flex items-center justify-center text-xs flex-shrink-0">
+                3
+              </div>
+<div class="space-y-1 flex-1">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-bold text-brand-navy">Report: Driver-owned summary</h3>
+<span class="text-[10px] font-semibold text-brand-forest">Editable draft</span>
+</div>
+<p class="text-[11px] text-brand-navyMuted leading-relaxed">
+                  Combines read-only replay evidence with a title, observations and service history written by the driver.
+                </p>
+<div class="pt-1 flex items-center gap-1.5 text-[10px] text-brand-forest font-semibold">
+<i class="w-3 h-3 text-brand-teal" data-lucide="check"></i>
+<span>Print or share only when you choose.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Evaluator Quick Presets (Instant Scenario Switching) -->
+<div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-card space-y-2.5">
+<div class="flex items-center justify-between">
+<span class="text-xs font-black text-brand-navy uppercase tracking-wider">Quick Evaluator Presets:</span>
+<span class="text-[10px] text-brand-navyMuted">Each preset jumps to the key moment</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<button class="p-2 rounded-xl border border-brand-borderLight bg-brand-mint hover:bg-white text-brand-navy text-xs font-medium text-left transition flex flex-col justify-between" onclick="applyPreset('clean')">
+<span class="font-extrabold text-emerald-800 text-[11px]">1. Clean Run</span>
+<span class="text-[9px] text-brand-navyMuted">No added drift (0%)</span>
+</button>
+<button class="p-2 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-medium text-left transition flex flex-col justify-between" onclick="applyPreset('drift')">
+<span class="font-extrabold text-amber-800 text-[11px]">2. Subtle Drift</span>
+<span class="text-[9px] text-amber-700">+15% from min 4</span>
+</button>
+<button class="p-2 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-900 text-xs font-medium text-left transition flex flex-col justify-between" onclick="applyPreset('severe')">
+<span class="font-extrabold text-rose-800 text-[11px]">3. High Drift</span>
+<span class="text-[9px] text-rose-700">+28% fuel-use ramp</span>
+</button>
+<button class="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-medium text-left transition flex flex-col justify-between" onclick="applyPreset('insufficient')">
+<span class="font-extrabold text-slate-700 text-[11px]">4. Missing Data</span>
+<span class="text-[9px] text-slate-500">Synthetic gap example</span>
+</button>
+</div>
+</div>
+<!-- System Governance & Methodology Note -->
+<div class="p-3 bg-brand-mint/80 rounded-2xl border border-brand-borderLight text-[11px] text-brand-navyMuted leading-relaxed flex items-start gap-2">
+<i class="w-4 h-4 text-brand-forest flex-shrink-0 mt-0.5" data-lucide="shield-check"></i>
+<div>
+<strong>Evaluation Transparency:</strong> Demo data: a de-identified sample route and driving trace, estimated fuel values, and synthetic comparison trips, fault signals and exhaust readings. This is an illustration, not a vehicle diagnosis or PUC result.
+          </div>
+</div>
+</div>
+</main>
+</div>
+<script defer src="/stitch-app.js"></script>
+
+</html>

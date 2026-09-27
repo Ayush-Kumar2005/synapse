@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DriftBeacon by ANKOR - Vehicle Efficiency Drift Detection</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              forest: '#174634',
+              forestHover: '#113527',
+              teal: '#0D9488',
+              tealLight: '#E6F4F1',
+              mint: '#F0F7F4',
+              warmWhite: '#FBFBFA',
+              cardBg: '#FFFFFF',
+              navy: '#0F1E28',
+              navyMuted: '#526371',
+              accentAmber: '#D97706',
+              accentAmberBg: '#FEF3C7',
+              accentRed: '#DC2626',
+              accentRedBg: '#FEE2E2',
+              borderLight: '#E2EBE6'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          },
+          boxShadow: {
+            'phone': '0 25px 65px -12px rgba(15, 30, 40, 0.28), 0 0 0 12px #1E282E, 0 0 0 14px #475569',
+            'subtle': '0 3px 12px rgba(15, 30, 40, 0.05)',
+            'card': '0 4px 20px -2px rgba(15, 30, 40, 0.06)'
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .custom-scrubber::-webkit-slider-thumb {
+      appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #174634;
+      cursor: pointer;
+      border: 2.5px solid white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+    }
+    .custom-scrubber::-moz-range-thumb {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #174634;
+      cursor: pointer;
+      border: 2.5px solid white;
+    }
+    .pulse-dot {
+      animation: pulseAnim 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(1.35); }
+    }
+    .car-marker {
+      transition: transform 0.15s ease-out;
+      transform-origin: center center;
+    }
+  </style>
+</head>
+<body class="bg-brand-warmWhite text-brand-navy antialiased min-h-screen flex flex-col justify-between selection:bg-teal-100 selection:text-teal-900">
+<!-- Desktop Presentation Outer Shell -->
+<div class="w-full flex-1 flex flex-col">
+<!-- Top Global Header (Shown on desktop showcase) -->
+<header class="hidden lg:flex items-center justify-between px-10 py-4 border-b border-brand-borderLight bg-white/80 backdrop-blur-md sticky top-0 z-40">
+<div class="flex items-center space-x-3">
+<div class="w-9 h-9 rounded-xl bg-brand-forest flex items-center justify-center text-white shadow-sm">
+<i class="w-5 h-5" data-lucide="gauge"></i>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<span class="font-extrabold text-lg tracking-tight text-brand-navy">DriftBeacon</span>
+<span class="text-[10px] uppercase tracking-wider font-bold text-brand-teal px-2 py-0.5 bg-brand-tealLight rounded-full">by ANKOR</span>
+</div>
+<p class="text-xs text-brand-navyMuted">Subtle Powertrain Fuel Efficiency Drift Detection • 2.0L Turbo Gasoline ICE</p>
+</div>
+</div>
+<div class="flex items-center space-x-5 text-sm">
+<div class="flex items-center space-x-2 text-xs text-brand-navyMuted bg-brand-mint border border-brand-borderLight px-3 py-1.5 rounded-lg">
+<i class="w-3.5 h-3.5 text-brand-teal" data-lucide="database"></i>
+<span>VED Dataset #4829 • Recorded 42 min run (Ann Arbor corridor)</span>
+</div>
+<a class="text-brand-navy hover:text-brand-forest font-semibold text-xs flex items-center gap-1 transition" href="#quick-guide">
+<span>Evaluator Guide</span>
+<i class="w-4 h-4" data-lucide="arrow-down-right"></i>
+</a>
+</div>
+</header>
+<!-- Main Container: Showcase Grid on Desktop, Pure Responsive Phone App on Mobile -->
+<main class="flex-1 max-w-7xl mx-auto w-full p-3 sm:p-6 lg:p-8 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 lg:gap-12">
+<!-- LEFT: Realistic Phone Mockup Frame (Mobile-First Canvas) -->
+<div class="w-full max-w-[420px] flex-shrink-0 flex flex-col items-center">
+<!-- Interactive Notice Tag (Desktop only) -->
+<div class="hidden sm:flex items-center gap-2 mb-3 text-xs font-semibold text-brand-navyMuted bg-white border border-brand-borderLight shadow-sm px-3.5 py-1 rounded-full">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+<span>Live Interactive Phone Simulation</span>
+</div>
+<!-- Phone Shell Container -->
+<div class="w-full h-[785px] max-h-[94vh] bg-white rounded-[44px] overflow-hidden shadow-card sm:shadow-phone border-4 border-slate-800/90 sm:border-0 relative flex flex-col select-none">
+<!-- Phone Speaker & Camera Notch (Dynamic Island Style) -->
+<div class="absolute top-0 left-0 right-0 h-7 flex items-center justify-between px-7 pt-2 z-50 pointer-events-none text-slate-800">
+<span class="text-[11px] font-bold tracking-tight font-mono" id="phoneClock">09:41</span>
+<div class="w-24 h-4 bg-slate-900 rounded-full mx-auto flex items-center justify-end px-2">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+</div>
+<div class="flex items-center space-x-1.5 text-[10px]">
+<i class="w-3 h-3" data-lucide="wifi"></i>
+<i class="w-3.5 h-3.5" data-lucide="battery"></i>
+</div>
+</div>
+<!-- Phone Inner Screen Content Area -->
+<div class="w-full h-full pt-8 pb-16 overflow-y-auto flex flex-col bg-brand-mint text-brand-navy relative" id="phoneViewport">
+<!-- VIEW 0: WELCOME / INTRO OVERLAY SCREEN -->
+<div class="absolute inset-0 bg-brand-warmWhite z-40 flex flex-col justify-between p-6 pt-11 transition-transform duration-300" id="welcomeScreen">
+<div class="flex flex-col items-center text-center mt-4">
+<div class="w-16 h-16 rounded-2xl bg-brand-tealLight border border-brand-teal/20 flex items-center justify-center text-brand-forest mb-4 shadow-sm">
+<i class="w-8 h-8 text-brand-forest" data-lucide="gauge"></i>
+</div>
+<div class="inline-block px-3 py-0.5 bg-brand-mint rounded-full text-[11px] font-bold text-brand-forest border border-brand-borderLight mb-3">
+                  ANKOR Diagnostics Labs
+                </div>
+<h1 class="text-2xl font-black tracking-tight text-brand-navy leading-snug px-1">
+                  Spot efficiency drift before it becomes a bigger problem.
+                </h1>
+<p class="text-xs text-brand-navyMuted mt-2.5 leading-relaxed px-2">
+                  Monitors subtle powertrain fuel burn changes by comparing recorded trips against physics-based baseline expectations for gasoline engines.
+                </p>
+</div>
+<!-- Feature Highlights on Welcome -->
+<div class="space-y-2.5 my-3">
+<div class="flex items-start gap-3 bg-white p-3 rounded-2xl border border-brand-borderLight shadow-sm">
+<div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+<i class="w-4 h-4" data-lucide="trending-up"></i>
+</div>
+<div>
+<h4 class="text-xs font-bold text-brand-navy">Pre-Fault Early Warning</h4>
+<p class="text-[11px] text-brand-navyMuted">Detects gradual 4–15% excess consumption weeks before Check Engine lights trigger.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 bg-white p-3 rounded-2xl border border-brand-borderLight shadow-sm">
+<div class="w-8 h-8 rounded-xl bg-teal-50 text-brand-teal flex items-center justify-center flex-shrink-0 mt-0.5">
+<i class="w-4 h-4" data-lucide="file-check-2"></i>
+</div>
+<div>
+<h4 class="text-xs font-bold text-brand-navy">Driver-Controlled Service Handoff</h4>
+<p class="text-[11px] text-brand-navyMuted">Objective timeline evidence for your technician to isolate mechanical root causes.</p>
+</div>
+</div>
+</div>
+<!-- Demo Notice & CTA -->
+<div class="space-y-2.5 pt-1">
+<div class="p-2.5 bg-brand-mint rounded-xl border border-brand-borderLight text-center">
+<p class="text-[11px] text-brand-navyMuted font-medium flex items-center justify-center gap-1.5">
+<i class="w-3.5 h-3.5 text-brand-teal" data-lucide="shield-alert"></i>
+<span>Recorded VED gasoline trip demo. No live OBD needed.</span>
+</p>
+</div>
+<button class="w-full py-3 px-4 bg-brand-forest hover:bg-brand-forestHover text-white font-bold text-xs rounded-xl transition shadow-md flex items-center justify-center space-x-2" id="btnStartRecordedDrive">
+<span>Start Recorded Drive</span>
+<i class="w-4 h-4" data-lucide="arrow-right"></i>
+</button>
+</div>
+</div>
+<!-- VIEW 1: TAB - DRIVE SCREEN -->
+<div class="flex-1 flex flex-col p-3.5 space-y-3 overflow-y-auto" id="tabContentDrive">
+<!-- App Bar inside Phone -->
+<div class="flex items-center justify-between pt-0.5">
+<div>
+<div class="text-[10px] font-bold uppercase tracking-wider text-brand-teal flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-brand-teal inline-block"></span>
+<span>VED Trip #4829 • Recorded Run</span>
+</div>
+<h2 class="text-sm font-black text-brand-navy">Active Playback Simulation</h2>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="hidden text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-300 px-2 py-0.5 rounded-full flex items-center gap-1" id="syntheticBadge">
+<i class="w-2.5 h-2.5" data-lucide="zap"></i> +15% Drift Active
+                  </span>
+<button class="p-1.5 rounded-xl bg-white border border-brand-borderLight text-brand-navy hover:bg-slate-50 transition shadow-xs" id="btnOpenDemoControls" title="Synthetic Drift Controls">
+<i class="w-3.5 h-3.5" data-lucide="sliders-horizontal"></i>
+</button>
+</div>
+</div>
+<!-- CAR SIMULATION HERO: OpenStreetMap Vector Road Map with Smooth Moving Car -->
+<div class="bg-white rounded-2xl border border-brand-borderLight shadow-card overflow-hidden">
+<!-- Map Header Context Bar -->
+<div class="px-3 py-2 bg-slate-50 border-b border-brand-borderLight flex items-center justify-between text-[11px]">
+<div class="flex items-center gap-1.5 font-bold text-brand-navy">
+<i class="w-3.5 h-3.5 text-brand-forest" data-lucide="map-pin"></i>
+<span id="drivingContextText">Steady Highway Cruise</span>
+</div>
+<div class="flex items-center gap-2 font-mono">
+<span class="font-bold text-brand-navy bg-white px-1.5 py-0.5 rounded border border-slate-200" id="heroSpeedBadge">78 km/h</span>
+<span class="font-semibold text-brand-navyMuted" id="tripTimeDisplay">00:00 / 42:00</span>
+</div>
+</div>
+<!-- Vector Map Area (OSM Style SVG) -->
+<div class="relative w-full h-44 bg-[#F2EFE9] overflow-hidden select-none">
+<!-- Vector Canvas -->
+<svg class="w-full h-full" id="heroOsmSvg" viewbox="0 0 380 180">
+<!-- Landuse / Parks -->
+<path d="M 10,10 L 110,15 L 90,80 L 15,60 Z" fill="#D8E8C8" opacity="0.8"></path>
+<path d="M 260,110 L 370,95 L 365,170 L 250,165 Z" fill="#D8E8C8" opacity="0.8"></path>
+<!-- Water feature -->
+<path d="M 0,140 Q 60,135 120,150 T 220,175 L 0,180 Z" fill="#C5E3EE"></path>
+<!-- Background Road Grid (Subtle OSM roads) -->
+<line stroke="#FFFFFF" stroke-width="3" x1="30" x2="30" y1="0" y2="180"></line>
+<line stroke="#FFFFFF" stroke-width="2.5" x1="120" x2="120" y1="0" y2="180"></line>
+<line stroke="#FFFFFF" stroke-width="3" x1="280" x2="280" y1="0" y2="180"></line>
+<line stroke="#FFFFFF" stroke-width="3" x1="0" x2="380" y1="65" y2="65"></line>
+<line stroke="#FFFFFF" stroke-width="2.5" x1="0" x2="380" y1="130" y2="130"></line>
+<!-- Highway Arterial Track (Polyline Backdrop) -->
+<path d="M 25,145 Q 80,140 110,95 T 190,75 T 275,55 T 355,35" fill="none" id="routePolyBackdrop" stroke="#E2E8F0" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"></path>
+<!-- Anomaly Hotspot glow segments on map -->
+<path class="transition-opacity duration-300" d="M 190,75 T 275,55 T 355,35" fill="none" id="routeAnomalyGlow" opacity="0" stroke="#F59E0B" stroke-linecap="round" stroke-width="12"></path>
+<!-- Traveled Route Line (High contrast forest green) -->
+<path d="M 25,145" fill="none" id="routePolyTraveled" stroke="#174634" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.5"></path>
+<!-- Start & Finish Pins -->
+<g transform="translate(25, 145)">
+<circle fill="#10B981" r="4"></circle>
+<circle fill="none" r="7" stroke="#10B981" stroke-width="1.5"></circle>
+<text fill="#0F1E28" font-size="8" font-weight="bold" x="-12" y="14">Start</text>
+</g>
+<g transform="translate(355, 35)">
+<circle fill="#64748B" r="4"></circle>
+<circle fill="none" r="7" stroke="#64748B" stroke-width="1.5"></circle>
+<text fill="#0F1E28" font-size="8" font-weight="bold" x="-6" y="-7">End</text>
+</g>
+<!-- Top-Down Realistic SVG Car Marker -->
+<g class="car-marker" id="carMarkerGroup" transform="translate(25, 145) rotate(0)">
+<!-- Car Drop Shadow -->
+<ellipse cx="0" cy="1" fill="#000000" opacity="0.25" rx="8" ry="14"></ellipse>
+<!-- Car Body -->
+<rect fill="#174634" height="24" rx="4" stroke="#FFFFFF" stroke-width="1.5" width="12" x="-6" y="-12"></rect>
+<!-- Windshield & Roof -->
+<rect fill="#E6F4F1" height="10" rx="2" width="9" x="-4.5" y="-5"></rect>
+<!-- Headlights -->
+<circle cx="-4" cy="-11" fill="#FEF08A" r="1.2"></circle>
+<circle cx="4" cy="-11" fill="#FEF08A" r="1.2"></circle>
+<!-- Taillights -->
+<circle cx="-4" cy="11" fill="#EF4444" r="1.2"></circle>
+<circle cx="4" cy="11" fill="#EF4444" r="1.2"></circle>
+</g>
+</svg>
+<!-- Map Overlays -->
+<div class="absolute bottom-1 right-2 bg-white/80 backdrop-blur-xs px-1.5 py-0.5 rounded text-[8px] font-mono text-slate-500">
+                    © OpenStreetMap contributors
+                  </div>
+<div class="hidden absolute top-2 left-2 bg-amber-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 animate-bounce" id="liveDriftAlertPill">
+<i class="w-3 h-3" data-lucide="flame"></i>
+<span>Excess Fuel Burn Hotspot</span>
+</div>
+</div>
+<!-- Unified Playback Scrubber & Controls -->
+<div class="p-3 bg-white space-y-2">
+<!-- Scrubber Track Slider -->
+<div class="relative flex items-center">
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer custom-scrubber accent-brand-forest" id="tripScrubber" max="100" min="0" type="range" value="0"/>
+</div>
+<!-- Controls Bar -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center space-x-1.5">
+<button class="px-3 py-1 bg-brand-forest hover:bg-brand-forestHover text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition shadow-xs" id="btnPlayPause">
+<i class="w-3.5 h-3.5" data-lucide="play" id="playIcon"></i>
+<span id="playBtnText">Play</span>
+</button>
+<button class="p-1.5 bg-slate-100 hover:bg-slate-200 text-brand-navy rounded-lg text-xs transition" id="btnResetTrip" title="Reset trip">
+<i class="w-3.5 h-3.5" data-lucide="rotate-ccw"></i>
+</button>
+</div>
+<!-- 1x / 2x / 4x Speed toggles -->
+<div class="flex items-center space-x-1 bg-slate-100 p-0.5 rounded-lg">
+<button class="speed-btn px-2 py-0.5 text-[10px] font-bold rounded-md bg-brand-forest text-white" data-speed="1">1x</button>
+<button class="speed-btn px-2 py-0.5 text-[10px] font-semibold rounded-md text-brand-navy hover:bg-white" data-speed="2">2x</button>
+<button class="speed-btn px-2 py-0.5 text-[10px] font-semibold rounded-md text-brand-navy hover:bg-white" data-speed="4">4x</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Plain-Language Status Card (5 Dynamic States) -->
+<div class="p-3.5 rounded-2xl bg-white border border-brand-borderLight shadow-subtle transition-all duration-300 flex items-start justify-between" id="statusBanner">
+<div class="space-y-1">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500" id="statusIndicatorDot"></span>
+<span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800" id="statusLabelText">Within expected range</span>
+</div>
+<h3 class="text-xs font-bold text-brand-navy leading-snug" id="statusHeadline">Powertrain fuel burn is tracking baseline model.</h3>
+<p class="text-[11px] text-brand-navyMuted" id="statusSubtext">No abnormal efficiency loss observed across current speed profile.</p>
+</div>
+<div class="p-2 bg-emerald-50 text-emerald-700 rounded-xl flex-shrink-0 ml-2" id="statusIconWrap">
+<i class="w-4 h-4" data-lucide="shield-check" id="statusIcon"></i>
+</div>
+</div>
+<!-- 4 Compact Readable Telemetry Metrics Grid -->
+<div class="grid grid-cols-2 gap-2">
+<!-- Metric 1: Observed Fuel Use -->
+<div class="bg-white p-2.5 rounded-2xl border border-brand-borderLight shadow-subtle flex flex-col justify-between">
+<span class="text-[10px] text-brand-navyMuted font-semibold flex items-center justify-between">
+<span>Est. Fuel Burn</span>
+<i class="w-3 h-3 text-brand-navyMuted" data-lucide="gauge"></i>
+</span>
+<div class="mt-1">
+<div class="flex items-baseline space-x-1">
+<span class="text-lg font-black tracking-tight text-brand-navy font-mono" id="metricObservedFuel">6.2</span>
+<span class="text-[10px] font-bold text-brand-navyMuted">L/h</span>
+</div>
+<span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded inline-block mt-0.5" id="fuelDeltaBadge">Nominal</span>
+</div>
+</div>
+<!-- Metric 2: Expected Baseline -->
+<div class="bg-white p-2.5 rounded-2xl border border-brand-borderLight shadow-subtle flex flex-col justify-between">
+<span class="text-[10px] text-brand-navyMuted font-semibold flex items-center justify-between">
+<span>Expected Baseline</span>
+<i class="w-3 h-3 text-brand-navyMuted" data-lucide="target"></i>
+</span>
+<div class="mt-1">
+<div class="flex items-baseline space-x-1">
+<span class="text-lg font-black tracking-tight text-brand-navy font-mono" id="metricExpectedFuel">6.1</span>
+<span class="text-[10px] font-bold text-brand-navyMuted">L/h</span>
+</div>
+<span class="text-[9px] text-brand-navyMuted font-medium inline-block mt-0.5">VED ICE model</span>
+</div>
+</div>
+<!-- Metric 3: Accumulated Excess Fuel -->
+<div class="bg-white p-2.5 rounded-2xl border border-brand-borderLight shadow-subtle flex flex-col justify-between">
+<span class="text-[10px] text-brand-navyMuted font-semibold flex items-center justify-between">
+<span>Acc. Excess Fuel</span>
+<i class="w-3 h-3 text-brand-navyMuted" data-lucide="droplet"></i>
+</span>
+<div class="mt-1">
+<div class="flex items-baseline space-x-1">
+<span class="text-lg font-black tracking-tight text-brand-navy font-mono" id="metricExcessFuel">+0.04</span>
+<span class="text-[10px] font-bold text-brand-navyMuted">L</span>
+</div>
+<span class="text-[9px] text-slate-500 font-mono inline-block mt-0.5" id="excessFuelSub">+0.8% variance</span>
+</div>
+</div>
+<!-- Metric 4: Estimated Extra CO2 -->
+<div class="bg-white p-2.5 rounded-2xl border border-brand-borderLight shadow-subtle flex flex-col justify-between">
+<span class="text-[10px] text-brand-navyMuted font-semibold flex items-center justify-between">
+<span>Extra CO₂*</span>
+<i class="w-3 h-3 text-brand-navyMuted" data-lucide="cloud"></i>
+</span>
+<div class="mt-1">
+<div class="flex items-baseline space-x-1">
+<span class="text-lg font-black tracking-tight text-brand-navy font-mono" id="metricExcessCO2">+0.09</span>
+<span class="text-[10px] font-bold text-brand-navyMuted">kg</span>
+</div>
+<span class="text-[8px] text-brand-navyMuted inline-block mt-0.5 leading-tight">*2.31 kg CO₂ / L gas</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Card to Analysis -->
+<div class="p-2.5 bg-brand-tealLight/60 border border-brand-teal/20 rounded-xl flex items-center justify-between text-xs">
+<div class="flex items-center gap-2 text-brand-forest">
+<i class="w-4 h-4 text-brand-teal" data-lucide="bar-chart-2"></i>
+<span class="font-bold text-[11px]">Notice a divergence? Inspect root factors</span>
+</div>
+<button class="font-extrabold text-[11px] text-brand-forest hover:underline flex items-center" onclick="switchTab('analysis')">
+<span>Inspect</span>
+<i class="w-3.5 h-3.5" data-lucide="chevron-right"></i>
+</button>
+</div>
+</div>
+<!-- VIEW 2: TAB - ANALYSIS SCREEN ("WHAT CHANGED?") -->
+<div class="hidden flex-1 flex flex-col p-3.5 space-y-3 overflow-y-auto" id="tabContentAnalysis">
+<div class="flex items-center justify-between pt-0.5">
+<div>
+<div class="text-[10px] font-bold uppercase tracking-wider text-brand-teal">Deep Diagnostics</div>
+<h2 class="text-sm font-black text-brand-navy">Efficiency Drift Analysis</h2>
+</div>
+<span class="text-[10px] font-mono bg-white px-2 py-0.5 rounded border border-brand-borderLight text-brand-navyMuted font-semibold" id="analysisTripPosition">At 00:00</span>
+</div>
+<!-- Concise Lead Finding Card -->
+<div class="p-3 bg-white rounded-2xl border border-brand-borderLight shadow-subtle space-y-1.5">
+<div class="flex items-center gap-1.5">
+<div class="p-1 rounded bg-amber-50 text-amber-700">
+<i class="w-3.5 h-3.5" data-lucide="sparkles"></i>
+</div>
+<h3 class="text-xs font-black text-brand-navy uppercase tracking-wide">Key Telemetry Finding</h3>
+</div>
+<p class="text-xs text-brand-navy leading-relaxed font-medium" id="analysisSummaryText">
+                  Fuel use is currently consistent with previous normal baseline runs (+0.8%). Steady speed cruise matches model expectations.
+                </p>
+<div class="pt-1.5 grid grid-cols-2 gap-2 text-[10px] border-t border-slate-100">
+<div>
+<span class="text-brand-navyMuted block">Trip Efficiency:</span>
+<span class="font-mono font-bold text-brand-navy" id="analysisL100km">6.9 vs 6.8 L/100km</span>
+</div>
+<div>
+<span class="text-brand-navyMuted block">Multi-Trip Index:</span>
+<span class="font-bold text-emerald-700" id="analysisFleetComparison">Nominal Correlated</span>
+</div>
+</div>
+</div>
+<!-- Drift Over Comparable Trips (Historical 6 Trips Visual Bar) -->
+<div class="bg-white p-3 rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+<div class="flex items-center justify-between text-xs">
+<span class="font-bold text-brand-navy text-[11px]">Drift Over Comparable Trips</span>
+<span class="text-[9px] text-slate-400">Past 6 highway runs (VED sample)</span>
+</div>
+<!-- 6 bar indicators -->
+<div class="grid grid-cols-6 gap-1.5 items-end h-12 pt-1 border-b border-slate-100 pb-1" id="multiTripBars">
+<div class="flex flex-col items-center gap-1">
+<div class="w-full bg-emerald-200 rounded-t h-4"></div>
+<span class="text-[8px] font-mono text-slate-400">#4824</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full bg-emerald-200 rounded-t h-5"></div>
+<span class="text-[8px] font-mono text-slate-400">#4825</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full bg-emerald-200 rounded-t h-4"></div>
+<span class="text-[8px] font-mono text-slate-400">#4826</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full bg-emerald-300 rounded-t h-5"></div>
+<span class="text-[8px] font-mono text-slate-400">#4827</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full bg-amber-400 rounded-t h-7" id="barTrip4828"></div>
+<span class="text-[8px] font-mono text-slate-400">#4828</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full bg-brand-forest rounded-t h-5" id="barTripCurrent"></div>
+<span class="text-[8px] font-mono font-bold text-brand-forest">Today</span>
+</div>
+</div>
+<p class="text-[10px] text-brand-navyMuted leading-normal" id="multiTripInsight">
+                  Baseline consistency confirmed across 4 runs. Excess gap began recurring on Trip #4828.
+                </p>
+</div>
+<!-- Interactive Chart Container (SVG Based with L/h units & Gap indicator) -->
+<div class="bg-white p-3 rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+<div class="flex items-center justify-between">
+<div class="text-[11px] font-bold text-brand-navy flex items-center gap-1">
+<span>Expected vs Observed Fuel Use</span>
+<span class="text-[9px] text-brand-navyMuted font-mono">(L/h)</span>
+</div>
+<!-- Chart legend -->
+<div class="flex items-center gap-2.5 text-[9px]">
+<div class="flex items-center gap-1">
+<span class="w-2.5 h-0.5 bg-slate-400 inline-block"></span>
+<span class="text-brand-navyMuted">Baseline</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-2.5 h-1 bg-brand-forest rounded inline-block" id="chartLegendObsDot"></span>
+<span class="font-bold text-brand-forest">Observed</span>
+</div>
+</div>
+</div>
+<!-- SVG Fuel Chart -->
+<div class="w-full h-32 relative border-b border-l border-slate-200 bg-slate-50/40 rounded-sm">
+<svg class="w-full h-full overflow-visible" id="analysisSvgChart" viewbox="0 0 340 130">
+<!-- Grid Lines -->
+<line stroke="#E2E8F0" stroke-dasharray="2 2" stroke-width="1" x1="0" x2="340" y1="32" y2="32"></line>
+<line stroke="#E2E8F0" stroke-dasharray="2 2" stroke-width="1" x1="0" x2="340" y1="65" y2="65"></line>
+<line stroke="#E2E8F0" stroke-dasharray="2 2" stroke-width="1" x1="0" x2="340" y1="98" y2="98"></line>
+<!-- Expected Curve (Dotted Slate) -->
+<path d="M 0,105 Q 60,80 120,85 T 220,60 T 340,75" fill="none" id="pathExpectedCurve" stroke="#94A3B8" stroke-dasharray="3 3" stroke-width="2"></path>
+<!-- Observed Curve (Bold Green / Amber / Red) -->
+<path d="M 0,105 Q 60,80 120,85 T 220,60 T 340,75" fill="none" id="pathObservedCurve" stroke="#174634" stroke-width="2.5"></path>
+<!-- Divergence Area Fill -->
+<polygon fill="#F59E0B" fill-opacity="0.15" id="divergenceArea" points="150,75 220,60 340,75 340,35 220,30 150,75"></polygon>
+<!-- Missing OBD packet gap marker (Telemetry sample robustness indicator) -->
+<rect fill="#CBD5E1" height="130" opacity="0.35" width="8" x="180" y="0"></rect>
+<text fill="#64748B" font-family="monospace" font-size="7" x="175" y="15">Gap</text>
+<!-- Current Time Cursor Vertical Line -->
+<line id="chartCursorLine" stroke="#0D9488" stroke-dasharray="2 2" stroke-width="1.5" x1="0" x2="0" y1="0" y2="130"></line>
+<circle cx="0" cy="105" fill="#0D9488" id="chartCursorPoint" r="4" stroke="#FFFFFF" stroke-width="2"></circle>
+</svg>
+<!-- Chart Y-axis labels -->
+<div class="absolute left-1 top-0 text-[8px] font-mono text-slate-400">12 L/h</div>
+<div class="absolute left-1 bottom-1 text-[8px] font-mono text-slate-400">2 L/h</div>
+</div>
+<div class="flex items-center justify-between text-[9px] text-slate-400 font-mono px-0.5">
+<span>00:00 (Start)</span>
+<span>18:00 (Highway entry)</span>
+<span>42:00 (Exit)</span>
+</div>
+</div>
+<!-- Driving Condition Breakdown (Context, NOT root mechanical blame) -->
+<div class="bg-white p-3 rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-bold text-brand-navy">Excess Fuel by Driving Regime</span>
+<span class="text-[9px] text-slate-400">Operating condition context</span>
+</div>
+<div class="space-y-1.5">
+<div>
+<div class="flex justify-between text-[10px] mb-0.5">
+<span class="text-brand-navy font-medium">Steady Highway Cruise (80–110 km/h)</span>
+<span class="font-mono font-bold text-amber-700" id="breakdownCruise">76% of excess</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-amber-500 rounded-full" id="barCruise" style="width: 76%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] mb-0.5">
+<span class="text-brand-navy font-medium">Urban Stop-and-Go</span>
+<span class="font-mono font-semibold text-slate-600" id="breakdownUrban">18% of excess</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-slate-400 rounded-full" id="barUrban" style="width: 18%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] mb-0.5">
+<span class="text-brand-navy font-medium">Idle Queue &amp; Warm-up</span>
+<span class="font-mono font-semibold text-slate-600" id="breakdownIdle">6% of excess</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-slate-300 rounded-full" id="barIdle" style="width: 6%;"></div>
+</div>
+</div>
+</div>
+<p class="text-[9px] text-slate-400 italic">
+                  Note: Operating regimes classify vehicle duty cycle and do not denote mechanical faults.
+                </p>
+</div>
+<!-- Route Hotspots Strip & Modal Trigger -->
+<div class="bg-white p-3 rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+<div class="flex items-center justify-between">
+<div class="text-[11px] font-bold text-brand-navy flex items-center gap-1.5">
+<i class="w-3.5 h-3.5 text-brand-teal" data-lucide="flame"></i>
+<span>Route Hotspot Segments</span>
+</div>
+<span class="text-[9px] text-brand-navyMuted">Tap segment for inspection</span>
+</div>
+<!-- 5 Segments Strip -->
+<div class="grid grid-cols-5 gap-1 h-9" id="heatStripSegments">
+<button class="segment-btn rounded-lg bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 flex flex-col items-center justify-center text-[9px] font-bold text-emerald-800 transition" onclick="openHotspotModal(0)">
+<span>S1</span>
+<span class="text-[7px] font-normal">Urban</span>
+</button>
+<button class="segment-btn rounded-lg bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 flex flex-col items-center justify-center text-[9px] font-bold text-emerald-800 transition" onclick="openHotspotModal(1)">
+<span>S2</span>
+<span class="text-[7px] font-normal">Arterial</span>
+</button>
+<button class="segment-btn rounded-lg bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 flex flex-col items-center justify-center text-[9px] font-bold text-emerald-800 transition" id="seg3Btn" onclick="openHotspotModal(2)">
+<span>S3</span>
+<span class="text-[7px] font-normal">Hwy A</span>
+</button>
+<button class="segment-btn rounded-lg bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 flex flex-col items-center justify-center text-[9px] font-bold text-emerald-800 transition" id="seg4Btn" onclick="openHotspotModal(3)">
+<span>S4</span>
+<span class="text-[7px] font-normal">Hwy B</span>
+</button>
+<button class="segment-btn rounded-lg bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 flex flex-col items-center justify-center text-[9px] font-bold text-emerald-800 transition" id="seg5Btn" onclick="openHotspotModal(4)">
+<span>S5</span>
+<span class="text-[7px] font-normal">Exit</span>
+</button>
+</div>
+</div>
+<!-- Practical Impact Calculator (Fuel Price & Excess Cost) -->
+<div class="p-3 bg-brand-warmWhite rounded-2xl border border-brand-borderLight space-y-2">
+<span class="text-[11px] font-bold text-brand-navy flex items-center justify-between">
+<span>Practical Cost &amp; Environmental Impact</span>
+<i class="w-3.5 h-3.5 text-brand-forest" data-lucide="calculator"></i>
+</span>
+<div class="grid grid-cols-2 gap-2 text-xs">
+<div class="p-2 bg-white rounded-xl border border-slate-200">
+<span class="text-[9px] text-brand-navyMuted block">Extra Gasoline:</span>
+<span class="font-bold text-brand-navy text-sm font-mono" id="analysisNetExcessFuel">+0.04 L</span>
+</div>
+<div class="p-2 bg-white rounded-xl border border-slate-200">
+<span class="text-[9px] text-brand-navyMuted block">Extra CO₂ (2.31 kg/L):</span>
+<span class="font-bold text-brand-navy text-sm font-mono" id="analysisNetExcessCO2">+0.09 kg</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 text-[11px]">
+<div class="flex items-center gap-1.5">
+<label class="text-brand-navyMuted" for="fuelPriceInput">Fuel cost ($/L):</label>
+<input class="w-16 px-1.5 py-0.5 text-xs font-mono font-bold bg-white border border-slate-200 rounded text-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-teal" id="fuelPriceInput" step="0.05" type="number" value="1.65"/>
+</div>
+<div class="text-right">
+<span class="text-brand-navyMuted text-[10px] block">Projected Monthly Extra:</span>
+<span class="font-black text-brand-forest font-mono text-xs" id="calcMonthlyExtraCost">+$0.52 / mo</span>
+</div>
+</div>
+</div>
+</div>
+<!-- VIEW 3: TAB - REPORT SCREEN (DRIVER-CONTROLLED HANDOFF) -->
+<div class="hidden flex-1 flex flex-col p-3.5 space-y-3 overflow-y-auto" id="tabContentService">
+<div class="pt-0.5">
+<div class="text-[10px] font-bold uppercase tracking-wider text-brand-teal">Diagnostic Dossier</div>
+<h2 class="text-sm font-black text-brand-navy">Technician &amp; Review Pack</h2>
+</div>
+<!-- Driver-Friendly Reason for Review Summary Card -->
+<div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-subtle space-y-2" id="serviceRecommendationCard">
+<div class="flex items-center gap-2">
+<div class="p-1.5 rounded-xl bg-emerald-50 text-emerald-700" id="serviceStatusIconBg">
+<i class="w-4 h-4" data-lucide="check-circle" id="serviceStatusIcon"></i>
+</div>
+<div>
+<h3 class="text-xs font-bold text-brand-navy uppercase tracking-wider" id="serviceRecTitle">No Review Required</h3>
+<span class="text-[9px] text-brand-navyMuted">Based on current recorded VED trip dataset</span>
+</div>
+</div>
+<p class="text-xs text-brand-navy leading-relaxed font-medium" id="serviceRecText">
+                  Fuel consumption remains within the typical variance window (under 3%). Standard maintenance schedule is adequate.
+                </p>
+<!-- Crucial Honest Disclaimer: Technician isolates cause, not app -->
+<div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-[10px] text-slate-600 leading-normal flex items-start gap-1.5">
+<i class="w-3.5 h-3.5 text-slate-400 flex-shrink-0 mt-0.5" data-lucide="info"></i>
+<span><strong>Technician Notice:</strong> DriftBeacon isolates unexplained fuel variance over time. Certified technicians must evaluate physical systems (e.g. oxygen/MAF sensors, brake caliper drag, boost leaks). No parts replacement is implied.</span>
+</div>
+</div>
+<!-- Full Diagnostic Evidence Preview Card -->
+<div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-subtle space-y-2.5">
+<div class="flex items-center justify-between text-xs pb-1.5 border-b border-slate-100">
+<div class="flex items-center gap-1.5 font-black text-brand-navy">
+<i class="w-3.5 h-3.5 text-brand-forest" data-lucide="file-text"></i>
+<span>Diagnostic Evidence Package</span>
+</div>
+<span class="font-mono text-[9px] text-brand-teal font-bold bg-brand-tealLight px-1.5 py-0.5 rounded">VED-TRIP4829-EVID</span>
+</div>
+<div class="space-y-1.5 text-[11px]">
+<div class="flex justify-between py-0.5 border-b border-slate-50">
+<span class="text-brand-navyMuted">Vehicle Context:</span>
+<span class="font-semibold text-brand-navy">2.0L Turbo Gasoline ICE</span>
+</div>
+<div class="flex justify-between py-0.5 border-b border-slate-50">
+<span class="text-brand-navyMuted">Alert Onset Window:</span>
+<span class="font-semibold text-brand-navy" id="evidenceAlertWindow">None (All segments nominal)</span>
+</div>
+<div class="flex justify-between py-0.5 border-b border-slate-50">
+<span class="text-brand-navyMuted">Observed vs Expected Burn:</span>
+<span class="font-mono font-bold text-brand-navy" id="evidenceBurnComp">6.1 L/h vs 6.1 L/h</span>
+</div>
+<div class="flex justify-between py-0.5 border-b border-slate-50">
+<span class="text-brand-navyMuted">Cumulative Excess Fuel:</span>
+<span class="font-mono font-bold text-emerald-700" id="evidenceExcess">+0.04 L (+0.8%)</span>
+</div>
+<div class="flex justify-between py-0.5 border-b border-slate-50">
+<span class="text-brand-navyMuted">Estimated Extra CO₂:</span>
+<span class="font-mono font-bold text-brand-navy" id="evidenceExtraCO2">+0.09 kg (at 2.31 kg/L)</span>
+</div>
+<div class="flex justify-between py-0.5 border-b border-slate-50">
+<span class="text-brand-navyMuted">CAN-BUS / OBD Validity:</span>
+<span class="font-bold text-emerald-700">98.4% continuous sample</span>
+</div>
+<div class="flex justify-between py-0.5">
+<span class="text-brand-navyMuted">Prevalent Driving Regime:</span>
+<span class="font-medium text-brand-navy">Steady Highway (80–110 km/h)</span>
+</div>
+</div>
+<!-- Export & Share Action Buttons with Feedback -->
+<div class="pt-2 flex gap-2">
+<button class="flex-1 py-2 px-3 bg-brand-forest hover:bg-brand-forestHover text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition shadow-xs" id="btnShareSummary">
+<i class="w-3.5 h-3.5" data-lucide="share-2"></i>
+<span>Share with Technician</span>
+</button>
+<button class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-brand-navy font-bold text-xs rounded-xl flex items-center gap-1 transition" id="btnPrintReport" title="Export PDF">
+<i class="w-3.5 h-3.5" data-lucide="download"></i>
+<span>PDF</span>
+</button>
+</div>
+</div>
+<!-- Technician Hand-off Notes & Logging -->
+<div class="p-3 bg-white rounded-2xl border border-brand-borderLight shadow-subtle space-y-2">
+<div class="flex items-center justify-between">
+<h4 class="text-xs font-black text-brand-navy flex items-center gap-1.5">
+<i class="w-3.5 h-3.5 text-brand-forest" data-lucide="wrench"></i>
+<span>Workshop Observation Log</span>
+</h4>
+<span class="text-[9px] text-slate-400">Technician Use</span>
+</div>
+<div class="space-y-1.5 text-xs">
+<div>
+<label class="block text-[10px] text-brand-navyMuted mb-0.5">Technician Preliminary Assessment:</label>
+<select class="w-full text-xs p-1.5 bg-slate-50 border border-brand-borderLight rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-teal" id="technicianFindingSelect">
+<option value="pending">Inspection Scheduled / Pending</option>
+<option value="maf_o2">Air-Fuel Ratio / MAF Sensor Reading Discrepancy</option>
+<option value="brake">Mechanical Caliper Drag / Pad Sticking</option>
+<option value="intake">Boost Hose Vacuum / Intake Leak</option>
+<option value="plugs">Spark Plug Gap / Ignition Degradation</option>
+<option value="nominal">Full Inspection: Nominal, No Fault Located</option>
+</select>
+</div>
+<div>
+<label class="block text-[10px] text-brand-navyMuted mb-0.5">Technician Notes:</label>
+<textarea class="w-full text-xs p-1.5 bg-slate-50 border border-brand-borderLight rounded-lg focus:outline-none focus:ring-1 focus:ring-brand-teal" id="technicianNotes" placeholder="e.g. Scanned fuel trim bank 1 (+8.4%). Caliper slide pins lubricated..." rows="2"></textarea>
+</div>
+<button class="w-full py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-bold transition" id="btnSaveTechLog">
+                    Save Workshop Entry
+                  </button>
+<p class="hidden text-[10px] text-emerald-700 text-center font-bold" id="techLogStatus">Stored in local vehicle service journal.</p>
+</div>
+</div>
+</div>
+<!-- HOTSPOT DETAILS MODAL DIALOG (Inside Phone) -->
+<div class="hidden absolute inset-x-3 bottom-14 bg-white rounded-2xl border border-brand-borderLight shadow-2xl z-50 p-3.5 transition-all" id="hotspotDetailModal">
+<div class="flex items-center justify-between pb-2 border-b border-slate-100">
+<div class="flex items-center gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-amber-500"></div>
+<h4 class="text-xs font-black text-brand-navy" id="hotspotModalTitle">Segment Telemetry Inspection</h4>
+</div>
+<button class="p-1 text-slate-400 hover:text-slate-600" onclick="closeHotspotModal()">
+<i class="w-4 h-4" data-lucide="x"></i>
+</button>
+</div>
+<div class="py-2 space-y-1.5 text-[11px]">
+<div class="flex justify-between">
+<span class="text-brand-navyMuted">Window &amp; Speed:</span>
+<span class="font-bold text-brand-navy" id="hotspotSpeed">Min 18–30 • 105 km/h</span>
+</div>
+<div class="flex justify-between">
+<span class="text-brand-navyMuted">Operating Context:</span>
+<span class="font-medium text-brand-navy" id="hotspotContext">Steady Highway Cruise</span>
+</div>
+<div class="flex justify-between">
+<span class="text-brand-navyMuted">Expected vs Observed Fuel:</span>
+<span class="font-mono font-bold text-brand-navy" id="hotspotFuel">6.1 vs 7.4 L/h (+21%)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-brand-navyMuted">Segment Excess Fuel Delta:</span>
+<span class="font-mono font-bold text-amber-700" id="hotspotExcess">+0.26 L</span>
+</div>
+<div class="flex justify-between">
+<span class="text-brand-navyMuted">GPS / OBD Validity:</span>
+<span class="text-emerald-700 font-bold">99.1% (High Confidence)</span>
+</div>
+</div>
+<button class="w-full mt-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-brand-navy text-xs font-bold rounded-lg transition" onclick="closeHotspotModal()">
+                Close Detail
+              </button>
+</div>
+<!-- DEMO CONTROLS BOTTOM SHEET (SLIDER MODAL) -->
+<div class="hidden absolute inset-x-0 bottom-0 bg-white rounded-t-3xl border-t border-brand-borderLight shadow-2xl z-50 p-4 transition-all duration-300" id="demoControlsSheet">
+<div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
+<div class="flex items-center gap-2">
+<div class="p-1 rounded bg-amber-100 text-amber-800">
+<i class="w-3.5 h-3.5" data-lucide="sliders"></i>
+</div>
+<h3 class="text-xs font-black text-brand-navy">Synthetic Drift Injection</h3>
+</div>
+<button class="p-1 text-slate-400 hover:text-slate-600" id="btnCloseDemoControls">
+<i class="w-4 h-4" data-lucide="x"></i>
+</button>
+</div>
+<p class="text-[10px] text-brand-navyMuted mb-2.5">
+                Inject controlled fuel inefficiency into recorded VED baseline run to evaluate how DriftBeacon surfaces pre-fault anomalies.
+              </p>
+<div class="space-y-2.5 text-xs">
+<!-- Slider 1: Synthetic Drift Magnitude -->
+<div>
+<div class="flex justify-between mb-0.5">
+<span class="text-brand-navy font-semibold text-[11px]">Excess Fuel Burn:</span>
+<span class="font-mono font-bold text-amber-700" id="sliderValueDrift">+15%</span>
+</div>
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-600" id="sliderDrift" max="35" min="0" step="1" type="range" value="15"/>
+<div class="flex justify-between text-[8px] text-slate-400">
+<span>0% (Clean baseline)</span>
+<span>+15% (Early drift)</span>
+<span>+35% (Severe)</span>
+</div>
+</div>
+<!-- Slider 2: Start Time -->
+<div>
+<div class="flex justify-between mb-0.5">
+<span class="text-brand-navy font-semibold text-[11px]">Onset Time:</span>
+<span class="font-mono font-bold text-brand-navy" id="sliderValueStartTime">Min 18 (Highway)</span>
+</div>
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-forest" id="sliderStartTime" max="35" min="0" step="1" type="range" value="18"/>
+</div>
+<!-- Slider 3: Ramp Duration -->
+<div>
+<div class="flex justify-between mb-0.5">
+<span class="text-brand-navy font-semibold text-[11px]">Ramp Duration:</span>
+<span class="font-mono font-bold text-brand-navy" id="sliderValueRamp">6 mins</span>
+</div>
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-forest" id="sliderRamp" max="15" min="1" step="1" type="range" value="6"/>
+</div>
+<!-- Action Button -->
+<div class="pt-1 flex gap-2">
+<button class="flex-1 py-2 px-3 bg-brand-forest hover:bg-brand-forestHover text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5" id="btnApplyAndReplay">
+<i class="w-3.5 h-3.5" data-lucide="play-circle"></i>
+<span>Apply &amp; Replay Fresh Run</span>
+</button>
+<button class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-brand-navy text-xs font-semibold rounded-xl transition" id="btnClearDrift">
+                    Clean Run (0%)
+                  </button>
+</div>
+</div>
+</div>
+<!-- SIMULATION NOTIFICATION TOAST -->
+<div class="hidden absolute top-10 inset-x-3 bg-brand-navy text-white text-xs px-3.5 py-2 rounded-xl shadow-lg z-50 flex items-center justify-between transition-all" id="notificationToast">
+<span id="toastMessage">State updated</span>
+<button class="text-slate-300 hover:text-white ml-2" onclick="hideToast()">
+<i class="w-3.5 h-3.5" data-lucide="x"></i>
+</button>
+</div>
+</div>
+<!-- PERSISTENT BOTTOM NAVIGATION BAR (3 Tabs: Drive, Analysis, Report) -->
+<div class="absolute bottom-0 inset-x-0 h-16 bg-white/95 backdrop-blur-md border-t border-brand-borderLight flex items-center justify-around px-3 z-30">
+<!-- Tab 1: Drive -->
+<button class="nav-tab flex flex-col items-center justify-center text-brand-forest space-y-0.5 flex-1 py-1 relative" id="navTabDrive" onclick="switchTab('drive')">
+<i class="w-4 h-4" data-lucide="steering-wheel"></i>
+<span class="text-[10px] font-extrabold">Drive</span>
+</button>
+<!-- Tab 2: Analysis -->
+<button class="nav-tab flex flex-col items-center justify-center text-slate-400 hover:text-brand-navy space-y-0.5 flex-1 py-1 relative" id="navTabAnalysis" onclick="switchTab('analysis')">
+<i class="w-4 h-4" data-lucide="bar-chart-2"></i>
+<span class="text-[10px] font-medium">Analysis</span>
+<span class="hidden absolute top-1 right-8 w-2 h-2 rounded-full bg-amber-500" id="analysisBadgeDot"></span>
+</button>
+<!-- Tab 3: Report -->
+<button class="nav-tab flex flex-col items-center justify-center text-slate-400 hover:text-brand-navy space-y-0.5 flex-1 py-1 relative" id="navTabService" onclick="switchTab('service')">
+<i class="w-4 h-4" data-lucide="file-check"></i>
+<span class="text-[10px] font-medium">Report</span>
+<span class="hidden absolute top-1 right-8 w-2 h-2 rounded-full bg-amber-500" id="reportBadgeDot"></span>
+</button>
+</div>
+<!-- Phone Home Bar -->
+<div class="absolute bottom-1 inset-x-0 flex justify-center pointer-events-none z-40">
+<div class="w-28 h-1 bg-slate-300 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- RIGHT: Desktop Showcase Explanation & Evaluator Walkthrough -->
+<div class="w-full max-w-xl flex flex-col space-y-5 lg:pt-1" id="quick-guide">
+<!-- Header & Executive Summary -->
+<div class="space-y-1.5">
+<div class="inline-flex items-center gap-1.5 px-3 py-0.5 bg-brand-tealLight rounded-full text-xs font-bold text-brand-teal">
+<i class="w-3.5 h-3.5" data-lucide="cpu"></i>
+<span>Continuous Telemetry Evaluation</span>
+</div>
+<h1 class="text-3xl lg:text-4xl font-black text-brand-navy tracking-tight leading-tight">
+            How DriftBeacon Detects Powertrain Drift
+          </h1>
+<p class="text-xs sm:text-sm text-brand-navyMuted leading-relaxed">
+            OBD-II Check Engine lights only illuminate after emissions thresholds fail or components break. DriftBeacon continuously compares real-world recorded driving against powertrain model baselines to uncover subtle fuel waste and physical drag weeks in advance.
+          </p>
+</div>
+<!-- 3-Step Product Explanation Cards -->
+<div class="space-y-3">
+<!-- Step 1 -->
+<div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-card hover:border-brand-teal/40 transition">
+<div class="flex items-start gap-3">
+<div class="w-7 h-7 rounded-xl bg-brand-forest text-white font-extrabold flex items-center justify-center text-xs flex-shrink-0">
+                1
+              </div>
+<div class="space-y-1 flex-1">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-bold text-brand-navy">Drive: Passive Background Recording</h3>
+<span class="text-[10px] font-semibold text-brand-teal">Continuous Telemetry</span>
+</div>
+<p class="text-[11px] text-brand-navyMuted leading-relaxed">
+                  During daily trips, fuel burn rate, vehicle speed, load, and ambient temperature are recorded into baseline bins. Non-intrusive statuses keep the driver informed.
+                </p>
+<div class="pt-1 flex items-center gap-1.5 text-[10px] text-brand-forest font-semibold">
+<i class="w-3 h-3 text-brand-teal" data-lucide="check"></i>
+<span>Zero annoying chime alarms during regular driving.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-card hover:border-brand-teal/40 transition">
+<div class="flex items-start gap-3">
+<div class="w-7 h-7 rounded-xl bg-brand-forest text-white font-extrabold flex items-center justify-center text-xs flex-shrink-0">
+                2
+              </div>
+<div class="space-y-1 flex-1">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-bold text-brand-navy">Analysis: Answer "What Changed?"</h3>
+<span class="text-[10px] font-semibold text-amber-700">Divergence Isolation</span>
+</div>
+<p class="text-[11px] text-brand-navyMuted leading-relaxed">
+                  Isolates exact operating regimes (e.g. steady cruise vs idle) where observed fuel exceeds expected L/h, differentiating driving behavior from mechanical resistance.
+                </p>
+<div class="pt-1 flex items-center gap-1.5 text-[10px] text-brand-forest font-semibold">
+<i class="w-3 h-3 text-brand-teal" data-lucide="check"></i>
+<span>Historical multi-trip comparison across valid datasets.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-card hover:border-brand-teal/40 transition">
+<div class="flex items-start gap-3">
+<div class="w-7 h-7 rounded-xl bg-brand-forest text-white font-extrabold flex items-center justify-center text-xs flex-shrink-0">
+                3
+              </div>
+<div class="space-y-1 flex-1">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-bold text-brand-navy">Report: Driver-Controlled Technician Handoff</h3>
+<span class="text-[10px] font-semibold text-brand-forest">Handoff Ready</span>
+</div>
+<p class="text-[11px] text-brand-navyMuted leading-relaxed">
+                  Generates an objective evidence dossier with speed, fuel delta, and telemetry coverage. Prompts the technician to inspect physical systems without declaring false part failures.
+                </p>
+<div class="pt-1 flex items-center gap-1.5 text-[10px] text-brand-forest font-semibold">
+<i class="w-3 h-3 text-brand-teal" data-lucide="check"></i>
+<span>Certified mechanics retain full diagnostic discretion.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Evaluator Quick Presets (Instant Scenario Switching) -->
+<div class="p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-card space-y-2.5">
+<div class="flex items-center justify-between">
+<span class="text-xs font-black text-brand-navy uppercase tracking-wider">Quick Evaluator Presets:</span>
+<span class="text-[10px] text-brand-navyMuted">Instant scenario switch</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<button class="p-2 rounded-xl border border-brand-borderLight bg-brand-mint hover:bg-white text-brand-navy text-xs font-medium text-left transition flex flex-col justify-between" onclick="applyPreset('clean')">
+<span class="font-extrabold text-emerald-800 text-[11px]">1. Clean Run</span>
+<span class="text-[9px] text-brand-navyMuted">Nominal ICE (0%)</span>
+</button>
+<button class="p-2 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-medium text-left transition flex flex-col justify-between" onclick="applyPreset('drift')">
+<span class="font-extrabold text-amber-800 text-[11px]">2. Subtle Drift</span>
+<span class="text-[9px] text-amber-700">+15% at min 18</span>
+</button>
+<button class="p-2 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-900 text-xs font-medium text-left transition flex flex-col justify-between" onclick="applyPreset('severe')">
+<span class="font-extrabold text-rose-800 text-[11px]">3. Inspection</span>
+<span class="text-[9px] text-rose-700">+28% divergence</span>
+</button>
+<button class="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-medium text-left transition flex flex-col justify-between" onclick="applyPreset('insufficient')">
+<span class="font-extrabold text-slate-700 text-[11px]">4. Insufficient</span>
+<span class="text-[9px] text-slate-500">Early calibration</span>
+</button>
+</div>
+</div>
+<!-- System Governance & Methodology Note -->
+<div class="p-3 bg-brand-mint/80 rounded-2xl border border-brand-borderLight text-[11px] text-brand-navyMuted leading-relaxed flex items-start gap-2">
+<i class="w-4 h-4 text-brand-forest flex-shrink-0 mt-0.5" data-lucide="shield-check"></i>
+<div>
+<strong>Evaluation Transparency:</strong> DriftBeacon is demonstrated on recorded 2.0L Turbo Gasoline ICE data from the Vehicle Energy Dataset (VED). Extra CO₂ emissions are computed using the EPA/standard factor: <strong>2.31 kg CO₂ / L gasoline</strong>.
+          </div>
+</div>
+</div>
+</main>
+</div>
+<!-- JAVASCRIPT: Full interactive simulation logic -->
+<script>
+    // State machine for DriftBeacon Prototype
+    const state = {
+      activeTab: 'drive',
+      isPlaying: false,
+      currentTime: 0, // 0 to 42 minutes
+      totalDuration: 42,
+      playbackSpeed: 1,
+      timerId: null,
+      
+      // Synthetic Drift parameters
+      hasSyntheticDrift: false,
+      driftPercent: 15,
+      driftStartTime: 18,
+      driftRampMinutes: 6,
+      
+      // System States: 'collecting' | 'nominal' | 'watch' | 'inspection' | 'insufficient'
+      systemStatus: 'nominal',
+      fuelPrice: 1.65
+    };
+
+    // Polyline points along the road (M 25,145 Q 80,140 110,95 T 190,75 T 275,55 T 355,35)
+    // Approximate coordinate points along progress 0.0 -> 1.0 for car placement and heading
+    function getCarPositionOnRoute(progress) {
+      const p = Math.max(0, Math.min(1, progress));
+      
+      // Piecewise road track approximation
+      let x, y, angle;
+      if (p < 0.25) {
+        // Section 1: Urban (25, 145) to (110, 95)
+        const t = p / 0.25;
+        x = 25 + (110 - 25) * t;
+        y = 145 - 50 * Math.sin(t * Math.PI * 0.5);
+        angle = -32;
+      } else if (p < 0.6) {
+        // Section 2: Arterial to Highway entry (110, 95) to (190, 75)
+        const t = (p - 0.25) / 0.35;
+        x = 110 + (190 - 110) * t;
+        y = 95 - 20 * t;
+        angle = -18;
+      } else if (p < 0.85) {
+        // Section 3: Highway Sustained Cruise (190, 75) to (275, 55)
+        const t = (p - 0.6) / 0.25;
+        x = 190 + (275 - 190) * t;
+        y = 75 - 20 * t;
+        angle = -15;
+      } else {
+        // Section 4: Highway passing to exit (275, 55) to (355, 35)
+        const t = (p - 0.85) / 0.15;
+        x = 275 + (355 - 275) * t;
+        y = 55 - 20 * t;
+        angle = -16;
+      }
+
+      return { x, y, angle };
+    }
+
+    // Realistic Baseline Speed, Operating Context, and Expected Fuel Profiles across 42 minutes
+    function getTripDataAt(minute, driftPct, driftStart, driftRamp) {
+      let expectedFuel = 5.2; // L/h
+      let speed = 40; // km/h
+      let context = "Urban Stop-and-Go";
+
+      if (minute < 8) {
+        // Segment 1: Urban stop and go
+        speed = 34 + Math.sin(minute * 1.5) * 12;
+        expectedFuel = 5.9 + Math.sin(minute * 1.2) * 1.2;
+        context = speed < 20 ? "Idle Queue / Warm-up" : "Urban Stop-and-Go";
+      } else if (minute < 18) {
+        // Segment 2: Arterial acceleration
+        speed = 60 + Math.cos(minute * 0.8) * 10;
+        expectedFuel = 6.4 + Math.sin(minute * 0.9) * 0.8;
+        context = "Arterial Corridor (50-70 km/h)";
+      } else if (minute < 30) {
+        // Segment 3: Steady Highway Cruise
+        speed = 104 + Math.sin(minute * 0.4) * 4;
+        expectedFuel = 6.1 + Math.sin(minute * 0.5) * 0.4;
+        context = "Steady Highway Cruise (100 km/h)";
+      } else if (minute < 38) {
+        // Segment 4: Highway passing & gradient
+        speed = 110 + Math.sin(minute * 0.6) * 6;
+        expectedFuel = 7.1 + Math.sin(minute * 0.7) * 0.8;
+        context = "Highway Cruise & Gradient";
+      } else {
+        // Segment 5: Cooldown and exit
+        speed = Math.max(25, 50 - (minute - 38) * 5);
+        expectedFuel = 4.8 + Math.cos(minute * 1.1) * 0.5;
+        context = "Off-Ramp & Cooldown";
+      }
+
+      // Calculate Synthetic Drift multiplier if active
+      let driftFactor = 0;
+      if (state.hasSyntheticDrift && minute >= driftStart) {
+        const elapsed = minute - driftStart;
+        const rampProgress = Math.min(1, elapsed / Math.max(1, driftRamp));
+        driftFactor = (driftPct / 100) * rampProgress;
+      }
+
+      // Baseline slight CAN noise (±0.06 L/h)
+      const noise = Math.sin(minute * 3.7) * 0.06;
+      const observedFuel = expectedFuel * (1 + driftFactor) + noise;
+      
+      return {
+        speed: Math.max(12, speed),
+        expectedFuel: Math.max(2.5, expectedFuel),
+        observedFuel: Math.max(2.5, observedFuel),
+        context: context,
+        driftFactor: driftFactor
+      };
+    }
+
+    // Cumulative excess fuel integration up to current minute
+    function calculateAccumulatedExcess(currentMin) {
+      let excessLitres = 0;
+      const step = 0.5; // half-minute integration steps
+      for (let m = 0; m <= currentMin; m += step) {
+        const data = getTripDataAt(m, state.driftPercent, state.driftStartTime, state.driftRampMinutes);
+        const deltaRate = Math.max(0, data.observedFuel - data.expectedFuel); // L/h
+        excessLitres += (deltaRate * (step / 60)); // L/h * hours
+      }
+      return excessLitres;
+    }
+
+    // Tab Switching: Drive, Analysis, Service (Report)
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      
+      document.getElementById('tabContentDrive').classList.toggle('hidden', tabId !== 'drive');
+      document.getElementById('tabContentAnalysis').classList.toggle('hidden', tabId !== 'analysis');
+      document.getElementById('tabContentService').classList.toggle('hidden', tabId !== 'service');
+
+      const navButtons = {
+        drive: document.getElementById('navTabDrive'),
+        analysis: document.getElementById('navTabAnalysis'),
+        service: document.getElementById('navTabService')
+      };
+
+      for (const [key, btn] of Object.entries(navButtons)) {
+        if (key === tabId) {
+          btn.classList.add('text-brand-forest');
+          btn.classList.remove('text-slate-400');
+          btn.querySelector('span').classList.add('font-black');
+        } else {
+          btn.classList.remove('text-brand-forest');
+          btn.classList.add('text-slate-400');
+          btn.querySelector('span').classList.remove('font-black');
+        }
+      }
+
+      if (tabId === 'analysis') {
+        renderAnalysisTab();
+      } else if (tabId === 'service') {
+        renderServiceTab();
+      }
+      lucide.createIcons();
+    }
+
+    // Update simulation display across all elements
+    function updateTripDisplay() {
+      const min = state.currentTime;
+      const currentData = getTripDataAt(min, state.driftPercent, state.driftStartTime, state.driftRampMinutes);
+      const excessFuelTotal = calculateAccumulatedExcess(min);
+      const extraCO2Kg = excessFuelTotal * 2.31; // Standard 2.31 kg CO2 / L gasoline
+
+      // 1. Time display
+      const minsStr = Math.floor(min).toString().padStart(2, '0');
+      const secsStr = Math.floor((min % 1) * 60).toString().padStart(2, '0');
+      document.getElementById('tripTimeDisplay').innerText = `${minsStr}:${secsStr} / 42:00`;
+      
+      // Update phone clock
+      const totalClockMin = 41 + Math.floor(min);
+      const clockHours = 9 + Math.floor(totalClockMin / 60);
+      const clockMins = (totalClockMin % 60).toString().padStart(2, '0');
+      document.getElementById('phoneClock').innerText = `0${clockHours}:${clockMins}`;
+
+      // 2. Map Car Marker Placement & Headings
+      const progress = min / state.totalDuration;
+      const carPos = getCarPositionOnRoute(progress);
+      
+      const carMarker = document.getElementById('carMarkerGroup');
+      if (carMarker) {
+        carMarker.setAttribute('transform', `translate(${carPos.x.toFixed(1)}, ${carPos.y.toFixed(1)}) rotate(${carPos.angle.toFixed(1)})`);
+      }
+
+      // Update traveled polyline
+      const traveledPath = document.getElementById('routePolyTraveled');
+      if (traveledPath) {
+        // Build subpath along traveled road
+        if (progress === 0) {
+          traveledPath.setAttribute('d', 'M 25,145');
+        } else {
+          traveledPath.setAttribute('d', `M 25,145 L ${carPos.x.toFixed(1)},${carPos.y.toFixed(1)}`);
+        }
+      }
+
+      // Map Context Bar
+      document.getElementById('drivingContextText').innerText = currentData.context;
+      document.getElementById('heroSpeedBadge').innerText = `${Math.round(currentData.speed)} km/h`;
+
+      // Anomaly glow on route map
+      const anomalyGlow = document.getElementById('routeAnomalyGlow');
+      const driftAlertPill = document.getElementById('liveDriftAlertPill');
+      const isDivergingNow = state.hasSyntheticDrift && min >= state.driftStartTime && state.driftPercent > 5;
+      
+      if (isDivergingNow) {
+        anomalyGlow.setAttribute('opacity', '0.65');
+        driftAlertPill.classList.remove('hidden');
+      } else {
+        anomalyGlow.setAttribute('opacity', '0');
+        driftAlertPill.classList.add('hidden');
+      }
+
+      // 3. Scrubber Slider sync
+      document.getElementById('tripScrubber').value = progress * 100;
+
+      // 4. System Status determination
+      const instantDeltaPct = ((currentData.observedFuel - currentData.expectedFuel) / currentData.expectedFuel) * 100;
+      
+      if (min < 3 && state.systemStatus === 'insufficient') {
+        setSystemStatus('insufficient');
+      } else if (min < 2.5) {
+        setSystemStatus('collecting');
+      } else if (instantDeltaPct > 20 || (excessFuelTotal > 0.35 && min > 22)) {
+        setSystemStatus('inspection');
+      } else if (instantDeltaPct > 7 || (excessFuelTotal > 0.12 && min > 18)) {
+        setSystemStatus('watch');
+      } else {
+        setSystemStatus('nominal');
+      }
+
+      // 5. Metric cards update
+      document.getElementById('metricObservedFuel').innerText = currentData.observedFuel.toFixed(1);
+      document.getElementById('metricExpectedFuel').innerText = currentData.expectedFuel.toFixed(1);
+      document.getElementById('metricExcessFuel').innerText = (excessFuelTotal >= 0 ? '+' : '') + excessFuelTotal.toFixed(2);
+      document.getElementById('metricExcessCO2').innerText = (extraCO2Kg >= 0 ? '+' : '') + extraCO2Kg.toFixed(2);
+
+      // Delta pill on observed KPI card
+      const fuelDeltaBadge = document.getElementById('fuelDeltaBadge');
+      const excessFuelSub = document.getElementById('excessFuelSub');
+      if (instantDeltaPct > 18) {
+        fuelDeltaBadge.className = 'text-[9px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.2 rounded inline-block mt-0.5';
+        fuelDeltaBadge.innerText = `+${instantDeltaPct.toFixed(0)}% high burn`;
+      } else if (instantDeltaPct > 6) {
+        fuelDeltaBadge.className = 'text-[9px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded inline-block mt-0.5';
+        fuelDeltaBadge.innerText = `+${instantDeltaPct.toFixed(0)}% elevated`;
+      } else {
+        fuelDeltaBadge.className = 'text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded inline-block mt-0.5';
+        fuelDeltaBadge.innerText = 'Nominal rate';
+      }
+
+      const totalExpectedBurnSoFar = Math.max(0.1, (min * 6.1) / 60);
+      const overallExcessPct = (excessFuelTotal / totalExpectedBurnSoFar) * 100;
+      excessFuelSub.innerText = `${overallExcessPct.toFixed(1)}% trip variance`;
+
+      // Sync active tab
+      if (state.activeTab === 'analysis') {
+        renderAnalysisTab();
+      } else if (state.activeTab === 'service') {
+        renderServiceTab();
+      }
+    }
+
+    // Status Banner Updates (5 Dynamic States)
+    function setSystemStatus(status) {
+      state.systemStatus = status;
+      const dot = document.getElementById('statusIndicatorDot');
+      const label = document.getElementById('statusLabelText');
+      const headline = document.getElementById('statusHeadline');
+      const subtext = document.getElementById('statusSubtext');
+      const iconWrap = document.getElementById('statusIconWrap');
+      const banner = document.getElementById('statusBanner');
+      
+      const analysisBadge = document.getElementById('analysisBadgeDot');
+      const reportBadge = document.getElementById('reportBadgeDot');
+
+      if (status === 'insufficient') {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-slate-400';
+        label.className = 'text-xs font-black uppercase tracking-wider text-slate-700';
+        label.innerText = 'Insufficient Data';
+        headline.innerText = 'Trip duration too brief for statistical confidence.';
+        subtext.innerText = 'Baseline model requires at least 4 km of continuous steady telemetry before evaluating drift.';
+        iconWrap.className = 'p-2 bg-slate-100 text-slate-600 rounded-xl flex-shrink-0 ml-2';
+        iconWrap.innerHTML = '<i data-lucide="help-circle" class="w-4 h-4"></i>';
+        banner.className = 'p-3.5 rounded-2xl bg-white border border-slate-200 shadow-subtle flex items-start justify-between';
+        analysisBadge.classList.add('hidden');
+        reportBadge.classList.add('hidden');
+      } else if (status === 'collecting') {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-blue-500 pulse-dot';
+        label.className = 'text-xs font-black uppercase tracking-wider text-blue-700';
+        label.innerText = 'Collecting Baseline Data';
+        headline.innerText = 'Calibrating powertrain ICE parameters...';
+        subtext.innerText = 'Sampling mass air flow, thermal stabilization, and manifold absolute pressure.';
+        iconWrap.className = 'p-2 bg-blue-50 text-blue-700 rounded-xl flex-shrink-0 ml-2';
+        iconWrap.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i>';
+        banner.className = 'p-3.5 rounded-2xl bg-white border border-blue-200 shadow-subtle flex items-start justify-between';
+        analysisBadge.classList.add('hidden');
+        reportBadge.classList.add('hidden');
+      } else if (status === 'nominal') {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
+        label.className = 'text-xs font-black uppercase tracking-wider text-emerald-800';
+        label.innerText = 'Within expected range';
+        headline.innerText = 'Powertrain fuel burn is tracking baseline model.';
+        subtext.innerText = 'No abnormal efficiency loss observed across current speed profile.';
+        iconWrap.className = 'p-2 bg-emerald-50 text-emerald-700 rounded-xl flex-shrink-0 ml-2';
+        iconWrap.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i>';
+        banner.className = 'p-3.5 rounded-2xl bg-white border border-brand-borderLight shadow-subtle flex items-start justify-between';
+        analysisBadge.classList.add('hidden');
+        reportBadge.classList.add('hidden');
+      } else if (status === 'watch') {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-500 pulse-dot';
+        label.className = 'text-xs font-black uppercase tracking-wider text-amber-800';
+        label.innerText = 'Watch: Efficiency Drift';
+        headline.innerText = 'Gradual divergence from expected fuel curve detected.';
+        subtext.innerText = 'Burn rate is 8–15% above model expectation at steady highway speed.';
+        iconWrap.className = 'p-2 bg-amber-100 text-amber-800 rounded-xl flex-shrink-0 ml-2';
+        iconWrap.innerHTML = '<i data-lucide="alert-triangle" class="w-4 h-4"></i>';
+        banner.className = 'p-3.5 rounded-2xl bg-amber-50/50 border border-amber-200 shadow-subtle flex items-start justify-between';
+        analysisBadge.classList.remove('hidden');
+        reportBadge.classList.remove('hidden');
+      } else if (status === 'inspection') {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-rose-600 pulse-dot';
+        label.className = 'text-xs font-black uppercase tracking-wider text-rose-800';
+        label.innerText = 'Inspection Recommended';
+        headline.innerText = 'Persistent excess fuel consumption confirmed.';
+        subtext.innerText = 'Divergence exceeds +20% threshold during continuous cruise segments.';
+        iconWrap.className = 'p-2 bg-rose-100 text-rose-700 rounded-xl flex-shrink-0 ml-2';
+        iconWrap.innerHTML = '<i data-lucide="alert-octagon" class="w-4 h-4"></i>';
+        banner.className = 'p-3.5 rounded-2xl bg-rose-50/70 border border-rose-300 shadow-subtle flex items-start justify-between';
+        analysisBadge.classList.remove('hidden');
+        reportBadge.classList.remove('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    // Playback Loop
+    function startPlayback() {
+      if (state.isPlaying) return;
+      state.isPlaying = true;
+      document.getElementById('playBtnText').innerText = 'Pause';
+      document.getElementById('playIcon').setAttribute('data-lucide', 'pause');
+      lucide.createIcons();
+
+      const tickIntervalMs = 200;
+      state.timerId = setInterval(() => {
+        const deltaMinutes = (0.2 * state.playbackSpeed);
+        state.currentTime += deltaMinutes;
+        
+        if (state.currentTime >= state.totalDuration) {
+          state.currentTime = state.totalDuration;
+          stopPlayback();
+          showToast("Recorded trip completed. Review findings in Analysis & Report tabs.");
+        }
+        updateTripDisplay();
+      }, tickIntervalMs);
+    }
+
+    function stopPlayback() {
+      state.isPlaying = false;
+      if (state.timerId) clearInterval(state.timerId);
+      document.getElementById('playBtnText').innerText = 'Play';
+      document.getElementById('playIcon').setAttribute('data-lucide', 'play');
+      lucide.createIcons();
+    }
+
+    function togglePlayback() {
+      if (state.isPlaying) {
+        stopPlayback();
+      } else {
+        if (state.currentTime >= state.totalDuration) {
+          state.currentTime = 0;
+        }
+        startPlayback();
+      }
+    }
+
+    function resetTrip() {
+      stopPlayback();
+      state.currentTime = 0;
+      updateTripDisplay();
+      showToast("Trip playback reset to start (00:00).");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('notificationToast');
+      document.getElementById('toastMessage').innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 4000);
+    }
+
+    function hideToast() {
+      document.getElementById('notificationToast').classList.add('hidden');
+    }
+
+    // Analysis Tab Renderer
+    function renderAnalysisTab() {
+      const min = state.currentTime;
+      const minsStr = Math.floor(min).toString().padStart(2, '0');
+      const secsStr = Math.floor((min % 1) * 60).toString().padStart(2, '0');
+      document.getElementById('analysisTripPosition').innerText = `At ${minsStr}:${secsStr}`;
+
+      const totalExcess = calculateAccumulatedExcess(min);
+      const totalCO2Kg = totalExcess * 2.31;
+      document.getElementById('analysisNetExcessFuel').innerText = `+${totalExcess.toFixed(2)} L`;
+      document.getElementById('analysisNetExcessCO2').innerText = `+${totalCO2Kg.toFixed(2)} kg`;
+
+      // Update projected monthly fuel cost (assuming ~18 similar trips per month)
+      const monthlyExtra = totalExcess * 18 * state.fuelPrice;
+      document.getElementById('calcMonthlyExtraCost').innerText = `+$${monthlyExtra.toFixed(2)} / mo`;
+
+      // Summary text & L/100km
+      const summaryText = document.getElementById('analysisSummaryText');
+      const fleetComp = document.getElementById('analysisFleetComparison');
+      const l100El = document.getElementById('analysisL100km');
+      
+      const currentData = getTripDataAt(min, state.driftPercent, state.driftStartTime, state.driftRampMinutes);
+      const observedL100 = (currentData.observedFuel / Math.max(10, currentData.speed)) * 100;
+      const expectedL100 = (currentData.expectedFuel / Math.max(10, currentData.speed)) * 100;
+      l100El.innerText = `${observedL100.toFixed(1)} vs ${expectedL100.toFixed(1)} L/100km`;
+
+      if (state.systemStatus === 'inspection' || totalExcess > 0.25) {
+        summaryText.innerHTML = `Subtle <strong>+${state.driftPercent}% fuel divergence</strong> observed predominantly during steady highway cruising. Model indicates resistance or air-fuel trim anomaly.`;
+        fleetComp.className = 'font-bold text-rose-700';
+        fleetComp.innerText = '+14.8% Above Fleet Model';
+      } else if (state.systemStatus === 'watch' || totalExcess > 0.1) {
+        summaryText.innerHTML = `Mild divergence emerging. Steady throttle at 104 km/h requires <strong>+${state.driftPercent}% excess fuel</strong> compared to calibrated ICE benchmark.`;
+        fleetComp.className = 'font-bold text-amber-700';
+        fleetComp.innerText = '+6.5% Watchlist Variance';
+      } else {
+        summaryText.innerHTML = `Fuel use is currently consistent with previous normal baseline runs (+0.8%). Steady speed cruise matches model expectations.`;
+        fleetComp.className = 'font-bold text-emerald-700';
+        fleetComp.innerText = 'Nominal Correlated';
+      }
+
+      // Render Dynamic SVG Path
+      renderSvgChartCurves();
+      updateMultiTripBarVisuals();
+    }
+
+    function renderSvgChartCurves() {
+      const numPoints = 22;
+      let expPoints = [];
+      let obsPoints = [];
+
+      for (let i = 0; i <= numPoints; i++) {
+        const m = (i / numPoints) * state.totalDuration;
+        const x = (i / numPoints) * 340;
+        const d = getTripDataAt(m, state.driftPercent, state.driftStartTime, state.driftRampMinutes);
+        
+        // Map fuel 0 to 12 L/h to Y (130 to 10)
+        const yExp = 130 - (d.expectedFuel / 12) * 115;
+        const yObs = 130 - (d.observedFuel / 12) * 115;
+
+        expPoints.push(`${x.toFixed(1)},${yExp.toFixed(1)}`);
+        obsPoints.push(`${x.toFixed(1)},${yObs.toFixed(1)}`);
+      }
+
+      document.getElementById('pathExpectedCurve').setAttribute('d', `M ${expPoints.join(' L ')}`);
+      
+      const obsPathEl = document.getElementById('pathObservedCurve');
+      obsPathEl.setAttribute('d', `M ${obsPoints.join(' L ')}`);
+      const obsColor = (state.systemStatus === 'inspection' ? '#DC2626' : (state.systemStatus === 'watch' ? '#D97706' : '#174634'));
+      obsPathEl.setAttribute('stroke', obsColor);
+      document.getElementById('chartLegendObsDot').style.backgroundColor = obsColor;
+
+      // Divergence polygon area
+      const divergenceArea = document.getElementById('divergenceArea');
+      if (state.hasSyntheticDrift && state.driftPercent > 5) {
+        let poly = [];
+        const startIndex = Math.floor((state.driftStartTime / state.totalDuration) * numPoints);
+        for (let i = startIndex; i <= numPoints; i++) {
+          poly.push(obsPoints[i]);
+        }
+        for (let i = numPoints; i >= startIndex; i--) {
+          poly.push(expPoints[i]);
+        }
+        divergenceArea.setAttribute('points', poly.join(' '));
+        divergenceArea.setAttribute('fill', state.systemStatus === 'inspection' ? '#DC2626' : '#F59E0B');
+        divergenceArea.style.display = 'block';
+      } else {
+        divergenceArea.style.display = 'none';
+      }
+
+      // Cursor line & point
+      const cursorX = (state.currentTime / state.totalDuration) * 340;
+      const currentData = getTripDataAt(state.currentTime, state.driftPercent, state.driftStartTime, state.driftRampMinutes);
+      const cursorY = 130 - (currentData.observedFuel / 12) * 115;
+
+      document.getElementById('chartCursorLine').setAttribute('x1', cursorX);
+      document.getElementById('chartCursorLine').setAttribute('x2', cursorX);
+      document.getElementById('chartCursorPoint').setAttribute('cx', cursorX);
+      document.getElementById('chartCursorPoint').setAttribute('cy', cursorY);
+    }
+
+    function updateMultiTripBarVisuals() {
+      const barToday = document.getElementById('barTripCurrent');
+      const barPrev = document.getElementById('barTrip4828');
+      const insight = document.getElementById('multiTripInsight');
+
+      if (state.hasSyntheticDrift && state.driftPercent >= 15) {
+        barToday.className = 'w-full bg-rose-500 rounded-t h-9';
+        barPrev.className = 'w-full bg-amber-400 rounded-t h-7';
+        insight.innerHTML = 'Excess fuel gap recurred over <strong>2 consecutive highway runs</strong>. Ruled out single-trip headwind or payload variance.';
+      } else {
+        barToday.className = 'w-full bg-brand-forest rounded-t h-4';
+        barPrev.className = 'w-full bg-emerald-200 rounded-t h-4';
+        insight.innerText = 'Baseline consistency confirmed across 5 trips. No recurring drift gap.';
+      }
+    }
+
+    // Hotspot Modal Data & Interaction
+    const hotspotSegments = [
+      {
+        title: "Segment 1: Urban Transit (Min 0–8)",
+        speed: "Min 0–8 • 32 km/h avg",
+        context: "Urban Stop-and-Go & Idle",
+        expObsClean: "5.8 vs 5.9 L/h (+1.7%)",
+        expObsDrift: "5.8 vs 5.9 L/h (+1.7%)",
+        excessClean: "+0.01 L",
+        excessDrift: "+0.01 L"
+      },
+      {
+        title: "Segment 2: Arterial Corridor (Min 8–18)",
+        speed: "Min 8–18 • 58 km/h avg",
+        context: "Suburban Arterial (Signalized)",
+        expObsClean: "6.4 vs 6.4 L/h (0.0%)",
+        expObsDrift: "6.4 vs 6.4 L/h (0.0%)",
+        excessClean: "+0.02 L",
+        excessDrift: "+0.02 L"
+      },
+      {
+        title: "Segment 3: Highway Transition (Min 18–30)",
+        speed: "Min 18–30 • 105 km/h avg",
+        context: "Steady Highway Cruise (Flat)",
+        expObsClean: "6.1 vs 6.1 L/h (+0.5%)",
+        expObsDrift: "6.1 vs 7.1 L/h (+16.4%)",
+        excessClean: "+0.01 L",
+        excessDrift: "+0.20 L"
+      },
+      {
+        title: "Segment 4: Highway Sustained Cruise (Min 30–38)",
+        speed: "Min 30–38 • 112 km/h avg",
+        context: "Highway Passing & Gradient",
+        expObsClean: "7.1 vs 7.2 L/h (+1.4%)",
+        expObsDrift: "7.1 vs 8.6 L/h (+21.1%)",
+        excessClean: "+0.01 L",
+        excessDrift: "+0.22 L"
+      },
+      {
+        title: "Segment 5: City Cooldown & Exit (Min 38–42)",
+        speed: "Min 38–42 • 42 km/h avg",
+        context: "Off-ramp deceleration",
+        expObsClean: "4.8 vs 4.8 L/h (0.0%)",
+        expObsDrift: "4.8 vs 5.3 L/h (+10.4%)",
+        excessClean: "+0.00 L",
+        excessDrift: "+0.05 L"
+      }
+    ];
+
+    function openHotspotModal(index) {
+      const data = hotspotSegments[index];
+      const hasDrift = state.hasSyntheticDrift && state.driftPercent > 5 && index >= 2;
+
+      document.getElementById('hotspotModalTitle').innerText = data.title;
+      document.getElementById('hotspotSpeed').innerText = data.speed;
+      document.getElementById('hotspotContext').innerText = data.context;
+      document.getElementById('hotspotFuel').innerText = hasDrift ? data.expObsDrift : data.expObsClean;
+      document.getElementById('hotspotExcess').innerText = hasDrift ? data.excessDrift : data.excessClean;
+
+      document.getElementById('hotspotDetailModal').classList.remove('hidden');
+    }
+
+    function closeHotspotModal() {
+      document.getElementById('hotspotDetailModal').classList.add('hidden');
+    }
+
+    // Service / Report Tab Renderer
+    function renderServiceTab() {
+      const recTitle = document.getElementById('serviceRecTitle');
+      const recText = document.getElementById('serviceRecText');
+      const iconWrap = document.getElementById('serviceStatusIconBg');
+      const icon = document.getElementById('serviceStatusIcon');
+      const recCard = document.getElementById('serviceRecommendationCard');
+      
+      const totalExcess = calculateAccumulatedExcess(state.currentTime);
+      const extraCO2Kg = totalExcess * 2.31;
+
+      if (state.systemStatus === 'inspection' || totalExcess > 0.25) {
+        recTitle.innerText = 'Technician Review Recommended';
+        recText.innerText = `Observed fuel burn diverges significantly (+${state.driftPercent}%) during steady highway operation. Sharing the evidence package with your mechanic can help isolate dragging calipers, sensor drift, or boost leaks.`;
+        iconWrap.className = 'p-1.5 rounded-xl bg-rose-100 text-rose-800';
+        icon.setAttribute('data-lucide', 'alert-triangle');
+        recCard.className = 'p-3.5 bg-rose-50/50 rounded-2xl border border-rose-200 shadow-subtle space-y-2';
+
+        document.getElementById('evidenceAlertWindow').innerText = `Min ${state.driftStartTime}:00 – Min ${Math.min(42, state.driftStartTime + 20)}:00 (Highway)`;
+        document.getElementById('evidenceBurnComp').innerText = `7.8 L/h vs 6.1 L/h (+${state.driftPercent}%)`;
+        document.getElementById('evidenceExcess').innerText = `+${totalExcess.toFixed(2)} L (+${state.driftPercent}%)`;
+        document.getElementById('evidenceExtraCO2').innerText = `+${extraCO2Kg.toFixed(2)} kg (2.31 kg/L gasoline)`;
+      } else if (state.systemStatus === 'watch' || totalExcess > 0.1) {
+        recTitle.innerText = 'Monitor Next 2 Recorded Drives';
+        recText.innerText = 'A mild efficiency variation was observed. Check tire pressures and monitor whether the variance persists across subsequent trips before booking a workshop visit.';
+        iconWrap.className = 'p-1.5 rounded-xl bg-amber-100 text-amber-800';
+        icon.setAttribute('data-lucide', 'eye');
+        recCard.className = 'p-3.5 bg-amber-50/50 rounded-2xl border border-amber-200 shadow-subtle space-y-2';
+
+        document.getElementById('evidenceAlertWindow').innerText = `Min ${state.driftStartTime}:00 – Min 30:00`;
+        document.getElementById('evidenceBurnComp').innerText = `6.7 L/h vs 6.1 L/h (+8%)`;
+        document.getElementById('evidenceExcess').innerText = `+${totalExcess.toFixed(2)} L`;
+        document.getElementById('evidenceExtraCO2').innerText = `+${extraCO2Kg.toFixed(2)} kg`;
+      } else {
+        recTitle.innerText = 'No Review Required';
+        recText.innerText = 'Fuel consumption remains well within the typical variance window (under 3%). Powertrain sensors and mechanical drag match model expectations.';
+        iconWrap.className = 'p-1.5 rounded-xl bg-emerald-50 text-emerald-700';
+        icon.setAttribute('data-lucide', 'check-circle');
+        recCard.className = 'p-3.5 bg-white rounded-2xl border border-brand-borderLight shadow-subtle space-y-2';
+
+        document.getElementById('evidenceAlertWindow').innerText = 'None (All segments nominal)';
+        document.getElementById('evidenceBurnComp').innerText = '6.1 L/h vs 6.1 L/h (0.0% variance)';
+        document.getElementById('evidenceExcess').innerText = `+${totalExcess.toFixed(2)} L (Normal noise)`;
+        document.getElementById('evidenceExtraCO2').innerText = `+${extraCO2Kg.toFixed(2)} kg`;
+      }
+      lucide.createIcons();
+    }
+
+    // Evaluator Presets
+    function applyPreset(presetType) {
+      stopPlayback();
+      const syntheticBadge = document.getElementById('syntheticBadge');
+      
+      if (presetType === 'clean') {
+        state.hasSyntheticDrift = false;
+        state.driftPercent = 0;
+        syntheticBadge.classList.add('hidden');
+        document.getElementById('sliderDrift').value = 0;
+        document.getElementById('sliderValueDrift').innerText = '0%';
+        state.currentTime = 25; // mid trip
+        showToast("Preset 1: Clean Baseline applied (0% drift).");
+      } else if (presetType === 'drift') {
+        state.hasSyntheticDrift = true;
+        state.driftPercent = 15;
+        state.driftStartTime = 18;
+        state.driftRampMinutes = 6;
+        syntheticBadge.classList.remove('hidden');
+        syntheticBadge.innerHTML = '<i data-lucide="zap" class="w-2.5 h-2.5"></i> +15% Drift Active';
+        document.getElementById('sliderDrift').value = 15;
+        document.getElementById('sliderValueDrift').innerText = '+15%';
+        state.currentTime = 26; // inside drift
+        showToast("Preset 2: Subtle +15% Drift applied at Min 18.");
+      } else if (presetType === 'severe') {
+        state.hasSyntheticDrift = true;
+        state.driftPercent = 28;
+        state.driftStartTime = 15;
+        state.driftRampMinutes = 4;
+        syntheticBadge.classList.remove('hidden');
+        syntheticBadge.innerHTML = '<i data-lucide="zap" class="w-2.5 h-2.5"></i> +28% Divergence';
+        document.getElementById('sliderDrift').value = 28;
+        document.getElementById('sliderValueDrift').innerText = '+28%';
+        state.currentTime = 32; // deep inside severe drift
+        showToast("Preset 3: Severe +28% Divergence applied.");
+      } else if (presetType === 'insufficient') {
+        state.hasSyntheticDrift = false;
+        state.driftPercent = 0;
+        syntheticBadge.classList.add('hidden');
+        state.currentTime = 1.2; // very early
+        setSystemStatus('insufficient');
+        showToast("Preset 4: Insufficient Data state demonstrated (<3 min).");
+      }
+
+      updateTripDisplay();
+      if (state.activeTab !== 'drive') {
+        switchTab(state.activeTab);
+      }
+      lucide.createIcons();
+    }
+
+    // Attach Event Listeners on DOM Load
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Welcome Screen Dismissal
+      document.getElementById('btnStartRecordedDrive').addEventListener('click', () => {
+        const welcome = document.getElementById('welcomeScreen');
+        welcome.classList.add('-translate-y-full');
+        setTimeout(() => { welcome.style.display = 'none'; }, 350);
+        startPlayback();
+      });
+
+      // 2. Play/Pause and Reset
+      document.getElementById('btnPlayPause').addEventListener('click', togglePlayback);
+      document.getElementById('btnResetTrip').addEventListener('click', resetTrip);
+
+      // 3. Trip Scrubber Slider
+      const scrubber = document.getElementById('tripScrubber');
+      scrubber.addEventListener('input', (e) => {
+        const pct = parseFloat(e.target.value);
+        state.currentTime = (pct / 100) * state.totalDuration;
+        updateTripDisplay();
+      });
+
+      // 4. Playback Speed Selectors
+      document.querySelectorAll('.speed-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.speed-btn').forEach(b => {
+            b.className = 'speed-btn px-2 py-0.5 text-[10px] font-semibold rounded-md text-brand-navy hover:bg-white';
+          });
+          btn.className = 'speed-btn px-2 py-0.5 text-[10px] font-bold rounded-md bg-brand-forest text-white';
+          state.playbackSpeed = parseFloat(btn.dataset.speed);
+        });
+      });
+
+      // 5. Fuel Price Calculation Input
+      const fuelInput = document.getElementById('fuelPriceInput');
+      if (fuelInput) {
+        fuelInput.addEventListener('input', (e) => {
+          state.fuelPrice = parseFloat(e.target.value) || 1.65;
+          renderAnalysisTab();
+        });
+      }
+
+      // 6. Demo Controls Bottom Sheet
+      const sheet = document.getElementById('demoControlsSheet');
+      document.getElementById('btnOpenDemoControls').addEventListener('click', () => {
+        sheet.classList.remove('hidden');
+      });
+      document.getElementById('btnCloseDemoControls').addEventListener('click', () => {
+        sheet.classList.add('hidden');
+      });
+
+      const sDrift = document.getElementById('sliderDrift');
+      sDrift.addEventListener('input', (e) => {
+        document.getElementById('sliderValueDrift').innerText = `+${e.target.value}%`;
+      });
+      const sStart = document.getElementById('sliderStartTime');
+      sStart.addEventListener('input', (e) => {
+        document.getElementById('sliderValueStartTime').innerText = `Min ${e.target.value}`;
+      });
+      const sRamp = document.getElementById('sliderRamp');
+      sRamp.addEventListener('input', (e) => {
+        document.getElementById('sliderValueRamp').innerText = `${e.target.value} mins`;
+      });
+
+      document.getElementById('btnApplyAndReplay').addEventListener('click', () => {
+        state.hasSyntheticDrift = true;
+        state.driftPercent = parseInt(sDrift.value);
+        state.driftStartTime = parseInt(sStart.value);
+        state.driftRampMinutes = parseInt(sRamp.value);
+        
+        const badge = document.getElementById('syntheticBadge');
+        badge.classList.remove('hidden');
+        badge.innerHTML = `<i data-lucide="zap" class="w-2.5 h-2.5"></i> +${state.driftPercent}% Drift Active`;
+        lucide.createIcons();
+
+        sheet.classList.add('hidden');
+        resetTrip();
+        startPlayback();
+        showToast(`Synthetic drift applied: +${state.driftPercent}% starting at Min ${state.driftStartTime}.`);
+      });
+
+      document.getElementById('btnClearDrift').addEventListener('click', () => {
+        state.hasSyntheticDrift = false;
+        state.driftPercent = 0;
+        document.getElementById('syntheticBadge').classList.add('hidden');
+        sheet.classList.add('hidden');
+        resetTrip();
+        startPlayback();
+        showToast("Cleared to clean baseline run (0% drift).");
+      });
+
+      // 7. Report Action Buttons
+      document.getElementById('btnShareSummary').addEventListener('click', () => {
+        showToast("Evidence dossier PKG-TRIP4829 prepared & shared via secure link.");
+      });
+
+      document.getElementById('btnPrintReport').addEventListener('click', () => {
+        showToast("Generating PDF summary: 'DriftBeacon_Trip4829_Evidence.pdf'...");
+      });
+
+      // 8. Technician Save Log
+      document.getElementById('btnSaveTechLog').addEventListener('click', () => {
+        const statusEl = document.getElementById('techLogStatus');
+        statusEl.classList.remove('hidden');
+        setTimeout(() => { statusEl.classList.add('hidden'); }, 3000);
+      });
+
+      // Initial render
+      updateTripDisplay();
+      lucide.createIcons();
+    });
+  </script>
+</body></html>

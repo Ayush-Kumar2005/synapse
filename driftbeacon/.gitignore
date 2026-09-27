@@ -1,5 +1,6 @@
 data/raw/
-data/prepared/
+data/prepared/*
+!data/prepared/ved_trip.json
 data/interim/
 handoff/
 artifacts/models/

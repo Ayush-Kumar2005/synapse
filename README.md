@@ -13,3 +13,6 @@ For the complete context to send that person, see
 Model work is on `model-development`. Raw data, prepared Parquet files, local
 Python environments and model binaries are excluded from Git. The preparation
 scripts reproduce the data; a local training ZIP supports the laptop handoff.
+
+The working Stitch-style phone demo and its local run instructions are in
+[DEMO_README.md](driftbeacon/DEMO_README.md).

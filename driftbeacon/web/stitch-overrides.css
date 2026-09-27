@@ -1,0 +1,28 @@
+/* Only agreed content areas and honest unavailable states differ from Stitch. */
+.stale-status{background:#f1f5f7!important;border-color:#cbd5e1!important}
+.alert-status{background:#fff8f5!important;border-color:#fecaca!important}
+#tabContentDrive>* ,#tabContentAnalysis>* ,#tabContentService>*{flex-shrink:0}
+.demo-car-icon{width:38px;height:54px;border:3px solid #174634;border-radius:11px;background:#e6f4f1;color:transparent;position:relative;box-shadow:0 5px 10px #17463433;margin-bottom:10px}
+.demo-car-icon::before{content:"";position:absolute;inset:11px 5px 12px;background:#9fcdbd;border-radius:5px}
+.demo-car-icon::after{content:"";position:absolute;left:8px;right:8px;top:5px;height:4px;background:#fff4b4;border-radius:2px}
+#driveMap{z-index:1}
+.drive-car-marker{background:none;border:0;filter:drop-shadow(0 2px 4px #0005)}
+.route-map-unavailable{min-height:150px;border:1px dashed #b8d4c7;border-radius:13px;background:linear-gradient(135deg,#edf5f0,#f8faf8);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:18px;color:#174634}
+.route-map-unavailable strong{font-size:12px}
+.route-map-unavailable span{font-size:10px;line-height:1.5;color:#62746c}
+#routeMap:not(.route-map-unavailable){height:195px;border-radius:13px;overflow:hidden}
+.time-section-btn{border:1.5px solid;border-radius:8px;padding:7px 3px;background:#fff;color:#174634;font-size:9px;font-weight:800;font-variant-numeric:tabular-nums}
+.time-section-btn.selected{background:#e6f4f1;box-shadow:0 0 0 2px #17463433}
+.time-section-btn:focus-visible{outline:2px solid #0d9488;outline-offset:2px}
+.report-label{display:flex;flex-direction:column;gap:4px;color:#526371;font-size:10px;font-weight:700}
+.report-input{width:100%;border:1px solid #d9e5dd;border-radius:8px;background:#f9fcfa;padding:8px;color:#0f1e28;font-size:11px;font-weight:500}
+.report-input:focus{outline:2px solid #0d9488}
+.report-check{display:flex;align-items:center;gap:6px;color:#526371;font-size:10px}
+.report-check input{accent-color:#174634}
+.report-evidence-grid{font-size:10px;line-height:1.45}
+.report-evidence-grid strong{max-width:58%;font-weight:700}
+.report-preview-content{max-height:330px;overflow:auto;margin-top:8px}
+.report-preview-content pre{font:10px/1.5 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;color:#0f1e28}
+#printableReport{display:none}
+@media (prefers-reduced-motion:reduce){.pulse-dot,.animate-ping,.animate-bounce{animation:none!important}*{scroll-behavior:auto!important}}
+@media print{body>*:not(#printableReport){display:none!important}#printableReport{display:block!important;margin:0;padding:20px;color:#111;font:12pt/1.45 system-ui,sans-serif}#printableReport h1{font-size:20pt}#printableReport pre{white-space:pre-wrap;overflow-wrap:anywhere;font:10pt/1.5 ui-monospace,monospace}}
